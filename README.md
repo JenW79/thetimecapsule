@@ -1,5 +1,8 @@
-# ⏳ The Time Capsule
- A retro-inspired e-commerce app built with Flask and React(Vite), bringing back the best of the '80s, '90s, and 2000s through curated nostalgic items.
+[https://thetimecapsule.onrender.com](https://thetimecapsule.onrender.com)
+
+⏳ **The Time Capsule**
+
+*A retro-inspired e-commerce app built with Flask and React (Vite), bringing back the best of the '80s, '90s, and 2000s through curated nostalgic items.*
 
 ---
 
@@ -80,11 +83,13 @@
 
 ## 👩‍💻 Team
  
-- Kathryn M.  
-- Andrea F. 
+- Kathryn M.
+- Andrea F.
 - Jen W. 
 
 ---
 
 > Built with love and collaboration during App Academy’s group project phase.
+
+
 
