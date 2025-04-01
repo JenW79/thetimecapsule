@@ -171,7 +171,7 @@ def checkout():
         country = form.country.data
         state = form.state.data
 
-    # "if current_user.is_authenticated:"" isn't required here because a guest can't submit an order form and only logged in users can submit an order form.
+    # "if current_user.is_authenticated:" isn't required here because a guest can't submit an order form and only logged in users can submit an order form.
     # if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id).first()
         if not cart:
@@ -217,7 +217,10 @@ def checkout():
             flash("Please fill in all required fields.", "error")
             return render_template('order_form.html', form=form)
 
-@cart_routes.route("/checkout", methods=["GET"])
+# GET /checkout
+# displays the cart
+
+@cart_routes.route("/checkout")
 @login_required
 def checkout_page():
     form = OrderForm()
@@ -243,6 +246,9 @@ def checkout_page():
 
     return render_template('order_form.html', form=form, total_price=total_price)
 
+# GET /order_confirmation/:order_id
+# displays the order confirmation page
+
 @cart_routes.route("/order_confirmation/<int:order_id>")
 @login_required
 def order_confirmation(order_id):
@@ -253,7 +259,9 @@ def order_confirmation(order_id):
 
     return render_template('order_confirmation.html', order=order)
 
-# GET /orders - List all orders made by the user
+# GET /orders
+# displays all orders made by the user
+
 @cart_routes.route("/orders")
 @login_required
 def orders_page():

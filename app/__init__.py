@@ -13,7 +13,8 @@ from .seeds import seed_commands
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+# app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+app = Flask(__name__, template_folder='./templates', static_folder='../react-vite/dist', static_url_path='/')
 
 # Setup login manager
 login = LoginManager(app)
