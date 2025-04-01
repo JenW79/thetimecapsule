@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from .models import db, User, Order
+from .models import db, User, CartItem
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.cart_routes import cart_routes
@@ -13,8 +13,8 @@ from .seeds import seed_commands
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 
-# app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
-app = Flask(__name__, template_folder='./templates', static_folder='../react-vite/dist', static_url_path='/')
+app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+# app = Flask(__name__, template_folder='./templates', static_folder='../react-vite/dist', static_url_path='/')
 
 # Setup login manager
 login = LoginManager(app)

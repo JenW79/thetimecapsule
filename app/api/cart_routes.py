@@ -1,7 +1,8 @@
 from flask import render_template, Blueprint, jsonify, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
 from app.forms import OrderForm
-# from app.models import Product, Order, Cart, CartItem, Transaction
+# from app.models import Product, CartItem
+from app.models import CartItem
 from app import db
 
 cart_routes = Blueprint('cart', __name__)
@@ -245,28 +246,6 @@ def checkout_page():
         total_price = sum(item['price'] * item['quantity'] for item in cart_items)
 
     return render_template('order_form.html', form=form, total_price=total_price)
-
-# GET /order_confirmation/:order_id
-# displays the order confirmation page
-
-@cart_routes.route("/order_confirmation/<int:order_id>")
-@login_required
-def order_confirmation(order_id):
-    order = Order.query.get_or_404(order_id)
-    if order.user_id != current_user.id:
-        flash("You do not have permission to view this order.", "error")
-        return redirect(url_for('cart.cart_page'))
-
-    return render_template('order_confirmation.html', order=order)
-
-# GET /orders
-# displays all orders made by the user
-
-@cart_routes.route("/orders")
-@login_required
-def orders_page():
-    orders = Order.query.filter_by(user_id=current_user.id).all()
-    return render_template('order_form_data.html', orders=orders)
 
 # a page for the cart with a checkout button
 # TEMPLATE: cart_page.html
