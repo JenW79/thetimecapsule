@@ -24,9 +24,10 @@ class Review(db.Model):
         return {
             'id': self.id,
             'user_id': self.user_id,
+            'username': self.user.username if self.user else "Unknown",
             'product_id': self.product_id,
             'rating': self.rating,
             'review_text': self.review_text,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None,
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if self.updated_at else None
+    }
