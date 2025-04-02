@@ -24,6 +24,9 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+    
+    reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
+    # reviews = db.relationship('Review', back_populates='product', cascade='all, delete-orphan')- wait for product.py
 
     def to_dict(self):
         return {
