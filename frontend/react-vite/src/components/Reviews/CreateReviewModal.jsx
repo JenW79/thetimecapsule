@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-<<<<<<< HEAD
 import { createReview } from "../../redux/reviews";
-=======
-import { createReview } from "../../store/reviews";
->>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 import { useParams } from "react-router-dom";
 
 const CreateReviewModal = ({ onClose }) => {
