@@ -11,37 +11,47 @@ cart_routes = Blueprint('cart', __name__)
 # get all products that a user added to the shopping cart
 
 @cart_routes.route("/cart")
-def cart_page():
+def get_cart():
     # # Fetch the user's cart from the database (or create one if not exists)
     # cart = Cart.query.filter_by(user_id=current_user.id).first()
     # OR
     if current_user.is_authenticated:
         # If the user is logged in, fetch the cart from the database
-        cart = Cart.query.filter_by(user_id=current_user.id).first()
-    
-    # if not cart:
-    #     # Create a new cart if it doesn't exist
-    #     cart = Cart(user_id=current_user.id)
-    #     db.session.add(cart)
-    #     db.session.commit()
-    # OR
-        if not cart:
-            # Create a new cart if it doesn't exist
-            cart = Cart(user_id=current_user.id)
-            db.session.add(cart)
-            db.session.commit()
-
-    # # Fetch the items in the user's cart
-    # cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
-    # OR
-        # Fetch the items in the user's cart
-        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
-
+        cart_items = Cart.query.filter_by(user_id=current_user.id).all()
+        items = [{
+            'product_id': item.product.id,
+            'name': item.product.name,
+            'quantity': item.quantity,
+            'price': item.product.price
+        } for item in cart_items]
+        return jsonify({"cart_items": items}), 200
     else:
-        # For guests, use session to store cart data
         cart_items = session.get('cart_items', [])
+        return jsonify({"cart_items": cart_items}), 200
+    
+    # # if not cart:
+    # #     # Create a new cart if it doesn't exist
+    # #     cart = Cart(user_id=current_user.id)
+    # #     db.session.add(cart)
+    # #     db.session.commit()
+    # # OR
+    #     if not cart:
+    #         # Create a new cart if it doesn't exist
+    #         cart = Cart(user_id=current_user.id)
+    #         db.session.add(cart)
+    #         db.session.commit()
 
-    return render_template('cart_page.html', cart_items=cart_items)
+    # # # Fetch the items in the user's cart
+    # # cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+    # # OR
+    #     # Fetch the items in the user's cart
+    #     cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+
+    # else:
+    #     # For guests, use session to store cart data
+    #     cart_items = session.get('cart_items', [])
+
+    # return render_template('cart_page.html', cart_items=cart_items)
 
 # POST /cart
 # a user adds a new product to the shopping cart
@@ -63,38 +73,19 @@ def add_to_cart():
     # OR
     if current_user.is_authenticated:
         # If the user is logged in, use the database to manage the cart
-        cart = Cart.query.filter_by(user_id=current_user.id).first()
-        if not cart:
-            cart = Cart(user_id=current_user.id)
-            db.session.add(cart)
-            db.session.commit()    
-
-    # # Add product to cart (or update quantity if already in cart)
-    # cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
-    # if cart_item:
-    #     cart_item.quantity += quantity
-    # else:
-    #     cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=quantity)
-    #     db.session.add(cart_item)
-
-    # db.session.commit()
-
-    # return jsonify({"message": "Product added to cart", "cart": cart_items}), 201
-    # OR
-    # Add product to cart (or update quantity if already in cart)
-        cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product.id).first()
         if cart_item:
             cart_item.quantity += quantity
         else:
-            cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=quantity)
-            db.session.add(cart_item)
-
+            cart_item = CartItem(user_id=current_user.id, product_id=product.id, quantity=quantity)
+        # if not cart:
+        #     cart = Cart(user_id=current_user.id)
+        #     db.session.add(cart)
+        db.session.add(cart_item)
+            # db.session.commit()
         db.session.commit()
-
         return jsonify({"message": "Product added to cart"}), 201
-
     else:
-        # For guests, use session storage for cart items
         cart_items = session.get('cart_items', [])
         existing_item = next((item for item in cart_items if item['product_id'] == product_id), None)
 
@@ -109,8 +100,50 @@ def add_to_cart():
             })
 
         session['cart_items'] = cart_items
-
         return jsonify({"message": "Product added to cart"}), 201
+
+    # # # Add product to cart (or update quantity if already in cart)
+    # # cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+    # # if cart_item:
+    # #     cart_item.quantity += quantity
+    # # else:
+    # #     cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=quantity)
+    # #     db.session.add(cart_item)
+
+    # # db.session.commit()
+
+    # # return jsonify({"message": "Product added to cart", "cart": cart_items}), 201
+    # # OR
+    # # Add product to cart (or update quantity if already in cart)
+    #     cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+    #     if cart_item:
+    #         cart_item.quantity += quantity
+    #     else:
+    #         cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=quantity)
+    #         db.session.add(cart_item)
+
+    #     db.session.commit()
+
+    #     return jsonify({"message": "Product added to cart"}), 201
+
+    # else:
+    #     # For guests, use session storage for cart items
+    #     cart_items = session.get('cart_items', [])
+    #     existing_item = next((item for item in cart_items if item['product_id'] == product_id), None)
+
+    #     if existing_item:
+    #         existing_item['quantity'] += quantity
+    #     else:
+    #         cart_items.append({
+    #             'product_id': product.id,
+    #             'name': product.name,
+    #             'quantity': quantity,
+    #             'price': product.price
+    #         })
+
+    #     session['cart_items'] = cart_items
+
+    #     return jsonify({"message": "Product added to cart"}), 201
 
 
 # DELETE /cart/:item_id
@@ -176,8 +209,9 @@ def checkout():
     # if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id).first()
         if not cart:
-            flash("Your cart is empty!", "error")
-            return redirect(url_for('cart.cart_page'))
+            # flash("Your cart is empty!", "error")
+            # return redirect(url_for('cart.cart_page'))
+            return jsonify({"error": "Your cart is empty!"}), 400
 
         # Calculate the total price
         total_price = sum(item.product.price * item.quantity for item in cart.items)
@@ -211,12 +245,14 @@ def checkout():
         db.session.delete(cart)
         db.session.commit()
 
-        flash("Order placed successfully!", "success")
-        return redirect(url_for('cart.order_confirmation', order_id=order.id))
+        # flash("Order placed successfully!", "success")
+        # return redirect(url_for('cart.order_confirmation', order_id=order.id))
+        return jsonify({"message": "Order placed successfully!", "order_id": order.id}), 201
     else:
             # If form is not valid, render the checkout page again with error messages
-            flash("Please fill in all required fields.", "error")
-            return render_template('order_form.html', form=form)
+            # flash("Please fill in all required fields.", "error")
+            # return render_template('order_form.html', form=form)
+        return jsonify({"error": "Form validation failed."}), 400
 
 # GET /checkout
 # displays the cart
@@ -224,28 +260,60 @@ def checkout():
 @cart_routes.route("/checkout")
 @login_required
 def checkout_page():
-    form = OrderForm()
+    # form = OrderForm()
 
     # Get the user's cart (whether they are logged in or a guest)
     if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id).first()
         if not cart:
-            flash("Your cart is empty!", "error")
-            return redirect(url_for('cart.cart_page'))
+            # flash("Your cart is empty!", "error")
+            # return redirect(url_for('cart.cart_page'))
+             return jsonify({"error": "Your cart is empty!"}), 400
 
-        # Calculate the total price
-        total_price = sum(item.product.price * item.quantity for item in cart.items)
-    else:
-        # For guests, use session cart items
-        cart_items = session.get('cart_items', [])
-        if not cart_items:
-            flash("Your cart is empty!", "error")
-            return redirect(url_for('cart.cart_page'))
+    #     # Calculate the total price
+    #     total_price = sum(item.product.price * item.quantity for item in cart.items)
+    # else:
+    #     # For guests, use session cart items
+    #     cart_items = session.get('cart_items', [])
+    #     if not cart_items:
+    #         flash("Your cart is empty!", "error")
+    #         return redirect(url_for('cart.cart_page'))
 
-        # Calculate the total price
+    #     # Calculate the total price
+    #     total_price = sum(item['price'] * item['quantity'] for item in cart_items)
+        # Calculate the total price of the cart
+        cart_items = [{
+            'product_id': item.product.id,
+            'name': item.product.name,
+            'quantity': item.quantity,
+            'price': item.product.price
+        } for item in cart.items]
+
         total_price = sum(item['price'] * item['quantity'] for item in cart_items)
 
-    return render_template('order_form.html', form=form, total_price=total_price)
+    # return render_template('order_form.html', form=form, total_price=total_price)
+        # Return cart items and total price as JSON
+        return jsonify({
+            "cart_items": cart_items,
+            "total_price": total_price
+        }), 200
+
+    else:
+        # For guests, fetch cart items from session
+        cart_items = session.get('cart_items', [])
+
+        # If the cart is empty, return a message
+        if not cart_items:
+            return jsonify({"error": "Your cart is empty!"}), 400
+
+        # Calculate the total price of the cart
+        total_price = sum(item['price'] * item['quantity'] for item in cart_items)
+
+        # Return cart items and total price as JSON
+        return jsonify({
+            "cart_items": cart_items,
+            "total_price": total_price
+        }), 200
 
 # a page for the cart with a checkout button
 # TEMPLATE: cart_page.html
