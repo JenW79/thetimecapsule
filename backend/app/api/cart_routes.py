@@ -1,9 +1,9 @@
 from flask import render_template, Blueprint, jsonify, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
-from app.forms import OrderForm
-# from app.models import Product, CartItem
-from app.models import CartItem
-from app import db
+from ..forms import OrderForm
+# from ..models import Product, CartItem
+from ..models import CartItem
+from .. import db
 
 cart_routes = Blueprint('cart', __name__)
 

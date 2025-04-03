@@ -4,7 +4,7 @@ from wtforms import StringField, SelectField, IntegerField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 # db = SQLAlchemy()
-from app import db
+from .. import db
 
 class OrderForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])

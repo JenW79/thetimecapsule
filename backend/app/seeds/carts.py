@@ -1,5 +1,5 @@
-# # from app.models import db, environment, SCHEMA, CartItem, Product, User
-# from app.models import db, environment, SCHEMA, CartItem, User
+# # from ..models import db, environment, SCHEMA, CartItem, Product, User
+# from ..models import db, environment, SCHEMA, CartItem, User
 # from sqlalchemy.sql import text
 
 # def seed_cart_items():
@@ -45,7 +45,7 @@
 
 
 
-from app.models import db, environment, SCHEMA, CartItem, User
+from ..models import db, environment, SCHEMA, CartItem, User
 from sqlalchemy.sql import text
 
 def seed_cart_items():
