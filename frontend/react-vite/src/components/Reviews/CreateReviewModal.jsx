@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createReview } from "../../store/reviews";
+import { createReview } from "../../redux/reviews";
 import { useParams } from "react-router-dom";
 
 const CreateReviewModal = ({ onClose }) => {

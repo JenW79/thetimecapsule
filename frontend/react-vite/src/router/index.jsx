@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import OrderFormPage from '../components/OrderFormPage/OrderFormPage';
 import CartPage from '../components/CartPage/CartPage'
 import Layout from './Layout';
+import ReviewList from '../components/Reviews/ReviewList';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "cart",
         element: <CartPage />,
+      },
+      {
+        path: "products/:productId/reviews", //test route
+        element: <ReviewList />,
       },
     ],
   },
