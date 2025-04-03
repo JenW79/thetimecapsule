@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 
 const OrderFormPage = () => {
@@ -272,5 +273,14 @@ const OrderFormPage = () => {
     </div>
   );
 };
+=======
+
+
+const OrderFormPage = () => {
+    return <div>Order Form Page</div>;
+  };
+
+
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 
 export default OrderFormPage;

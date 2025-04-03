@@ -7,7 +7,11 @@ import {
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import cartReducer from "./cart";
+<<<<<<< HEAD
 import reviewsReducer from './reviews';
+=======
+import reviewsReducer from "./reviews";
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 
 const rootReducer = combineReducers({
   session: sessionReducer,

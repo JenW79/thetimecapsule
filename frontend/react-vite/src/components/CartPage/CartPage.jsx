@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import { useDispatch, useSelector } from 'react-redux';
 // import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
 // import { useEffect, useState } from 'react';
@@ -94,10 +95,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
 import { useEffect, useState, useRef } from 'react';
+=======
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 import './CartPage.css';
 
 const CartPage = () => {
   const dispatch = useDispatch();
+<<<<<<< HEAD
   const cartItems = useSelector((state) => state.cart.cartItems || []);
   const prevCartItemsRef = useRef();
   const navigate = useNavigate();
@@ -111,6 +117,9 @@ const CartPage = () => {
     { id: '2', name: 'Product 2', price: 35 },
     { id: '3', name: 'Product 3', price: 50 },
   ];
+=======
+  const cartItems = useSelector((state) => state.cart.items);
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 
   const handleIncrement = (productId) => {
     dispatch(incrementItem(productId));
@@ -128,6 +137,7 @@ const CartPage = () => {
     dispatch(addToCart(product));
   };
 
+<<<<<<< HEAD
   const handleClearCart = () => {
     dispatch(removeFromCart('all'));
   };
@@ -162,11 +172,18 @@ const CartPage = () => {
     <div>
       <h2>Your Cart</h2>
       {!cartItems || cartItems.length === 0 ? (
+=======
+  return (
+    <div>
+      <h2>Your Cart</h2>
+      {cartItems.length === 0 ? (
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
         <p>Your cart is empty!</p>
       ) : (
         <ul>
           {cartItems.map((item) => (
             <li key={item.id}>
+<<<<<<< HEAD
               {item.name} - ${item.price} - Quantity: {item.quantity}
               <br />
               <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
@@ -174,10 +191,18 @@ const CartPage = () => {
               <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
               {/* <button onClick={() => handleDecrement(item.id)} className="your-cart-button">-</button> */}
               <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
+=======
+              {item.name} - ${item.price} - Quantity:{item.quantity}
+              <br></br>
+              <button onClick={() => handleIncrement(item.id)} className="button-spacing">+</button>
+              <button onClick={() => handleDecrement(item.id)} className="button-spacing">-</button>
+              <button onClick={() => handleRemoveFromCart(item.id)} className="button-spacing">Remove</button>
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
             </li>
           ))}
         </ul>
       )}
+<<<<<<< HEAD
 
       <h3>Total Price: ${totalPrice}</h3>
 
@@ -200,10 +225,22 @@ const CartPage = () => {
       <div>
         <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
           Proceed to Checkout
+=======
+      <div>
+        <h3>Add New Item to Cart</h3>
+        <button onClick={() => handleAddToCart({ id: 'example-id', name: 'New Product', price: 100 })}>
+          Add New Product
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
         </button>
       </div>
     </div>
   );
 };
 
+<<<<<<< HEAD
 export default CartPage;
+=======
+
+
+export default CartPage;
+>>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
