@@ -13,8 +13,8 @@ def authenticate():
     Authenticates a user.
     """
     if current_user.is_authenticated:
-        return current_user.to_dict()
-    return {'errors': {'message': 'Unauthorized'}}, 401
+        return current_user.to_dict(), 200
+    return { "user": None }, 200 
 
 
 @auth_routes.route('/login', methods=['POST'])
