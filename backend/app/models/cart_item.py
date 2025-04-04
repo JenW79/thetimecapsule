@@ -53,6 +53,7 @@
 
 
 from .db import db, environment, SCHEMA
+from sqlalchemy import DateTime
 from datetime import datetime
 
 class CartItem(db.Model):
@@ -63,8 +64,8 @@ class CartItem(db.Model):
     product_id = db.Column(db.Integer,db.ForeignKey(("products.id")),nullable=False)
     product = db.relationship('Product', back_populates='cart_items')
     quantity = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime)
-    updated_at = db.Column(db.DateTime)
+    created_at = db.Column(DateTime, default=datetime.now())
+    updated_at = db.Column(DateTime, default=datetime.now())
     is_ordered = db.Column(db.Boolean, default=False)
 
     user = db.relationship('User', backref='cart_items')

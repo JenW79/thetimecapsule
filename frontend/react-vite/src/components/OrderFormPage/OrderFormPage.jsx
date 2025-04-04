@@ -10,6 +10,9 @@ const OrderFormPage = () => {
     country: "",
     state: "",
     payment_method: "",
+    expiration_date: "",
+    cvv: "",
+    card_number: ""
   });
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,12 +27,39 @@ const OrderFormPage = () => {
     }));
   };
 
+  const validateCardDetails = () => {
+    const expirationDatePattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expirationDatePattern.test(formData.expiration_date)) {
+      return "Expiration Date must be in MM/YY format.";
+    }
+
+    const cvvPattern = /^\d{3,4}$/;
+    if (!cvvPattern.test(formData.cvv)) {
+      return "CVV must be 3 or 4 digits.";
+    }
+
+    const cardNumberPattern = /^\d{10}$/;
+    if (!cardNumberPattern.test(formData.card_number)) {
+      return "Card Number must be exactly 10 digits.";
+    }
+
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    const validationError = validateCardDetails();
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
 
     const formDataToSubmit = {
       ...formData,
-      zip_code: parseInt(formData.zip_code, 10 || 0)
+      zip_code: formData.zip_code ? parseInt(formData.zip_code, 10) : 0
     };
 
     try {
@@ -42,11 +72,29 @@ const OrderFormPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit the order");
+        const errorData = await response.text();
+        let errorMessage = "There was an error submitting the order.";
+        if (errorData.includes("Your cart is empty!")) {
+          errorMessage = "Your cart is empty.";
+        } else if (errorData.includes("Invalid payment details")) {
+          errorMessage = "The payment details provided are invalid. Please check your card information.";
+        } else if (errorData.includes("Expired credit card")) {
+          errorMessage = "Your credit card has expired. Please provide a valid card.";
+        }
+
+        setErrorMessage(errorMessage);
+        return;
       }
 
       const data = await response.json();
-      setSuccessMessage("Order submitted successfully!");
+
+      // if (!response.ok) {
+      //   throw new Error(data.error || "Failed to submit the order");
+      // }
+
+      setSuccessMessage(alert("Order submitted successfully!"));
+      // setSuccessMessage("Order submitted successfully!");
+      // alert("Order submitted successfully!");
       setOrders((prevOrders) => [...prevOrders, data.order_data]);
       setFormData({
         first_name: "",
@@ -57,9 +105,12 @@ const OrderFormPage = () => {
         country: "",
         state: "",
         payment_method: "",
+        expiration_date: "",
+        cvv: "",
+        card_number: ""
       });
     } catch (error) {
-      setErrorMessage("There was an error submitting the order.");
+      setErrorMessage(error.message || "There was an error submitting the order.");
       console.error(error);
     }
   };
@@ -79,6 +130,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>Last Name</label>
         <input
@@ -88,6 +140,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>Street Address</label>
         <input
@@ -97,6 +150,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>Zip Code</label>
         <input
@@ -106,6 +160,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>City</label>
         <input
@@ -115,6 +170,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>Country</label>
         <input
@@ -124,6 +180,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>State</label>
         <input
@@ -133,6 +190,7 @@ const OrderFormPage = () => {
           onChange={handleChange}
           required
         />
+        <br />
 
         <label>Payment Method</label>
         <select
@@ -157,6 +215,36 @@ const OrderFormPage = () => {
           <option value="Sezzle">Sezzle</option>
           <option value="Afterpay">Afterpay</option>
         </select>
+        <br />
+
+        <label>Expiration Date: MM/YY</label>
+        <input
+          type="text"
+          name="expiration_date"
+          value={formData.expiration_date}
+          onChange={handleChange}
+          required
+        />
+        <br />
+
+        <label>CVV</label>
+        <input
+          type="text"
+          name="cvv"
+          value={formData.cvv}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        
+        <label>Card Number</label>
+        <input
+          type="text"
+          name="card_number"
+          value={formData.card_number}
+          onChange={handleChange}
+          required
+        />
 
         <button type="submit">Submit Order</button>
       </form>

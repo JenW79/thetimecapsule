@@ -29,6 +29,10 @@ class OrderForm(FlaskForm):
         ('Zip', 'Zip'),
         ('Sezzle', 'Sezzle'),
         ('Afterpay', 'Afterpay'),
-    ])
+            ])
+    expiration_date = StringField("Expiration Date")
+    cvv = StringField("CVV")
+    card_number = StringField("Card Number")
+
     submit = SubmitField("Submit")
     cancel = SubmitField("Cancel")
