@@ -92,13 +92,14 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { addToCart, removeFromCart, incrementItem, decrementItem, clearCart } from '../../redux/cart';
-import { useEffect, useState } from 'react';
+import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
+import { useEffect, useState, useRef } from 'react';
 import './CartPage.css';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items || []);
+  const cartItems = useSelector((state) => state.cart.cartItems || []);
+  const prevCartItemsRef = useRef();
   const navigate = useNavigate();
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -128,7 +129,7 @@ const CartPage = () => {
   };
 
   const handleClearCart = () => {
-    dispatch(clearCart());
+    dispatch(removeFromCart('all'));
   };
 
   useEffect(() => {
@@ -136,13 +137,16 @@ const CartPage = () => {
     //   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     //   setTotalPrice(total);
     // }, [cartItems]);
-    // Simulate error handling for cart fetch or calculation
-    try {
-      const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      setTotalPrice(total);
-    } catch (err) {
-      console.error('Error calculating total price:', err);
-      setError('Failed to calculate total price');
+    if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
+      prevCartItemsRef.current = cartItems;
+      // Simulate error handling for cart fetch or calculation
+      try {
+        const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        setTotalPrice(total);
+      } catch (err) {
+        console.error('Error calculating total price:', err);
+        setError('Failed to calculate total price');
+      }
     }
   }, [cartItems]);
 
@@ -165,8 +169,10 @@ const CartPage = () => {
             <li key={item.id}>
               {item.name} - ${item.price} - Quantity: {item.quantity}
               <br />
-              <button onClick={() => handleIncrement(item.id)} className="your-cart-button">+</button>
-              <button onClick={() => handleDecrement(item.id)} className="your-cart-button">-</button>
+              <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
+              {/* <button onClick={() => handleIncrement(item.id)} className="your-cart-button">+</button> */}
+              <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
+              {/* <button onClick={() => handleDecrement(item.id)} className="your-cart-button">-</button> */}
               <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
             </li>
           ))}

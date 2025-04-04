@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, jsonify, request, session
 from flask_login import login_required, current_user
 from ..forms import OrderForm
 from ..models import CartItem
+# from ..models import CartItem, Product
 from .. import db
 
 cart_routes = Blueprint('cart', __name__)
@@ -12,7 +13,25 @@ cart_routes = Blueprint('cart', __name__)
 def get_cart():
     if current_user.is_authenticated:
         cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-        return jsonify({'cart_items': [item.to_dict() for item in cart_items]}), 200
+    # #    return jsonify({'cart_items': [item.to_dict() for item in cart_items]}), 200
+    # else:
+    #     return jsonify({"cart_items": []}), 200
+    # Mock product data for testing
+        mock_products = {
+            1: {'id': 1, 'name': 'Product 1', 'price': 20},
+            2: {'id': 2, 'name': 'Product 2', 'price': 35},
+            3: {'id': 3, 'name': 'Product 3', 'price': 50},
+        }
+        cart_items_with_details = []
+        for item in cart_items:
+            item_dict = item.to_dict()
+            product_id = item.product_id
+            if product_id in mock_products:
+                item_dict['price'] = mock_products[product_id]['price']
+                item_dict['name'] = mock_products[product_id]['name']
+            cart_items_with_details.append(item_dict)
+            
+        return jsonify({'cart_items': cart_items_with_details}), 200
     else:
         return jsonify({"cart_items": []}), 200
 
@@ -21,31 +40,46 @@ def get_cart():
 # A user adds a new product to the shopping cart
 @cart_routes.route("/cart", methods=["POST"])
 def add_to_cart():
+    print("POST request received at /api/cart")
+    print("Request data:", request.json)
     product_id = request.json.get('product_id')
     quantity = request.json.get('quantity', 1)
     
-    product = Product.query.get_or_404(product_id)
+    # Mock product data for testing
+    mock_products = {
+        '1': {'id': 1, 'name': 'Product 1', 'price': 20},
+        '2': {'id': 2, 'name': 'Product 2', 'price': 35},
+        '3': {'id': 3, 'name': 'Product 3', 'price': 50},
+    }
+    
+    if product_id not in mock_products:
+        return jsonify({"error": "Product not found"}), 404
+    
+    product = mock_products[product_id]
+    ##  product = Product.query.get_or_404(product_id)
 
     if current_user.is_authenticated:
-        cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product['id']).first()
+        
         if cart_item:
             cart_item.quantity += quantity
         else:
-            cart_item = CartItem(user_id=current_user.id, product_id=product.id, quantity=quantity)
-        db.session.add(cart_item)
+            cart_item = CartItem(user_id=current_user.id, product_id=product['id'], quantity=quantity)
+            
+            db.session.add(cart_item)
+        
         db.session.commit()
         return jsonify({"message": "Product added to cart"}), 201
     else:
         return jsonify({
             "message": "Product added to cart",
             "product": {
-                'product_id': product.id,
-                'name': product.name,
+                'product_id': product['id'],
+                'name': product['name'],
                 'quantity': quantity,
-                'price': product.price
+                'price': product['price']
             }
         }), 201
-
 
 # DELETE /cart/:item_id
 # A user removes an item from the shopping cart

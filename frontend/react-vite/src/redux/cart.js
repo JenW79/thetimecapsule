@@ -109,6 +109,27 @@ export const addToCart = (product, quantity = 1) => async (dispatch, getState) =
 export const removeFromCart = (productId) => async (dispatch, getState) => {
     const { session } = getState();
 
+    if (productId === 'all') {
+        if (session.user) {
+            const { cart } = getState();
+            const promises = cart.cartItems.map(item => 
+                fetch(`/api/cart/${item.id}`, {
+                    method: 'DELETE'
+                })
+            );
+            
+            try {
+                await Promise.all(promises);
+                dispatch({ type: CLEAR_CART });
+            } catch (error) {
+                console.error("Failed to clear cart:", error);
+            }
+        } else {
+            dispatch({ type: CLEAR_CART });
+            localStorage.removeItem('guestCart');
+        }
+        return;
+    }
     if (session.user) {
         const response = await fetch(`/api/cart/${productId}`, {
             method: 'DELETE'
@@ -127,86 +148,86 @@ export const removeFromCart = (productId) => async (dispatch, getState) => {
     }
 };
 
-export const mergeCartsAfterLogin = () => async (dispatch) => {
-    const storedCart = localStorage.getItem('guestCart');
+    export const mergeCartsAfterLogin = () => async (dispatch) => {
+        const storedCart = localStorage.getItem('guestCart');
 
-    if (storedCart) {
-        const guestCartItems = JSON.parse(storedCart);
-        for (const item of guestCartItems) {
-            await fetch('/api/cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    product_id: item.product_id,
-                    quantity: item.quantity
-                })
-            });
-        }
-
-        localStorage.removeItem('guestCart');
-        dispatch(fetchCart());
-    }
-};
-
-const cartReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case SET_CART:
-            return { ...state, cartItems: Array.isArray(action.payload) ? action.payload : [] };
-
-        case ADD_CART_ITEM: {
-            const existingItemIndex = state.cartItems.findIndex(
-                item => item.product_id === action.payload.product_id
-            );
-
-            if (existingItemIndex >= 0) {
-                const updatedItems = [...state.cartItems];
-                updatedItems[existingItemIndex] = {
-                    ...updatedItems[existingItemIndex],
-                    quantity: updatedItems[existingItemIndex].quantity + action.payload.quantity
-                };
-                return { ...state, cartItems: updatedItems };
-            } else {
-                return { ...state, cartItems: [...state.cartItems, action.payload] };
+        if (storedCart) {
+            const guestCartItems = JSON.parse(storedCart);
+            for (const item of guestCartItems) {
+                await fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: item.product_id,
+                        quantity: item.quantity
+                    })
+                });
             }
+
+            localStorage.removeItem('guestCart');
+            dispatch(fetchCart());
         }
+    };
 
-        case REMOVE_CART_ITEM:
-            return {
-                ...state,
-                cartItems: state.cartItems.filter(item => item.product_id !== action.payload)
-            };
+    const cartReducer = (state = initialState, action) => {
+        switch (action.type) {
+            case SET_CART:
+                return { ...state, cartItems: Array.isArray(action.payload) ? action.payload : [] };
 
-        case CLEAR_CART:
-            return { ...state, cartItems: [] };
+            case ADD_CART_ITEM: {
+                const existingItemIndex = state.cartItems.findIndex(
+                    item => item.product_id === action.payload.product_id
+                );
 
-        case INCREMENT_ITEM: {
-            const updatedItems = state.cartItems.map(item =>
-                item.product_id === action.payload
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            );
-            return { ...state, cartItems: updatedItems };
+                if (existingItemIndex >= 0) {
+                    const updatedItems = [...state.cartItems];
+                    updatedItems[existingItemIndex] = {
+                        ...updatedItems[existingItemIndex],
+                        quantity: updatedItems[existingItemIndex].quantity + action.payload.quantity
+                    };
+                    return { ...state, cartItems: updatedItems };
+                } else {
+                    return { ...state, cartItems: [...state.cartItems, action.payload] };
+                }
+            }
+
+            case REMOVE_CART_ITEM:
+                return {
+                    ...state,
+                    cartItems: state.cartItems.filter(item => item.product_id !== action.payload)
+                };
+
+            case CLEAR_CART:
+                return { ...state, cartItems: [] };
+
+            case INCREMENT_ITEM: {
+                const updatedItems = state.cartItems.map(item =>
+                    item.product_id === action.payload
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+                return { ...state, cartItems: updatedItems };
+            }
+
+            case DECREMENT_ITEM: {
+                const updatedItems = state.cartItems.map(item =>
+                    item.product_id === action.payload
+                        ? {
+                            ...item,
+                            quantity: item.quantity > 1 ? item.quantity - 1 : 0
+                        }
+                        : item
+                );
+                const updatedCartItems = updatedItems.filter(item => item.quantity > 0);
+
+                return { ...state, cartItems: updatedCartItems };
+            }
+
+            default:
+                return state;
         }
+    };
 
-        case DECREMENT_ITEM: {
-            const updatedItems = state.cartItems.map(item =>
-                item.product_id === action.payload
-                    ? {
-                        ...item,
-                        quantity: item.quantity > 1 ? item.quantity - 1 : 0
-                    }
-                    : item
-            );
-            const updatedCartItems = updatedItems.filter(item => item.quantity > 0);
-
-            return { ...state, cartItems: updatedCartItems };
-        }
-
-        default:
-            return state;
-    }
-};
-
-export default cartReducer;
+    export default cartReducer;
