@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // import { useDispatch, useSelector } from 'react-redux';
 // import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
 // import { useEffect, useState } from 'react';
@@ -95,10 +94,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
 import { useEffect, useState, useRef } from 'react';
-=======
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
->>>>>>> 55a08da (added backend/frontend folders for clairity, working on redux thunks and components)
 import './CartPage.css';
 
 const CartPage = () => {
