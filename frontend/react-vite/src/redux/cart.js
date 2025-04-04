@@ -41,24 +41,38 @@ export const clearCart = () => ({
 export const fetchCart = () => async (dispatch, getState) => {
     const { session } = getState();
 
-    if (session.user) {
-        const response = await fetch('/api/cart');
-        if (response.ok) {
-            const data = await response.json();
+    try {
+        if (session.user) {
+            const response = await fetch('/api/cart');
+            const text = await response.text();
+            console.log(text);
+            if (!response.ok) {
+                console.error("Failed to fetch cart:", text);
+                return;
+            }
+            // if (response.ok) {
+            // const data = await response.json();
+            const data = JSON.parse(text);
             dispatch(setCart(data.cart_items));
-        }
-    } else {
-        const storedCart = localStorage.getItem('guestCart');
-        if (storedCart) {
-            dispatch(setCart(JSON.parse(storedCart)));
+            // } catch (error) {
+            //     console.error("Error fetching cart:", error);
+            // }
         } else {
-            dispatch(setCart([]));
+            const storedCart = localStorage.getItem('guestCart');
+            if (storedCart) {
+                dispatch(setCart(JSON.parse(storedCart)));
+            } else {
+                dispatch(setCart([]));
+            }
         }
+    } catch (error) {
+        console.error("Error fetching cart:", error);
+        dispatch(setCart([]));
     }
 };
 
 export const addToCart = (product, quantity = 1) => async (dispatch, getState) => {
-    const { session } = getState(); // Used getState here to get session
+    const { session } = getState();
 
     if (session.user) {
         const response = await fetch('/api/cart', {
@@ -74,6 +88,8 @@ export const addToCart = (product, quantity = 1) => async (dispatch, getState) =
 
         if (response.ok) {
             dispatch(fetchCart());
+        } else {
+            console.error("Failed to add item to cart");
         }
     } else {
         const cartItem = {
@@ -85,13 +101,13 @@ export const addToCart = (product, quantity = 1) => async (dispatch, getState) =
 
         dispatch(addCartItem(cartItem));
 
-        const { cart } = getState(); // Get the updated cart state
+        const { cart } = getState();
         localStorage.setItem('guestCart', JSON.stringify(cart.cartItems));
     }
 };
 
 export const removeFromCart = (productId) => async (dispatch, getState) => {
-    const { session } = getState(); // Used getState here to get session
+    const { session } = getState();
 
     if (session.user) {
         const response = await fetch(`/api/cart/${productId}`, {
@@ -100,11 +116,13 @@ export const removeFromCart = (productId) => async (dispatch, getState) => {
 
         if (response.ok) {
             dispatch(fetchCart());
+        } else {
+            console.error("Failed to remove item from cart");
         }
     } else {
         dispatch(removeCartItem(productId));
 
-        const { cart } = getState(); // Get the updated cart state
+        const { cart } = getState();
         localStorage.setItem('guestCart', JSON.stringify(cart.cartItems));
     }
 };
@@ -135,7 +153,7 @@ export const mergeCartsAfterLogin = () => async (dispatch) => {
 const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_CART:
-            return { ...state, cartItems: action.payload };
+            return { ...state, cartItems: Array.isArray(action.payload) ? action.payload : [] };
 
         case ADD_CART_ITEM: {
             const existingItemIndex = state.cartItems.findIndex(

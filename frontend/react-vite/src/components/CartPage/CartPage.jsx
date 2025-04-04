@@ -98,7 +98,7 @@ import './CartPage.css';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const navigate = useNavigate();
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -157,7 +157,7 @@ const CartPage = () => {
   return (
     <div>
       <h2>Your Cart</h2>
-      {cartItems.length === 0 ? (
+      {!cartItems || cartItems.length === 0 ? (
         <p>Your cart is empty!</p>
       ) : (
         <ul>

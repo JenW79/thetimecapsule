@@ -12,13 +12,7 @@ cart_routes = Blueprint('cart', __name__)
 def get_cart():
     if current_user.is_authenticated:
         cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-        items = [{
-            'product_id': item.product.id,
-            'name': item.product.name,
-            'quantity': item.quantity,
-            'price': item.product.price
-        } for item in cart_items]
-        return jsonify({"cart_items": items}), 200
+        return jsonify({'cart_items': [item.to_dict() for item in cart_items]}), 200
     else:
         return jsonify({"cart_items": []}), 200
 
