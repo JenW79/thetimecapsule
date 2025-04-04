@@ -13,9 +13,12 @@ from .forms import order_form
 from .seeds import seed_commands
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta
 
 # app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 app = Flask(__name__, static_folder="../../frontend/react-vite/dist", static_url_path="")
+
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=3650)
 
 # Setup login manager
 login = LoginManager(app)
@@ -98,5 +101,4 @@ def react_root(path):
 
 @app.errorhandler(404)
 def not_found(e):
-    # return app.send_static_file('index.html')
     return app.send_static_file('index.html')

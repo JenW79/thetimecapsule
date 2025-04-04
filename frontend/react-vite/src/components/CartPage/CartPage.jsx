@@ -55,7 +55,7 @@
 //           {cartItems.map((item) => (
 //             <li key={item.id}>
 //               {item.name} - ${item.price} - Quantity:{item.quantity}
-//               <br></br>
+//               <br />
 //               <button onClick={() => handleIncrement(item.id)} className="button-spacing">+</button>
 //               <button onClick={() => handleDecrement(item.id)} className="button-spacing">-</button>
 //               <button onClick={() => handleRemoveFromCart(item.id)} className="button-spacing">Remove</button>
@@ -91,13 +91,15 @@
 
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
+import { useNavigate } from 'react-router-dom';
+import { addToCart, removeFromCart, incrementItem, decrementItem, clearCart } from '../../redux/cart';
 import { useEffect, useState } from 'react';
 import './CartPage.css';
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const navigate = useNavigate();
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
@@ -125,12 +127,16 @@ const CartPage = () => {
     dispatch(addToCart(product));
   };
 
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+
   useEffect(() => {
-  //   // Calculate the total price whenever the cart items change
-  //   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  //   setTotalPrice(total);
-  // }, [cartItems]);
-  // Simulate error handling for cart fetch or calculation
+    //   // Calculate the total price whenever the cart items change
+    //   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    //   setTotalPrice(total);
+    // }, [cartItems]);
+    // Simulate error handling for cart fetch or calculation
     try {
       const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
       setTotalPrice(total);
@@ -144,6 +150,10 @@ const CartPage = () => {
     return <div>{error}</div>
   }
 
+  const handleProceedToCheckout = () => {
+    navigate('/checkout');
+  }
+
   return (
     <div>
       <h2>Your Cart</h2>
@@ -155,9 +165,9 @@ const CartPage = () => {
             <li key={item.id}>
               {item.name} - ${item.price} - Quantity: {item.quantity}
               <br />
-              <button onClick={() => handleIncrement(item.id)} className="button-spacing">+</button>
-              <button onClick={() => handleDecrement(item.id)} className="button-spacing">-</button>
-              <button onClick={() => handleRemoveFromCart(item.id)} className="button-spacing">Remove</button>
+              <button onClick={() => handleIncrement(item.id)} className="your-cart-button">+</button>
+              <button onClick={() => handleDecrement(item.id)} className="your-cart-button">-</button>
+              <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
             </li>
           ))}
         </ul>
@@ -168,14 +178,21 @@ const CartPage = () => {
       <div>
         <h3>Add New Item to Cart</h3>
         {availableProducts.map((product) => (
-          <button key={product.id} onClick={() => handleAddToCart(product)}>
+          <button key={product.id} onClick={() => handleAddToCart(product)} className="add-to-cart-button">
             Add {product.name} (${product.price})
           </button>
         ))}
       </div>
 
       <div>
-        <button onClick={() => alert('Proceeding to checkout...')}>
+        <button onClick={handleClearCart} className="clear-cart-button">
+          Clear Cart
+        </button>
+      </div>
+      <br />
+
+      <div>
+        <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
           Proceed to Checkout
         </button>
       </div>
