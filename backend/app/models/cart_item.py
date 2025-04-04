@@ -60,7 +60,8 @@ class CartItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    product_id = db.Column(db.Integer)
+    product_id = db.Column(db.Integer,db.ForeignKey(("products.id")),nullable=False)
+    product = db.relationship('Product', back_populates='cart_items')
     quantity = db.Column(db.Integer)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)

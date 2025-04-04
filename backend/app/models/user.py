@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
     
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
     # reviews = db.relationship('Review', back_populates='product', cascade='all, delete-orphan')- wait for product.py
+    products = db.relationship("Product", back_populates="owner")
 
     def to_dict(self):
         return {
