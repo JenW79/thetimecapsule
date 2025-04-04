@@ -20,8 +20,7 @@ def get_cart():
         } for item in cart_items]
         return jsonify({"cart_items": items}), 200
     else:
-        cart_items = session.get('cart_items', [])
-        return jsonify({"cart_items": cart_items}), 200
+        return jsonify({"cart_items": []}), 200
 
 
 # POST /cart
@@ -43,19 +42,15 @@ def add_to_cart():
         db.session.commit()
         return jsonify({"message": "Product added to cart"}), 201
     else:
-        cart_items = session.get('cart_items', [])
-        existing_item = next((item for item in cart_items if item['product_id'] == product_id), None)
-        if existing_item:
-            existing_item['quantity'] += quantity
-        else:
-            cart_items.append({
+        return jsonify({
+            "message": "Product added to cart",
+            "product": {
                 'product_id': product.id,
                 'name': product.name,
                 'quantity': quantity,
                 'price': product.price
-            })
-        session['cart_items'] = cart_items
-        return jsonify({"message": "Product added to cart"}), 201
+            }
+        }), 201
 
 
 # DELETE /cart/:item_id
@@ -70,11 +65,7 @@ def remove_item_from_cart(item_id):
         db.session.commit()
         return jsonify({"message": "Item removed from cart"}), 200
     else:
-        cart_items = session.get('cart_items', [])
-        cart_items = [item for item in cart_items if item['product_id'] != item_id]
-        session['cart_items'] = cart_items
         return jsonify({"message": "Item removed from cart"}), 200
-
 
 # POST /checkout
 # A user submits the order form

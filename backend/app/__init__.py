@@ -18,8 +18,6 @@ from datetime import timedelta
 # app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 app = Flask(__name__, static_folder="../../frontend/react-vite/dist", static_url_path="")
 
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=3650)
-
 # Setup login manager
 login = LoginManager(app)
 login.login_view = 'auth.unauthorized'
