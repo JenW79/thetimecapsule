@@ -65,6 +65,7 @@ class CartItem(db.Model):
     quantity = db.Column(db.Integer)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
+    is_ordered = db.Column(db.Boolean, default=False)
 
     user = db.relationship('User', backref='cart_items')
 
@@ -77,6 +78,10 @@ class CartItem(db.Model):
             'price': self.product.price if hasattr(self, 'product') and self.product else 0,
             'name': self.product.name if hasattr(self, 'product') and self.product else 'Unknown Product',
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "is_ordered": self.is_ordered
         }
+
+def __repr__(self):
+        return f"<CartItem {self.id} - {self.product.name}>"
 

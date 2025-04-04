@@ -100,39 +100,159 @@ def remove_item_from_cart(item_id):
 @cart_routes.route("/checkout", methods=["POST"])
 @login_required
 def submit_order():
-    form = OrderForm()
-    
-    if form.validate_on_submit():
-
-        order_data = {
-            "first_name": form.first_name.data,
-            "last_name": form.last_name.data,
-            "street_address": form.street_address.data,
-            "zip_code": form.zip_code.data,
-            "city": form.city.data,
-            "country": form.country.data,
-            "state": form.state.data,
-            "payment_method": form.payment_method.data,
-        }
-
-        cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-        if not cart_items:
-            return jsonify({"error": "Your cart is empty!"}), 400
-
-        total_price = sum(item.product.price * item.quantity for item in cart_items)
-
-        return jsonify({
-            "message": "Order form submitted successfully",
-            "order_data": order_data,
-            "cart_summary": {
-                "total_price": total_price,
-                "items": [{
-                    'product_id': item.product.id,
-                    'name': item.product.name,
-                    'quantity': item.quantity,
-                    'price': item.product.price
-                } for item in cart_items]
+    print("Received checkout data:", request.json)
+    form = OrderForm(meta={'csrf': False})
+    if request.is_json:
+        form_data = request.json
+        form.first_name.data = form_data.get('first_name')
+        form.last_name.data = form_data.get('last_name')
+        form.street_address.data = form_data.get('street_address')
+        try:
+            form.zip_code.data = int(form_data.get('zip_code', 0))
+        except (ValueError, TypeError):
+            return jsonify({"error": "Zip code must be a number"}), 400
+            
+        form.city.data = form_data.get('city')
+        form.country.data = form_data.get('country')
+        form.state.data = form_data.get('state')
+        form.payment_method.data = form_data.get('payment_method')
+        if form.validate():
+            order_data = {
+                "first_name": form.first_name.data,
+                "last_name": form.last_name.data,
+                "street_address": form.street_address.data,
+                "zip_code": form.zip_code.data,
+                "city": form.city.data,
+                "country": form.country.data,
+                "state": form.state.data,
+                "payment_method": form.payment_method.data,
             }
-        }), 200
 
-    return jsonify({"error": "Form validation failed."}), 400
+            cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+            if not cart_items:
+                return jsonify({"error": "Your cart is empty!"}), 400
+                # Mock product data for testing
+            mock_products = {
+                1: {'id': 1, 'name': 'Product 1', 'price': 20},
+                2: {'id': 2, 'name': 'Product 2', 'price': 35},
+                3: {'id': 3, 'name': 'Product 3', 'price': 50},
+            }
+            total_price = 0
+            items_summary = []
+            
+            for item in cart_items:
+                product_id = item.product_id
+                if product_id in mock_products:
+                    price = mock_products[product_id]['price']
+                    name = mock_products[product_id]['name']
+                    total_price += price * item.quantity
+                    items_summary.append({
+                        'product_id': product_id,
+                        'name': name,
+                        'quantity': item.quantity,
+                        'price': price
+                    })
+
+                    for item in cart_items:
+                        db.session.delete(item)
+
+                db.session.commit()
+
+            return jsonify({
+                "message": "Order form submitted successfully",
+                "order_data": order_data,
+                "cart_summary": {
+                    "total_price": total_price,
+                    "items": items_summary
+                }
+            }), 200
+        else:
+            print("Form validation errors:", form.errors)
+            return jsonify({"error": "Form validation failed.", "details": form.errors}), 400
+        return jsonify({"error": "Invalid request format."}), 400
+
+    # # if request.is_json:
+    #     form_data = request.get_json()
+    #     form = OrderForm(
+    #         formdata=None,
+    #         data={
+    #             'first_name': form_data.get('first_name'),
+    #             'last_name': form_data.get('last_name'),
+    #             'street_address': form_data.get('street_address'),
+    #             'zip_code': form_data.get('zip_code'),
+    #             'city': form_data.get('city'),
+    #             'country': form_data.get('country'),
+    #             'state': form_data.get('state'),
+    #             'payment_method': form_data.get('payment_method')
+    #         }
+    #     )
+    # else:
+    #     form = OrderForm()
+    
+    # if form.validate_on_submit():
+
+    #     order_data = {
+    #         "first_name": form.first_name.data,
+    #         "last_name": form.last_name.data,
+    #         "street_address": form.street_address.data,
+    #         "zip_code": form.zip_code.data,
+    #         "city": form.city.data,
+    #         "country": form.country.data,
+    #         "state": form.state.data,
+    #         "payment_method": form.payment_method.data,
+    #     }
+
+    #     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    #     if not cart_items:
+    #         return jsonify({"error": "Your cart is empty!"}), 400
+
+    #     # Mock product data for testing
+    #     mock_products = {
+    #         1: {'id': 1, 'name': 'Product 1', 'price': 20},
+    #         2: {'id': 2, 'name': 'Product 2', 'price': 35},
+    #         3: {'id': 3, 'name': 'Product 3', 'price': 50},
+    #     }
+        
+    #     total_price = 0
+    #     items_summary = []
+        
+    #     for item in cart_items:
+    #         product_id = item.product_id
+    #         if product_id in mock_products:
+    #             price = mock_products[product_id]['price']
+    #             name = mock_products[product_id]['name']
+    #             total_price += price * item.quantity
+    #             items_summary.append({
+    #                 'product_id': product_id,
+    #                 'name': name,
+    #                 'quantity': item.quantity,
+    #                 'price': price
+    #             })
+
+    #     return jsonify({
+    #         "message": "Order form submitted successfully",
+    #         "order_data": order_data,
+    #         "cart_summary": {
+    #             "total_price": total_price,
+    #             "items": items_summary
+    #         }
+    #     }), 200
+
+    # return jsonify({"error": "Form validation failed.", "details": form.errors}), 400
+    #     # total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    #     return jsonify({
+    #         "message": "Order form submitted successfully",
+    #         "order_data": order_data,
+    #         "cart_summary": {
+    #             "total_price": total_price,
+    #             "items": [{
+    #                 'product_id': item.product.id,
+    #                 'name': item.product.name,
+    #                 'quantity': item.quantity,
+    #                 'price': item.product.price
+    #             } for item in cart_items]
+    #         }
+    #     }), 200
+
+    # return jsonify({"error": "Form validation failed.", "details": form.errors}), 400

@@ -27,13 +27,18 @@ const OrderFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formDataToSubmit = {
+      ...formData,
+      zip_code: parseInt(formData.zip_code, 10 || 0)
+    };
+
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formDataToSubmit),
       });
 
       if (!response.ok) {
@@ -42,7 +47,7 @@ const OrderFormPage = () => {
 
       const data = await response.json();
       setSuccessMessage("Order submitted successfully!");
-      setOrders((prevOrders) => [...prevOrders, data]);
+      setOrders((prevOrders) => [...prevOrders, data.order_data]);
       setFormData({
         first_name: "",
         last_name: "",
@@ -140,6 +145,17 @@ const OrderFormPage = () => {
           <option value="Credit Card">Credit Card</option>
           <option value="Debit Card">Debit Card</option>
           <option value="PayPal">PayPal</option>
+          <option value="Apple Pay">Apple Pay</option>
+          <option value="Google Pay">Google Pay</option>
+          <option value="Amazon Pay">Amazon Pay</option>
+          <option value="Samsung Pay">Samsung Pay</option>
+          <option value="Venmo">Venmo</option>
+          <option value="Stripe">Stripe</option>
+          <option value="Affirm">Affirm</option>
+          <option value="Klarna">Klarna</option>
+          <option value="Zip">Zip</option>
+          <option value="Sezzle">Sezzle</option>
+          <option value="Afterpay">Afterpay</option>
         </select>
 
         <button type="submit">Submit Order</button>
