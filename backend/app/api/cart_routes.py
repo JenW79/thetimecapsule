@@ -1,8 +1,8 @@
 from flask import render_template, Blueprint, jsonify, request, session
 from flask_login import login_required, current_user
 from ..forms import OrderForm
-from ..models import CartItem
-# from ..models import CartItem, Product
+# from ..models import CartItem
+from ..models import CartItem, Product
 from .. import db
 import re;
 

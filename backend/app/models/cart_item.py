@@ -69,6 +69,7 @@ class CartItem(db.Model):
     is_ordered = db.Column(db.Boolean, default=False)
 
     user = db.relationship('User', backref='cart_items')
+    product = db.relationship('Product', backref='cart_items')
 
     def to_dict(self):
         return {
