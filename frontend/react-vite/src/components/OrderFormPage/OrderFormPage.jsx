@@ -88,10 +88,6 @@ const OrderFormPage = () => {
 
       const data = await response.json();
 
-      // if (!response.ok) {
-      //   throw new Error(data.error || "Failed to submit the order");
-      // }
-
       setSuccessMessage(alert("Order submitted successfully!"));
       // setSuccessMessage("Order submitted successfully!");
       // alert("Order submitted successfully!");
