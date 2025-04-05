@@ -16,3 +16,5 @@ const AddtoCartButton = ({ item }) => {
 }
 
 export default AddtoCartButton;
+
+// Note: Use this add to cart button on the Product page
