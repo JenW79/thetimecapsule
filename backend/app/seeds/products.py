@@ -120,10 +120,14 @@ def seed_products():
         )
     ]
     
-    db.session.add_all(products)
-    db.session.commit()
-    
-    logger.info(f"Created {len(products)} products")
+    try:
+        db.session.add_all(products)
+        db.session.commit()
+        
+        logger.info(f"Created {len(products)} products")
+    except Exception as e:
+        logger.error(f"Error while committing products: {e}")
+        db.session.rollback()
     return products
 
 # Uses a raw SQL query to TRUNCATE or DELETE the products table.

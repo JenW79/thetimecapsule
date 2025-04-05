@@ -37,7 +37,7 @@ def upgrade():
     sa.Column('category', sa.String(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('products', schema=None) as batch_op:
@@ -77,7 +77,6 @@ def downgrade():
     op.drop_table('cart_items')
     with op.batch_alter_table('products', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_products_name'))
-        batch_op.drop_index(batch_op.f('ix_products_id'))
 
     op.drop_table('products')
     op.drop_table('users')
