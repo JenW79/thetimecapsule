@@ -29,7 +29,7 @@ class Product(db.Model):
     created_at = db.Column(DateTime, default=datetime.now())
 
     # Relationships
-    owner = relationship("User", back_populates="products")
-    favorited_by = relationship("Favorite", back_populates="product")
-    reviews = relationship("Review", back_populates="product")
-    cart_items = relationship("CartItem", back_populates="product")
+    owner = db.relationship("User", back_populates="products")
+    # favorited_by = db.relationship("Favorite", back_populates="product") #favorites not ready yet
+    reviews = db.relationship("Review", back_populates="product")
+    cart_items = db.relationship("CartItem", back_populates="product")
