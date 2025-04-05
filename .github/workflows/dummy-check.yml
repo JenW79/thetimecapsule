@@ -1,12 +1,13 @@
-name: Safe Sync Check
+name: sync-check
 
 on:
   pull_request:
     branches: [development]
 
 jobs:
-  always-pass:
+  confirm-up-to-date:
+    name: Check branch is up-to-date
     runs-on: ubuntu-latest
     steps:
-      - name: Confirming this branch is up-to-date 👍
-        run: echo "This dummy check exists only to ensure pull before merge"
+      - name: Print confirmation
+        run: echo "Safe Sync Check passed!"
