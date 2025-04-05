@@ -62,14 +62,13 @@ class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     product_id = db.Column(db.Integer,db.ForeignKey(("products.id")),nullable=False)
-    product = db.relationship('Product', back_populates='cart_items')
     quantity = db.Column(db.Integer)
     created_at = db.Column(DateTime, default=datetime.now())
-    updated_at = db.Column(DateTime, default=datetime.now())
+    updated_at = db.Column(DateTime, default=datetime.now(), onupdate=datetime.utcnow)
     is_ordered = db.Column(db.Boolean, default=False)
 
     user = db.relationship('User', backref='cart_items')
-    product = db.relationship('Product', backref='cart_items')
+    product = db.relationship('Product', back_populates='cart_items')
 
     def to_dict(self):
         return {
