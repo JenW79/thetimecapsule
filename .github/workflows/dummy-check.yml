@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print confirmation
-        run: echo "Safe Sync Check passed!"
+        run: echo "Safe Sync Check passed!!!"
