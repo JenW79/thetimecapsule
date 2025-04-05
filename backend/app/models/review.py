@@ -1,4 +1,3 @@
-
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime, timezone
 
@@ -9,18 +8,30 @@ class Review(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    # product_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('products.id')), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey("products.id")) #passing version of commented out above
-    # product_id = db.Column(db.Integer, nullable=True)  # Temporary placeholdernullable=False) #duplicate product_id error
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey(add_prefix_for_prod('users.id')), #add_prefix_for_prod ensures compatibility in production schema.
+        nullable=False
+    )
+    product_id = db.Column(
+        db.Integer,
+        db.ForeignKey(add_prefix_for_prod('products.id')), #add_prefix_for_prod ensures compatibility in production schema.
+        nullable=False
+    )
     rating = db.Column(db.Integer, nullable=False)
     review_text = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = db.Column(
+        db.DateTime,
+        default=lambda: datetime.now(timezone.utc)
+    )
+    updated_at = db.Column(
+        db.DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
 
     user = db.relationship('User', back_populates='reviews')
-    # product = db.relationship('Product', back_populates='reviews')needs product.py #syntax error
-    product = db.relationship('Product', back_populates='reviews')
+    product = db.relationship('Product', back_populates='reviews')  # Matches product.py relationship
 
     def to_dict(self):
         return {
@@ -32,4 +43,4 @@ class Review(db.Model):
             'review_text': self.review_text,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None,
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if self.updated_at else None
-    }
+        }
