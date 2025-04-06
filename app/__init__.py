@@ -15,8 +15,8 @@ from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
 
-# app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
-app = Flask(__name__, static_folder="../../frontend/react-vite/dist", static_url_path="")
+app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+# app = Flask(__name__, static_folder="../../frontend/react-vite/dist", static_url_path="")
 
 # Setup login manager
 login = LoginManager(app)
