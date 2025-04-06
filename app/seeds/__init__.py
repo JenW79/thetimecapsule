@@ -3,7 +3,7 @@ from .users import seed_users, undo_users
 from .carts import seed_cart_items, undo_cart_items
 from .reviews import seed_reviews, undo_reviews
 from .products import seed_products, undo_products
-from ..models.db import db, environment, SCHEMA
+from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
 # So we can type `flask seed --help`

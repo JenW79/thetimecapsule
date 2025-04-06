@@ -2,6 +2,7 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from sqlalchemy import DateTime, ForeignKey
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from app.models.cart_item import CartItem
 
 # class Decade(enum.Enum):
 #     EIGHTIES = "80s"
