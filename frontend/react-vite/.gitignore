@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.env
+__pycache__/
+*.py[cod]
+.venv
+.DS_Store
+.vscode/
+*.db
+.history
+instance/
+instance/dev.db
