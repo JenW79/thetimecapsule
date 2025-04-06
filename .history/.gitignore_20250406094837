@@ -4,9 +4,8 @@ __pycache__/
 .venv
 .DS_Store
 .vscode/
-node_modules
-instance/
 *.db
-instance/dev.db
 .history
-history/
+instance/
+instance/dev.db
+node

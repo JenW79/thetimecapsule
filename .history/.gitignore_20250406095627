@@ -6,7 +6,3 @@ __pycache__/
 .vscode/
 node_modules
 instance/
-*.db
-instance/dev.db
-.history
-history/
