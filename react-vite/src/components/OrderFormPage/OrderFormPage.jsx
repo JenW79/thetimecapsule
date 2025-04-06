@@ -261,6 +261,8 @@ const OrderFormPage = () => {
                   <li>Country: {order.country}</li>
                   <li>State: {order.state}</li>
                   <li>Payment Method: {order.payment_method}</li>
+                  <li>Product Name: {order.product_name}</li>
+                  <li>Quantity: {order.quantity}</li>
                 </ul>
               </li>
             ))
