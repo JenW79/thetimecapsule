@@ -1,4 +1,4 @@
-from ..models import db, Review
+from app.models import db, Review
 from datetime import datetime, timezone
 
 def seed_reviews():

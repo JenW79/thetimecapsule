@@ -1,4 +1,4 @@
-from ..models import db, Product, User, environment, SCHEMA
+from app.models import db, Product, User, environment, SCHEMA
 from sqlalchemy.sql import text
 from datetime import datetime
 import logging
@@ -120,14 +120,10 @@ def seed_products():
         )
     ]
     
-    try:
-        db.session.add_all(products)
-        db.session.commit()
-        
-        logger.info(f"Created {len(products)} products")
-    except Exception as e:
-        logger.error(f"Error while committing products: {e}")
-        db.session.rollback()
+    db.session.add_all(products)
+    db.session.commit()
+    
+    logger.info(f"Created {len(products)} products")
     return products
 
 # Uses a raw SQL query to TRUNCATE or DELETE the products table.

@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Confirm sync for branch protection
-        run: echo "✅ This check ensures the branch is synced with development."
+        run: echo "This check ensures the branch is synced with development."
