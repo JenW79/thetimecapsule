@@ -9,5 +9,21 @@ jobs:
     name: required-sync-check
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm sync for branch protection
-        run: echo "This check ensures the branch is synced with development."
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch dev branch
+        run: |
+          git fetch origin development
+
+      - name: Check if branch is behind development
+        run: |
+          BEHIND=$(git rev-list HEAD..origin/development --count)
+          if [ "$BEHIND" -ne 0 ]; then
+            echo "❌ Branch is behind development by $BEHIND commits. Please sync before merging."
+            exit 1
+          else
+            echo "✅ Branch is up-to-date with development."
+          fi
