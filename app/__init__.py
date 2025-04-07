@@ -4,13 +4,19 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from .models import db, User
+from .models import db, User, CartItem
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
+from .api.cart_routes import cart_routes
+from .api.review_routes import review_routes
+from .forms import order_form
 from .seeds import seed_commands
 from .config import Config
+from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+# app = Flask(__name__, static_folder="../../frontend/react-vite/dist", static_url_path="")
 
 # Setup login manager
 login = LoginManager(app)
@@ -28,6 +34,8 @@ app.cli.add_command(seed_commands)
 app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
+app.register_blueprint(cart_routes, url_prefix='/api')
+app.register_blueprint(review_routes, url_prefix='/api')
 db.init_app(app)
 Migrate(app, db)
 
@@ -82,9 +90,12 @@ def react_root(path):
     or index.html requests
     """
     if path == 'favicon.ico':
-        return app.send_from_directory('public', 'favicon.ico')
-    return app.send_static_file('index.html')
+        return app.send_static_file('favicon.ico')
 
+    if path and os.path.exists(os.path.join(app.static_folder, path)):
+        return app.send_static_file(path)
+    
+    return app.send_static_file('index.html')
 
 @app.errorhandler(404)
 def not_found(e):

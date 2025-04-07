@@ -1,0 +1,47 @@
+.button-spacing {
+    margin-right: 10px;
+}
+
+.your-cart-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.your-cart-button:hover {
+    background-color: purple;
+}
+
+.add-to-cart-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.add-to-cart-button:hover {
+    background-color: purple;
+}
+
+.clear-cart-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.clear-cart-button:hover {
+    background-color: purple;
+}

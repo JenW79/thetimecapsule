@@ -30,7 +30,7 @@ class Product(db.Model):
     created_at = db.Column(DateTime, default=datetime.now())
 
     # Relationships
-    user = db.relationship("User", back_populates="products") #added user not owner to stay consistent with user.py
-    # favorited_by = relationship("Favorite", back_populates="product") // to be added later (commented out due to throwing errors)
-    reviews = db.relationship("Review", back_populates="product", cascade="all, delete-orphan")
+    owner = db.relationship("User", back_populates="products")
+    # favorited_by = db.relationship("Favorite", back_populates="product") #favorites not ready yet
+    reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
