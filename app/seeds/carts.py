@@ -14,7 +14,6 @@ def seed_cart_items():
         nintendo_product = Product(
             name='Nintendo Entertainment System (NES)', 
             description='Classic 80s gaming console', 
-            description='Classic 80s gaming console', 
             price=199.99, 
             image_url='url-to-image', 
             decade='1980s', 
@@ -38,7 +37,6 @@ def seed_cart_items():
         logger.info("Product 'iPod' not found. Creating it.")
         ipod_product = Product(
             name='iPod', 
-            description='Portable media player', 
             description='Portable media player', 
             price=299.99, 
             image_url='url-to-image', 
