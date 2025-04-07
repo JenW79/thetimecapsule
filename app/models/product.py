@@ -26,7 +26,7 @@ class Product(db.Model):
     image_url = db.Column(db.String)
     decade = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
-    owner_id = db.Column(db.Integer, ForeignKey("users.id"))
+    owner_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
     created_at = db.Column(DateTime, default=datetime.now())
 
     # Relationships
