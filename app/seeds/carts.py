@@ -26,7 +26,7 @@ def seed_cart_items():
         bratz_product = Product(
             name='Bratz', 
             description='Doll series', 
-            price=29.99, 
+            price=19.99, 
             image_url='url-to-image', 
             decade='2000s', 
             category='Toys'
