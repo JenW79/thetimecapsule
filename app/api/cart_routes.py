@@ -392,8 +392,10 @@ def submit_order():
             return jsonify({"error": "CVV must be 3 or 4 digits."}), 400
 
         card_number = form.card_number.data
-        if not re.match(r"^\d{10}$", card_number):
-            return jsonify({"error": "Card number must be exactly 10 digits."}), 400
+        # if not re.match(r"^\d{10}$", card_number):
+        #     return jsonify({"error": "Card number must be exactly 10 digits."}), 400
+        if not re.match(r"^\d{16}$", card_number):
+            return jsonify({"error": "Card number must be exactly 16 digits."}), 400
 
         if form.validate():
             order_data = {
