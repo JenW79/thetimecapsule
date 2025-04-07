@@ -148,7 +148,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 def seed_cart_items():
-
     nintendo_product = Product.query.filter_by(name='Nintendo Entertainment System (NES)').first()
     bratz_product = Product.query.filter_by(name='Bratz').first()
     ipod_product = Product.query.filter_by(name='iPod').first()
@@ -157,6 +156,7 @@ def seed_cart_items():
         logger.info("Product 'Nintendo Entertainment System (NES)' not found. Creating it.")
         nintendo_product = Product(
             name='Nintendo Entertainment System (NES)', 
+            description='Classic 80s gaming console', 
             description='Classic 80s gaming console', 
             price=199.99, 
             image_url='url-to-image', 
@@ -170,8 +170,8 @@ def seed_cart_items():
         bratz_product = Product(
             name='Bratz', 
             description='Doll series', 
-            price=19.99, 
-            image_url='url-to-image', 
+            price=29.99, 
+            image_url='https://example.com/bratz.jpg', 
             decade='2000s', 
             category='Toys'
         )
@@ -181,6 +181,7 @@ def seed_cart_items():
         logger.info("Product 'iPod' not found. Creating it.")
         ipod_product = Product(
             name='iPod', 
+            description='Portable media player', 
             description='Portable media player', 
             price=299.99, 
             image_url='url-to-image', 
@@ -200,6 +201,7 @@ def seed_cart_items():
         raise ValueError("User not found!")
 
     cart_item_1 = CartItem(product_id=nintendo_product.id, user_id=user.id, quantity=1)
+    cart_item_2 = CartItem(product_id=bratz_product.id, user_id=user.id, quantity=1)
     cart_item_2 = CartItem(product_id=bratz_product.id, user_id=user.id, quantity=1)
     cart_item_3 = CartItem(product_id=ipod_product.id, user_id=user.id, quantity=1)
 
