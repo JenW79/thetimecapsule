@@ -35,3 +35,6 @@ instance/
 instance/dev.db
 .history
 history/
+# Ignore build folder (dist) except for final deployment to Render (make sure to remove before deploy!) 
+# putting this in ignore while development will prevent merge conflicts or issues with bloat. 
+dist/
