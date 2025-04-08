@@ -63,7 +63,7 @@ class CartItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')))
-    product_id = db.Column(db.Integer,db.ForeignKey(add_prefix_for_prod("products.id")),nullable=False)
+    product_id = db.Column(db.Integer,db.ForeignKey(add_prefix_for_prod('products.id')),nullable=False)
     quantity = db.Column(db.Integer)
     created_at = db.Column(DateTime, default=datetime.now())
     updated_at = db.Column(DateTime, default=datetime.now(), onupdate=datetime.utcnow)

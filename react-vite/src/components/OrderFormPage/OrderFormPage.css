@@ -134,12 +134,12 @@
   }
   
   .submit-button {
-    background-color: #4caf50;
+    background-color: black;
     color: white;
   }
   
   .submit-button:hover {
-    background-color: #45a049;
+    background-color: black;
   }
   
   .submit-button:disabled {
@@ -148,12 +148,12 @@
   }
   
   .cancel-button {
-    background-color: #f44336;
+    background-color: black;
     color: white;
   }
   
   .cancel-button:hover {
-    background-color: #d32f2f;
+    background-color: black;
   }
   
   .cancel-button:disabled {
@@ -173,10 +173,12 @@
   .success-message {
     background-color: #e8f5e9;
     color: #2e7d32;
+    /* color: purple; */
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 20px;
     border-left: 4px solid #2e7d32;
+    /* border-left: 4px solid purple; */
   }
   
   .order-history {
