@@ -1,5 +1,3 @@
-import { mergeCartsAfterLogin } from './cart';
-
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
@@ -21,7 +19,7 @@ export const thunkAuthenticate = () => async (dispatch) => {
   }
 };
 
-export const thunkLogin = (credentials) => async dispatch => {
+export const thunkLogin = (credentials) => async (dispatch) => {
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -31,13 +29,12 @@ export const thunkLogin = (credentials) => async dispatch => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data));
-    dispatch(mergeCartsAfterLogin());
     return null;
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: "Something went wrong. Please try again" };
   }
 };
 
@@ -53,9 +50,9 @@ export const thunkSignup = (user) => async (dispatch) => {
     dispatch(setUser(data));
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: "Something went wrong. Please try again" };
   }
 };
 

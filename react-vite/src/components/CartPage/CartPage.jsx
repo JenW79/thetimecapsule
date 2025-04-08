@@ -1,494 +1,7 @@
-// import { useDispatch, useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
-// import { useEffect, useState, useRef } from 'react';
-// import './CartPage.css';
-
-// const CartPage = () => {
-//   const dispatch = useDispatch();
-//   const cartItems = useSelector((state) => state.cart.cartItems || []);
-//   const prevCartItemsRef = useRef();
-//   const navigate = useNavigate();
-
-//   const [totalPrice, setTotalPrice] = useState(0);
-//   const [error, setError] = useState(null);
-
-//   // Hardcoded product list for adding to the cart
-//   const availableProducts = [
-//     { id: '1', name: 'Product 1', price: 20 },
-//     { id: '2', name: 'Product 2', price: 35 },
-//     { id: '3', name: 'Product 3', price: 50 },
-//   ];
-
-//   const handleIncrement = (productId) => {
-//     dispatch(incrementItem(productId));
-//   };
-
-//   const handleDecrement = (productId) => {
-//     dispatch(decrementItem(productId));
-//   };
-
-//   const handleRemoveFromCart = (productId) => {
-//     dispatch(removeFromCart(productId));
-//   };
-
-//   const handleAddToCart = (product) => {
-//     dispatch(addToCart(product));
-//   };
-
-//   const handleClearCart = () => {
-//     dispatch(removeFromCart('all'));
-//   };
-
-//   useEffect(() => {
-//     if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-//       prevCartItemsRef.current = cartItems;
-//       // Simulate error handling for cart fetch or calculation
-//       try {
-//         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-//         setTotalPrice(total.toFixed(2));
-//       } catch (err) {
-//         console.error('Error calculating total price:', err);
-//         setError('Failed to calculate total price');
-//       }
-//     }
-//   }, [cartItems]);
-
-//   if (error) {
-//     return <div>{error}</div>;
-//   }
-
-//   const handleProceedToCheckout = () => {
-//     navigate('/checkout');
-//   };
-
-//   return (
-//     <div>
-//       <h2>Your Cart</h2>
-//       {!cartItems || cartItems.length === 0 ? (
-//         <p>Your cart is empty!</p>
-//       ) : (
-//         <ul>
-//           {cartItems.map((item) => (
-//             <li key={item.id}>
-//               {item.name} - ${item.price} - Quantity: {item.quantity}
-//               <br />
-//               <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
-//               <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
-//               <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-
-//       <h3>Total Price: ${totalPrice}</h3>
-
-//       <div>
-//         <h3>Add New Item to Cart</h3>
-//         {availableProducts.map((product) => (
-//           <button key={product.id} onClick={() => handleAddToCart(product)} className="add-to-cart-button">
-//             Add {product.name} (${product.price})
-//           </button>
-//         ))}
-//       </div>
-
-//       <div>
-//         <button onClick={handleClearCart} className="clear-cart-button">
-//           Clear Cart
-//         </button>
-//       </div>
-//       <br />
-
-//       <div>
-//         <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
-//           Proceed to Checkout
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CartPage;
-// // **note: use the code above since product routes isn't added yet
-
-
-
-
-
-
-// // import { useDispatch, useSelector } from 'react-redux';
-// // import { useNavigate } from 'react-router-dom';
-// // // import { addToCart, removeFromCart, incrementItem, decrementItem, mergeCartsAfterLogin, fetchCart  } from '../../redux/cart';
-// // import { addToCart, removeFromCart, incrementItem, decrementItem  } from '../../redux/cart';
-// // import { useEffect, useState, useRef } from 'react';
-// // import './CartPage.css';
-
-// // const CartPage = () => {
-// //   const dispatch = useDispatch();
-// //   const cartItems = useSelector((state) => state.cart.cartItems || []);
-// //   const prevCartItemsRef = useRef();
-// //   const navigate = useNavigate();
-
-// //   const [totalPrice, setTotalPrice] = useState(0);
-// //   const [error, setError] = useState(null);
-// //   const [availableProducts, setAvailableProducts] = useState([]);
-
-// //   useEffect(() => {
-// //     fetch('/api/products')
-// //       .then((response) => response.json())
-// //       .then((data) => setAvailableProducts(data))
-// //       .catch((error) => {
-// //         console.error('Error fetching products:', error);
-// //         setError('Failed to load products');
-// //       });
-// //   }, []);
-
-// //   const handleIncrement = (productId) => {
-// //     dispatch(incrementItem(productId));
-// //   };
-
-// //   const handleDecrement = (productId) => {
-// //     dispatch(decrementItem(productId));
-// //   };
-
-// //   const handleRemoveFromCart = (productId) => {
-// //     dispatch(removeFromCart(productId));
-// //   };
-
-// //   const handleAddToCart = (product) => {
-// //     dispatch(addToCart(product));
-// //   };
-
-// //   const handleClearCart = () => {
-// //     dispatch(removeFromCart('all'));
-// //   };
-
-// //   useEffect(() => {
-// //     if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-// //       prevCartItemsRef.current = cartItems;
-// //       try {
-// //         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-// //         setTotalPrice(total);
-// //       } catch (err) {
-// //         console.error('Error calculating total price:', err);
-// //         setError('Failed to calculate total price');
-// //       }
-// //     }
-// //   }, [cartItems]);
-
-// //   if (error) {
-// //     return <div>{error}</div>;
-// //   }
-
-// //   const handleProceedToCheckout = () => {
-// //     navigate('/checkout');
-// //   };
-
-// //   return (
-// //     <div>
-// //       <h2>Your Cart</h2>
-// //       {!cartItems || cartItems.length === 0 ? (
-// //         <p>Your cart is empty!</p>
-// //       ) : (
-// //         <ul>
-// //           {cartItems.map((item) => (
-// //             <li key={item.id}>
-// //               {item.name} - ${item.price} - Quantity: {item.quantity}
-// //               <br />
-// //               <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
-// //               <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
-// //               <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
-// //             </li>
-// //           ))}
-// //         </ul>
-// //       )}
-
-// //       <h3>Total Price: ${totalPrice}</h3>
-
-// //       <div>
-// //         <h3>Add New Item to Cart</h3>
-// //         {availableProducts.length > 0 ? (
-// //           <select onChange={(e) => handleAddToCart(availableProducts[e.target.selectedIndex])}>
-// //             <option>Select a product</option>
-// //             {availableProducts.map((product) => (
-// //               <option key={product.id} value={product.id}>
-// //                 {product.name} - ${product.price}
-// //               </option>
-// //             ))}
-// //           </select>
-// //         ) : (
-// //           <p>Loading available products...</p>
-// //         )}
-// //       </div>
-
-// //       <div>
-// //         <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
-// //           Proceed to Checkout
-// //         </button>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default CartPage;
-
-
-
-
-
-// // **note: uncomment the code below after product routes is added
-// // import { useDispatch, useSelector } from 'react-redux';
-// // import { useNavigate } from 'react-router-dom';
-// // import { addToCart, removeFromCart, incrementItem, decrementItem, mergeCartsAfterLogin } from '../../redux/cart';
-// // import { useEffect, useState, useRef } from 'react';
-// // import './CartPage.css';
-
-// // const CartPage = () => {
-// //   const dispatch = useDispatch();
-// //   const cartItems = useSelector((state) => state.cart.cartItems || []);
-// //   const prevCartItemsRef = useRef();
-// //   const navigate = useNavigate();
-
-// //   const [totalPrice, setTotalPrice] = useState(0);
-// //   const [error, setError] = useState(null);
-
-// //   const [availableProducts, setAvailableProducts] = useState([]);
-
-// //   useEffect(() => {
-// //     fetch('/api/products')
-// //       .then((response) => response.json())
-// //       .then((data) => setAvailableProducts(data))
-// //       .catch((error) => {
-// //         console.error('Error fetching products:', error);
-// //         setError('Failed to load products');
-// //       });
-// //   }, []);
-
-// //   const user = useSelector((state) => state.session.user);
-// //   useEffect(() => {
-// //     if (user) {
-// //       dispatch(mergeCartsAfterLogin());
-// //     }
-// //   }, [dispatch, user]);
-
-// //   const handleIncrement = (productId) => {
-// //     dispatch(incrementItem(productId));
-// //   };
-
-// //   const handleDecrement = (productId) => {
-// //     dispatch(decrementItem(productId));
-// //   };
-
-// //   const handleRemoveFromCart = (productId) => {
-// //     dispatch(removeFromCart(productId));
-// //   };
-
-// //   const handleAddToCart = (product) => {
-// //     dispatch(addToCart(product));
-// //   };
-
-// //   useEffect(() => {
-// //     if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-// //       prevCartItemsRef.current = cartItems;
-// //       try {
-// //         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-// //         setTotalPrice(total.toFixed(2)); 
-// //       } catch (err) {
-// //         console.error('Error calculating total price:', err);
-// //         setError('Failed to calculate total price');
-// //       }
-// //     }
-// //   }, [cartItems]);
-
-// //   if (error) {
-// //     return <div>{error}</div>;
-// //   }
-
-// //   const handleProceedToCheckout = () => {
-// //     navigate('/checkout');
-// //   };
-
-// //   return (
-// //     <div>
-// //       <h2>Your Cart</h2>
-// //       {!cartItems || cartItems.length === 0 ? (
-// //         <p>Your cart is empty!</p>
-// //       ) : (
-// //         <ul>
-// //           {cartItems.map((item) => (
-// //             <li key={item.id}>
-// //               {item.name} - ${item.price} - Quantity: {item.quantity}
-// //               <br />
-// //               <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
-// //               <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
-// //               <button onClick={() => handleRemoveFromCart(item.id)} className="your-cart-button">Remove from cart</button>
-// //             </li>
-// //           ))}
-// //         </ul>
-// //       )}
-
-// //       <h3>Total Price: ${totalPrice}</h3>
-
-// //       <div>
-// //         <h3>Add New Item to Cart</h3>
-// //         {availableProducts.length > 0 ? (
-// //           <select onChange={(e) => handleAddToCart(availableProducts[e.target.selectedIndex])}>
-// //             <option>Select a product</option>
-// //             {availableProducts.map((product) => (
-// //               <option key={product.id} value={product.id}>
-// //                 {product.name} - ${product.price}
-// //               </option>
-// //             ))}
-// //           </select>
-// //         ) : (
-// //           <p>Loading available products...</p>
-// //         )}
-// //       </div>
-
-// //       <div>
-// //         <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
-// //           Proceed to Checkout
-// //         </button>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default CartPage;
-
-
-
-
-
-// // import { useDispatch, useSelector } from 'react-redux';
-// // import { useNavigate } from 'react-router-dom';
-// // import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
-// // import { useEffect, useState, useRef } from 'react';
-// // import './CartPage.css';
-
-// // const CartPage = () => {
-// //   const dispatch = useDispatch();
-// //   const cartItems = useSelector((state) => state.cart.cartItems || []);
-// //   const prevCartItemsRef = useRef();
-// //   const navigate = useNavigate();
-
-// //   const [totalPrice, setTotalPrice] = useState(0);
-// //   const [error, setError] = useState(null);
-
-// //   // Hardcoded product list for adding to the cart
-// //   const availableProducts = [
-// //     { id: '1', name: 'Product 1', price: 20 },
-// //     { id: '2', name: 'Product 2', price: 35 },
-// //     { id: '3', name: 'Product 3', price: 50 },
-// //   ];
-
-// //   const handleIncrement = (productId) => {
-// //     dispatch(incrementItem(productId));
-// //   };
-
-// //   const handleDecrement = (productId) => {
-// //     dispatch(decrementItem(productId));
-// //   };
-
-// //   const handleRemoveFromCart = (productId) => {
-// //     dispatch(removeFromCart(productId));
-// //   };
-
-// //   const handleAddToCart = (product) => {
-// //     dispatch(addToCart(product));
-// //   };
-
-// //   const handleClearCart = () => {
-// //     dispatch(removeFromCart('all'));
-// //   };
-
-// //   useEffect(() => {
-// //     if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-// //       prevCartItemsRef.current = cartItems;
-// //       try {
-// //         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-// //         setTotalPrice(total.toFixed(2));
-// //       } catch (err) {
-// //         console.error('Error calculating total price:', err);
-// //         setError('Failed to calculate total price');
-// //       }
-// //     }
-// //   }, [cartItems]);
-
-// //   useEffect(() => {
-// //     const savedCart = localStorage.getItem('guestCart');
-// //     if (savedCart) {
-// //       const parsedCart = JSON.parse(savedCart);
-// //       parsedCart.forEach((item) => dispatch(addToCart(item)));
-// //     }
-// //   }, [dispatch]);
-
-// //   if (error) {
-// //     return <div>{error}</div>;
-// //   }
-
-// //   const handleProceedToCheckout = () => {
-// //     navigate('/checkout');
-// //   };
-
-// //   return (
-// //     <div>
-// //       <h2>Your Cart</h2>
-// //       {!cartItems || cartItems.length === 0 ? (
-// //         <p>Your cart is empty!</p>
-// //       ) : (
-// //         <ul>
-// //           {cartItems.map((item) => (
-// //             <li key={item.product_id}>
-// //               {item.name} - ${item.price} - Quantity: {item.quantity}
-// //               <br />
-// //               <button onClick={() => handleIncrement(item.product_id)} className="your-cart-button">+</button>
-// //               <button onClick={() => handleDecrement(item.product_id)} className="your-cart-button">-</button>
-// //               <button onClick={() => handleRemoveFromCart(item.product_id)} className="your-cart-button">Remove from cart</button>
-// //             </li>
-// //           ))}
-// //         </ul>
-// //       )}
-
-// //       <h3>Total Price: ${totalPrice}</h3>
-
-// //       <div>
-// //         <h3>Add New Item to Cart</h3>
-// //         {availableProducts.map((product) => (
-// //           <button key={product.id} onClick={() => handleAddToCart(product)} className="add-to-cart-button">
-// //             Add {product.name} (${product.price})
-// //           </button>
-// //         ))}
-// //       </div>
-
-// //       <div>
-// //         <button onClick={handleClearCart} className="clear-cart-button">
-// //           Clear Cart
-// //         </button>
-// //       </div>
-// //       <br />
-
-// //       <div>
-// //         <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
-// //           Proceed to Checkout
-// //         </button>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default CartPage;
-
-
-
-
-
-
-// **note: use the code below since product routes isn't added yet
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart, incrementItem, decrementItem, clearCart } from '../../redux/cart';
 import { useNavigate } from 'react-router-dom';
-import { addToCart, removeFromCart, incrementItem, decrementItem } from '../../redux/cart';
-import { useEffect, useState, useRef } from 'react';
 import './CartPage.css';
 
 const CartPage = () => {
@@ -500,11 +13,88 @@ const CartPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
 
-  // Hardcoded product list for adding to the cart
   const availableProducts = [
-    { id: '1', name: 'Product 1', price: 20 },
-    { id: '2', name: 'Product 2', price: 35 },
-    { id: '3', name: 'Product 3', price: 50 },
+    {
+      id: '1',
+      name: 'Cabbage Patch Kids',
+      description: 'Popular soft-bodied dolls with adoption papers, a cultural phenomenon of the 1980s',
+      price: 49.99,
+      image_url: 'https://example.com/cabbage-patch-kids.jpg',
+      decade: '80s',
+      category: 'toy',
+    },
+    {
+      id: '2',
+      name: 'Pac-Man',
+      description: 'Iconic arcade game where players navigate a yellow character through a maze eating dots and avoiding ghosts',
+      price: 29.99,
+      image_url: 'https://example.com/pacman.jpg',
+      decade: '80s',
+      category: 'game',
+    },
+    {
+      id: '3',
+      name: 'Nintendo Entertainment System (NES)',
+      description: '8-bit home video game console that revitalized the video game industry in the 1980s',
+      price: 199.99,
+      image_url: 'https://example.com/nes.jpg',
+      decade: '80s',
+      category: 'electronic',
+    },
+    {
+      id: '4',
+      name: 'Beanie Babies',
+      description: 'Small stuffed animals filled with plastic pellets, creating a collecting craze in the 1990s',
+      price: 9.99,
+      image_url: 'https://example.com/beanie-babies.jpg',
+      decade: '90s',
+      category: 'toy',
+    },
+    {
+      id: '5',
+      name: 'Pokemon',
+      description: 'Japanese media franchise centered on fictional creatures called Pokemon, with games, trading cards, and more',
+      price: 39.99,
+      image_url: 'https://example.com/pokemon.jpg',
+      decade: '90s',
+      category: 'game',
+    },
+    {
+      id: '6',
+      name: 'Cassettes',
+      description: 'Analog magnetic tape recording format for audio recording and playback, popular in the 1990s',
+      price: 14.99,
+      image_url: 'https://example.com/cassettes.jpg',
+      decade: '90s',
+      category: 'electronic',
+    },
+    {
+      id: '7',
+      name: 'Bratz',
+      description: 'Fashion dolls characterized by their large heads and stylized features, popular in the 2000s',
+      price: 24.99,
+      image_url: 'https://example.com/bratz.jpg',
+      decade: '00s',
+      category: 'toy',
+    },
+    {
+      id: '8',
+      name: 'Call of Duty',
+      description: 'First-person shooter video game franchise that began in 2003, known for its realistic warfare gameplay',
+      price: 59.99,
+      image_url: 'https://example.com/call-of-duty.jpg',
+      decade: '00s',
+      category: 'game',
+    },
+    {
+      id: '9',
+      name: 'iPod',
+      description: 'Portable media player designed and marketed by Apple Inc., revolutionary in the 2000s music scene',
+      price: 299.99,
+      image_url: 'https://example.com/ipod.jpg',
+      decade: '00s',
+      category: 'electronic',
+    },
   ];
 
   const handleIncrement = (productId) => {
@@ -524,13 +114,12 @@ const CartPage = () => {
   };
 
   const handleClearCart = () => {
-    dispatch(removeFromCart('all'));
+    dispatch(clearCart());
   };
 
   useEffect(() => {
     if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
       prevCartItemsRef.current = cartItems;
-      // Simulate error handling for cart fetch or calculation
       try {
         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         setTotalPrice(total.toFixed(2));
@@ -561,14 +150,14 @@ const CartPage = () => {
         <div className="cart-items-container">
           <ul className="cart-items-list">
             {cartItems.map((item) => (
-              <li key={item.product_id} className="cart-item">
+              <li key={item.id} className="cart-item">
                 <div className="item-details">
                   <h3 className="item-name">{item.name}</h3>
                   <p className="item-price">${item.price}</p>
                 </div>
                 <div className="item-quantity-controls">
                   <button 
-                    onClick={() => handleDecrement(item.product_id)} 
+                    onClick={() => handleDecrement(item.id)} 
                     className="quantity-btn"
                     aria-label="Decrease quantity"
                   >
@@ -576,7 +165,7 @@ const CartPage = () => {
                   </button>
                   <span className="quantity-display">{item.quantity}</span>
                   <button 
-                    onClick={() => handleIncrement(item.product_id)} 
+                    onClick={() => handleIncrement(item.id)} 
                     className="quantity-btn"
                     aria-label="Increase quantity"
                   >
@@ -587,7 +176,7 @@ const CartPage = () => {
                   <p>${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
                 <button 
-                  onClick={() => handleRemoveFromCart(item.product_id)} 
+                  onClick={() => handleRemoveFromCart(item.id)} 
                   className="remove-btn"
                   aria-label="Remove item"
                 >
@@ -596,7 +185,7 @@ const CartPage = () => {
               </li>
             ))}
           </ul>
-          
+
           <div className="cart-summary">
             <div className="cart-total">
               <h3>Total: ${totalPrice}</h3>
