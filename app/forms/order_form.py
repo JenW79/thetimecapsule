@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, SubmitField
 # from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length #added Length, was missing
 from flask_sqlalchemy import SQLAlchemy
 # db = SQLAlchemy()
 from app.models import db
