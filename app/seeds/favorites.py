@@ -1,6 +1,7 @@
 import logging
 from sqlalchemy.orm import Session
-from app.models import Favorite, User, Product
+from sqlalchemy import text
+from app.models import Favorite, User, Product, db, environment, SCHEMA
 
 logger = logging.getLogger(__name__)
 
@@ -71,3 +72,14 @@ def seed_favorites(db: Session, users: list[User], products: list[Product]):
     
     logger.info(f"Created {len(favorites)} favorites")
     return favorites
+
+
+def undo_favorites():
+    if environment == "production":
+        db.session.execute(
+            f"TRUNCATE table {SCHEMA}.favorites RESTART IDENTITY CASCADE;"
+        )
+    else:
+        db.session.execute(text("DELETE FROM favorites"))
+
+    db.session.commit()

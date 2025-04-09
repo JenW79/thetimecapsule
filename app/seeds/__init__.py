@@ -3,7 +3,9 @@ from .users import seed_users, undo_users
 from .carts import seed_cart_items, undo_cart_items
 from .reviews import seed_reviews, undo_reviews
 from .products import seed_products, undo_products
-from app.models.db import db, environment, SCHEMA
+from .favorites import seed_favorites, undo_favorites
+from app.models import db, environment, SCHEMA, Product, User
+
 
 # Creates a seed group to hold our commands
 # So we can type `flask seed --help`
@@ -20,11 +22,18 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_users()
         undo_cart_items()
+        undo_reviews()
+        undo_favorites()
     seed_users()
     # Add other seed functions here
     seed_cart_items()
     seed_reviews()
     seed_products()
+
+    #Fetch the users & products for favorites
+    users = User.query.all()
+    products = Product.query.all()
+    seed_favorites(db.session, users, products)
 
 
 # Creates the `flask seed undo` command
@@ -35,3 +44,4 @@ def undo():
     undo_cart_items()
     undo_reviews()
     undo_products()
+    undo_favorites()
