@@ -1,13 +1,11 @@
 from flask import render_template, Blueprint, jsonify, request, session
 from flask_login import login_required, current_user
-from app.forms import OrderForm
 from app.models import db, CartItem, Product
+from app.forms import OrderForm
 import re
 
 cart_routes = Blueprint('cart', __name__)
 
-# GET /cart
-# Get all products that a user added to the shopping cart
 @cart_routes.route("/cart")
 def get_cart():
     if current_user.is_authenticated:
@@ -25,47 +23,41 @@ def get_cart():
     else:
         return jsonify({"cart_items": []}), 200
 
-
-# POST /cart
-# A user adds a new product to the shopping cart
 @cart_routes.route("/cart", methods=["POST"])
 def add_to_cart():
-    print("POST request received at /api/cart")
-    print("Request data:", request.json)
-    product_id = request.json.get('product_id')
-    quantity = request.json.get('quantity', 1)
-    
-    product = Product.query.get(product_id)
-    
-    if not product:
-        return jsonify({"error": "Product not found"}), 404
-    
-    if current_user.is_authenticated:
-        cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product.id).first()
-        
-        if cart_item:
-            cart_item.quantity += quantity
+    products = request.json
+    for product in products:
+        product_id = product.get('id')
+        quantity = product.get('quantity', 1)
+
+        product_obj = Product.query.get(product_id)
+
+        if not product_obj:
+            return jsonify({"error": "Product not found"}), 404
+
+        if current_user.is_authenticated:
+            cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_obj.id).first()
+
+            if cart_item:
+                cart_item.quantity += quantity
+            else:
+                cart_item = CartItem(user_id=current_user.id, product_id=product_obj.id, quantity=quantity)
+                db.session.add(cart_item)
+
+            db.session.commit()
         else:
-            cart_item = CartItem(user_id=current_user.id, product_id=product.id, quantity=quantity)
-            
-            db.session.add(cart_item)
-        
-        db.session.commit()
-        return jsonify({"message": "Product added to cart"}), 201
-    else:
-        return jsonify({
-            "message": "Product added to cart",
-            "product": {
-                'product_id': product.id,
-                'name': product.name,
-                'quantity': quantity,
-                'price': product.price
-            }
-        }), 201
+            return jsonify({
+                "message": "Product added to cart",
+                "product": {
+                    'product_id': product_obj.id,
+                    'name': product_obj.name,
+                    'quantity': quantity,
+                    'price': product_obj.price
+                }
+            }), 201
 
+    return jsonify({"message": "Products added to cart"}), 201
 
-# DELETE /cart/:item_id
-# A user removes an item from the shopping cart
 @cart_routes.route("/cart/<int:item_id>", methods=["DELETE"])
 def remove_item_from_cart(item_id):
     if current_user.is_authenticated:
@@ -78,13 +70,16 @@ def remove_item_from_cart(item_id):
     else:
         return jsonify({"message": "Item removed from cart"}), 200
 
-
-# POST /checkout
-# A user submits the order form
+@cart_routes.route("/cart", methods=["DELETE"])
+def clear_cart():
+    if current_user.is_authenticated:
+        db.session.commit()
+        return jsonify({"message": "Cart cleared"}), 200
+    else:
+        return jsonify({"message": "Cart cleared"}), 200
 @cart_routes.route("/checkout", methods=["POST"])
 @login_required
 def submit_order():
-    print("Received checkout data:", request.json)
     form = OrderForm(meta={'csrf': False})
     if request.is_json:
         form_data = request.json
@@ -158,7 +153,6 @@ def submit_order():
                 }
             }), 200
         else:
-            print("Form validation errors:", form.errors)
             return jsonify({"error": "Form validation failed.", "details": form.errors}), 400
 
     return jsonify({"error": "Invalid request format."}), 400
