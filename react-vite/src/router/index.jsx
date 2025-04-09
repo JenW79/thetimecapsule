@@ -12,7 +12,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Welcome!</h1>,
+        element: (
+        <div>
+            <img src="/the-time-capsule-logo.png" alt="The Time Capsule Logo" className="logo" />
+          </div>
+        ),
       },
       {
         path: "login",
