@@ -1,6 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy import text
 
 
 class User(db.Model, UserMixin):
@@ -26,7 +27,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
     
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
-    # reviews = db.relationship('Review', back_populates='product', cascade='all, delete-orphan')- wait for product.py #syntax error
+    favorites = db.relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
     products = db.relationship('Product', back_populates='owner')
 
     def to_dict(self):
@@ -35,3 +36,11 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email
         }
+    
+
+def undo_users():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute(text("DELETE FROM users"))
+    db.session.commit()

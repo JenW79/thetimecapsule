@@ -32,6 +32,6 @@ class Product(db.Model):
 
     # Relationships
     owner = db.relationship("User", back_populates="products")
-    # favorited_by = db.relationship("Favorite", back_populates="product") #favorites not ready yet
+    favorited_by = db.relationship("Favorite", back_populates="product", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
