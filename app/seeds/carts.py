@@ -55,11 +55,27 @@ def seed_cart_items():
         logger.error("No user found")
         raise ValueError("User not found!")
 
-    cart_item_1 = CartItem(product_id=nintendo_product.id, user_id=user.id, quantity=1)
-    cart_item_2 = CartItem(product_id=bratz_product.id, user_id=user.id, quantity=1)
-    cart_item_3 = CartItem(product_id=ipod_product.id, user_id=user.id, quantity=1)
+    existing_cart_item = CartItem.query.filter_by(product_id=nintendo_product.id, user_id=user.id).first()
+    if existing_cart_item:
+        existing_cart_item.quantity += 1
+    else:
+        new_cart_item = CartItem(product_id=nintendo_product.id, user_id=user.id, quantity=1)
+        db.session.add(new_cart_item)
 
-    db.session.add_all([cart_item_1, cart_item_2, cart_item_3])
+    existing_cart_item = CartItem.query.filter_by(product_id=bratz_product.id, user_id=user.id).first()
+    if existing_cart_item:
+        existing_cart_item.quantity += 1
+    else:
+        new_cart_item = CartItem(product_id=bratz_product.id, user_id=user.id, quantity=1)
+        db.session.add(new_cart_item)
+
+    existing_cart_item = CartItem.query.filter_by(product_id=ipod_product.id, user_id=user.id).first()
+    if existing_cart_item:
+        existing_cart_item.quantity += 1
+    else:
+        new_cart_item = CartItem(product_id=ipod_product.id, user_id=user.id, quantity=1)
+        db.session.add(new_cart_item)
+
     db.session.commit()
     logger.info("Cart items added successfully.")
 
