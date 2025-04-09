@@ -13,6 +13,7 @@ from app.models.cart_item import CartItem
 #     TOY = "toy"
 #     GAME = "game"
 #     ELECTRONIC = "electronic"
+# 
 
 class Product(db.Model):
     __tablename__ = "products"
