@@ -30,8 +30,27 @@ class Product(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
     created_at = db.Column(DateTime, default=datetime.now())
 
+    
+
     # Relationships
     owner = db.relationship("User", back_populates="products")
     favorited_by = db.relationship("Favorite", back_populates="product", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "price": round(self.price, 2),
+            "image_url": self.image_url,
+            "decade": self.decade,
+            "category": self.category,
+            "owner": {
+                "id": self.owner.id,
+                "username": self.owner.username
+            } if self.owner else None,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "review_count": len(self.reviews)
+        }

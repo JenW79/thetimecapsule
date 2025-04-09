@@ -6,7 +6,7 @@ from datetime import datetime
 favorites_routes= Blueprint('favorites', __name__)
 
 #GET /api/favorites
-@favorites_routes.route('/')
+@favorites_routes.route('')
 @login_required
 def get_favorites():
     favorites = Favorite.query.filter_by(user_id = current_user.id).all()
