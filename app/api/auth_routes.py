@@ -29,7 +29,8 @@ def login():
     
     if form.validate_on_submit():
         # Add the user to the session, we are logged in!
-        user = User.query.filter(User.email == form.data['email']).first()
+        email = form.data['email'].strip().lower()  # ensures email is converted lowercase
+        user = User.query.filter(User.email == email).first()
         login_user(user)
         return user.to_dict()
     return form.errors, 401

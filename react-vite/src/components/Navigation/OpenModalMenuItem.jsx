@@ -15,7 +15,10 @@ function OpenModalMenuItem({
   };
 
   return (
-    <li onClick={onClick}>{itemText}</li>
+    <li className="profile-dropdown-item" onClick={onClick}>
+  {itemText}
+</li>
+
   );
 }
 
