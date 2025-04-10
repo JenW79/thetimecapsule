@@ -5,6 +5,7 @@ import OrderFormPage from '../components/OrderFormPage/OrderFormPage';
 import CartPage from '../components/CartPage/CartPage'
 import Layout from './Layout';
 import ReviewList from '../components/Reviews/ReviewList';
+import LandingPage from '../components/LandingPage/LandingPage';
 
 export const router = createBrowserRouter([
   {
@@ -12,11 +13,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-        <div>
-            <img src="/the-time-capsule-logo.png" alt="The Time Capsule Logo" className="logo" />
-          </div>
-        ),
+          element: <LandingPage />,
       },
       {
         path: "login",
