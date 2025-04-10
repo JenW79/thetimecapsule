@@ -55,6 +55,7 @@ export const editReview = (reviewId, payload) => async (dispatch) => {
   };
 
   const initialState = {};
+  
   export default function reviewsReducer(state = initialState, action) {
     switch (action.type) {
       case LOAD_REVIEWS: {
