@@ -28,7 +28,7 @@ class Product(db.Model):
     decade = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
-    created_at = db.Column(DateTime, default=datetime.now())
+    created_at = db.Column(DateTime, default=datetime.now)
 
     
 
