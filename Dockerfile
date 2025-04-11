@@ -1,6 +1,7 @@
 FROM python:3.9.18-alpine3.18
 
 RUN apk add build-base
+
 RUN apk add postgresql-dev gcc python3-dev musl-dev
 
 ARG FLASK_APP
@@ -12,19 +13,10 @@ ARG SECRET_KEY
 ENV FLASK_APP=app
 ENV FLASK_ENV=production
 
-# ---------- Build Frontend ----------
-WORKDIR /var/www/react-vite
-
-COPY react-vite/package*.json ./
-RUN npm install
-
-COPY react-vite .
-RUN npm run build
-
-# ---------- Back to Flask ----------
 WORKDIR /var/www
 
 COPY requirements.txt .
+
 RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
@@ -32,5 +24,4 @@ COPY . .
 
 RUN flask db upgrade
 RUN flask seed all
-
 CMD gunicorn app:app
