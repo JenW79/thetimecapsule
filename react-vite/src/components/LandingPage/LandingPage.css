@@ -1,7 +1,7 @@
 .landing-page {
     background-image: url('/the-time-capsule-landing-page.png');
     background-size: contain;
-    background-position: top center;
+    background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
     width: 100%;
@@ -10,8 +10,15 @@
     justify-content: flex-start;
     align-items: center;
     padding-top: 0;
-}
-
-.landing-page h1 {
+    background-color: #f0f0f0;
+  }
+  
+  .landing-page h1 {
     margin-top: 20px;
-}
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .landing-page .logo-container {
+    margin-top: 40px;
+  }  
