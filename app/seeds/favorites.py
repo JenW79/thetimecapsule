@@ -75,11 +75,16 @@ def seed_favorites(db: Session, users: list[User], products: list[Product]):
 
 
 def undo_favorites():
-    if environment == "production":
-        db.session.execute(
-            f"TRUNCATE table {SCHEMA}.favorites RESTART IDENTITY CASCADE;"
-        )
-    else:
-        db.session.execute(text("DELETE FROM favorites"))
-
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(
+                text(f"TRUNCATE table {SCHEMA}.favorites RESTART IDENTITY CASCADE;")
+            )
+        else:
+            db.session.execute(text("DELETE FROM favorites"))
+        db.session.commit()
+    except Exception as e:
+        print("Skipping undo_favorites due to error:", e)
+        db.session.rollback()
+    
+    
