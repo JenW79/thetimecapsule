@@ -15,3 +15,4 @@ def undo_reviews():
         db.session.commit()
     except Exception as e:
         print("Skipping DELETE FROM reviews:", e)
+        db.session.rollback() 
