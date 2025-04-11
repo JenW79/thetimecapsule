@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from app.models.db import Base,environment, SCHEMA
+from app.models.db import Base, environment, SCHEMA
 from .db import add_prefix_for_prod
 
 class Favorite(Base):
