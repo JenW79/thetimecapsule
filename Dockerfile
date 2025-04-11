@@ -10,6 +10,9 @@ ARG DATABASE_URL
 ARG SCHEMA
 ARG SECRET_KEY
 
+ENV FLASK_APP=app
+ENV FLASK_ENV=production
+
 WORKDIR /var/www
 
 COPY requirements.txt .
