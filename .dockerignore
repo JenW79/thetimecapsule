@@ -5,3 +5,10 @@ node_modules
 .venv
 dev.db
 .gitignore
+.github/
+.env.* 
+*.log
+*.sqlite3
+.vscode
+.DS_Store
+__pycache__/
