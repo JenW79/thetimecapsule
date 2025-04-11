@@ -23,7 +23,7 @@ def get_favorites():
 @favorites_routes.route('/', methods=['POST'])
 @login_required
 def add_favorite():
-    data = request.get.json()
+    data = request.get_json()
     product_id = data.get('product_id')
 
     #check if already favorited
@@ -31,7 +31,7 @@ def add_favorite():
     if existing:
         return jsonify({"error": "Product already favorited"}), 400
     favorite = Favorite(user_id = current_user.id, product_id=product_id)
-    db.session.add(Favorite)
+    db.session.add(favorite)
     db.session.commit()
 
     return jsonify({'id': favorite.id, 'product_id': favorite.product_id}), 201
