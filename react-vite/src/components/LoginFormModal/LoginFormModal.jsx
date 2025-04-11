@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
 
-function LoginFormModal() {
+function LoginFormModal({ embedded = false }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,8 +35,8 @@ function LoginFormModal() {
 
   return (
     <>
-     <div className="login-form-container">
-      <h1>Log In</h1>
+     <div className={embedded ? "" : "login-form-container"}>
+      {!embedded && <h1>Sign In</h1>}
       <form className="login-form" onSubmit={handleSubmit}>
   <label htmlFor="email">Email address</label>
   <input
@@ -62,11 +62,11 @@ function LoginFormModal() {
     className={`login-button ${!email || !password ? "disabled-login" : ""}`}
     disabled={!email || !password}
   >
-    Log In
+    Sign In
   </button>
 </form>
       <p className="demo-user-text" onClick={loginAsDemoUser}>
-       Log in as Demo User
+       Sign in as Demo User
       </p>
       </div>
     </>

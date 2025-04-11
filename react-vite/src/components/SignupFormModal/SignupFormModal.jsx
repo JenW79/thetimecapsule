@@ -6,7 +6,7 @@ import "./SignupForm.css";
 
 
 
-function SignupFormModal() {
+function SignupFormModal({ embedded = false }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -40,8 +40,8 @@ function SignupFormModal() {
   };
 
   return (
-    <div className="signup-form-container">
-      <h1>Sign Up</h1>
+    <div className={embedded ? "" : "signup-form-container"}>
+      {!embedded && <h1>Sign Up</h1>}
       <form className="signup-form" onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input

@@ -1,0 +1,28 @@
+.auth-modal-container {
+    padding: 24px;
+    width: 400px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    font-family: "Helvetica Neue", sans-serif;
+  }
+  
+  .auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .auth-header h1 {
+    margin: 0;
+  }
+  
+  .auth-switch-button {
+    background: none;
+    border: 2px solid black;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  

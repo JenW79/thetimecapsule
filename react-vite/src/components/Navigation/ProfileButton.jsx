@@ -2,19 +2,25 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkLogout } from "../../redux/session";
-import OpenModalMenuItem from "./OpenModalMenuItem";
-import LoginFormModal from "../LoginFormModal";
-import SignupFormModal from "../SignupFormModal";
+import AuthModal from "../AuthModal/AuthModal";
 import profileIcon from '../../assets/the-time-capsule-profile-button.png';
+import { useModal } from "../../context/Modal";
 
 function ProfileButton() {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const user = useSelector((store) => store.session.user);
   const ulRef = useRef();
+  const { setModalContent } = useModal();
 
   const toggleMenu = (e) => {
-    e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
+    e.stopPropagation();
+  
+    if (!user) {
+      setModalContent(<AuthModal />);
+      return;
+    }
+  
     setShowMenu(!showMenu);
   };
 
@@ -45,32 +51,16 @@ function ProfileButton() {
       <button className="profile-button" onClick={toggleMenu}>
         <img src={profileIcon} alt="Profile" className="profile-icon" />
       </button>
-      {showMenu && (
-        <ul className="profile-dropdown" ref={ulRef}>
-          {user ? (
-            <>
-              <li>{user.username}</li>
-              <li>{user.email}</li>
-              <li>
-                <button onClick={logout}>Log Out</button>
-              </li>
-            </>
-          ) : (
-            <>
-              <OpenModalMenuItem
-                itemText="Log In"
-                onItemClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
-              <OpenModalMenuItem
-                itemText="Sign Up"
-                onItemClick={closeMenu}
-                modalComponent={<SignupFormModal />}
-              />
-            </>
-          )}
-        </ul>
-      )}
+      {showMenu && user && (
+  <ul className="profile-dropdown" ref={ulRef}>
+    <li>{user.username}</li>
+    <li>{user.email}</li>
+    <li>
+      <button onClick={logout}>Log Out</button>
+    </li>
+  </ul>
+)}
+
     </>
   );
 }
