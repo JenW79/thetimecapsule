@@ -1,11 +1,14 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from app.models.db import Base
+from app.models.db import Base,environment, SCHEMA
 from .db import add_prefix_for_prod
 
 class Favorite(Base):
     __tablename__ = "favorites"
+    if environment == "production":
+     __table_args__ = {'schema': SCHEMA}
+    
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey(add_prefix_for_prod("users.id")))
