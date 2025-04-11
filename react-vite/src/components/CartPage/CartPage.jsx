@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, incrementItem, decrementItem, clearCart, fetchCart } from '../../redux/cart';
 import { useNavigate } from 'react-router-dom';
+import LoginFormModal from '../LoginFormModal';
+import SignupFormModal from '../SignupFormModal';
 import './CartPage.css';
 
 const CartPage = () => {
@@ -14,6 +16,40 @@ const CartPage = () => {
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+
+  const signupModalRef = useRef(null);
+  const loginModalRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      const clickedScrollbar = e.clientX >= document.documentElement.clientWidth;
+
+      if (!clickedScrollbar) {
+        if (
+          showSignupModal &&
+          signupModalRef.current &&
+          !signupModalRef.current.contains(e.target)
+        ) {
+          setShowSignupModal(false);
+        }
+
+        if (
+          showLoginModal &&
+          loginModalRef.current &&
+          !loginModalRef.current.contains(e.target)
+        ) {
+          setShowLoginModal(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [showSignupModal, showLoginModal]);
 
   const availableProducts = [
     { id: '1', name: 'Cabbage Patch Kids', description: 'Popular soft-bodied dolls with adoption papers, a cultural phenomenon of the 1980s', price: 49.99, image_url: 'https://example.com/cabbage-patch-kids.jpg', decade: '80s', category: 'toy' },
@@ -58,7 +94,6 @@ const CartPage = () => {
         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         setTotalPrice(total.toFixed(2));
       } catch (err) {
-        console.error('Error calculating total price:', err);
         setError('Failed to calculate total price');
       }
     }
@@ -70,7 +105,7 @@ const CartPage = () => {
 
   const handleProceedToCheckout = () => {
     if (!sessionUser) {
-      navigate('/login');
+      setShowSignupModal(true);
       return;
     }
     navigate('/checkout');
@@ -94,40 +129,28 @@ const CartPage = () => {
                   <p className="item-price">${item.price}</p>
                 </div>
                 <div className="item-quantity-controls">
-                  <button onClick={() => handleDecrement(item.id)} className="quantity-btn" aria-label="Decrease quantity">
-                    -
-                  </button>
+                  <button onClick={() => handleDecrement(item.id)} className="quantity-btn" aria-label="Decrease quantity">-</button>
                   <span className="quantity-display">{item.quantity}</span>
-                  <button onClick={() => handleIncrement(item.id)} className="quantity-btn" aria-label="Increase quantity">
-                    +
-                  </button>
+                  <button onClick={() => handleIncrement(item.id)} className="quantity-btn" aria-label="Increase quantity">+</button>
                 </div>
                 <div className="item-subtotal">
                   <p>${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
-                <button onClick={() => handleRemoveFromCart(item.id)} className="remove-btn" aria-label="Remove item">
-                  Remove
-                </button>
+                <button onClick={() => handleRemoveFromCart(item.id)} className="remove-btn" aria-label="Remove item">Remove</button>
               </li>
             ))}
           </ul>
-
           <div className="cart-summary">
             <div className="cart-total">
               <h3>Total: ${totalPrice}</h3>
             </div>
             <div className="cart-actions">
-              <button onClick={handleClearCart} className="clear-cart-button">
-                Clear Cart
-              </button>
-              <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">
-                Proceed to Checkout
-              </button>
+              <button onClick={handleClearCart} className="clear-cart-button">Clear Cart</button>
+              <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">Proceed to Checkout</button>
             </div>
           </div>
         </div>
       )}
-
       <div className="available-products">
         <h3>Add New Item to Cart</h3>
         <div className="product-grid">
@@ -135,13 +158,13 @@ const CartPage = () => {
             <div key={product.id} className="product-card">
               <h4>{product.name}</h4>
               <p>${product.price}</p>
-              <button onClick={() => handleAddToCart(product)} className="add-to-cart-button">
-                Add to Cart
-              </button>
+              <button onClick={() => handleAddToCart(product)} className="add-to-cart-button">Add to Cart</button>
             </div>
           ))}
         </div>
       </div>
+      {showLoginModal && <div ref={loginModalRef}><LoginFormModal onClose={() => setShowLoginModal(false)} /></div>}
+      {showSignupModal && <div ref={signupModalRef}><SignupFormModal onClose={() => setShowSignupModal(false)} /></div>}
     </div>
   );
 };
