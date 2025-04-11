@@ -8,6 +8,15 @@ product_routes = Blueprint('products', __name__)
 #GET products /api/products
 @product_routes.route('')
 def get_products():
+    decade = request.args.get('decade')
+    category = request.args.get('category')
+
+    query = Product.query
+    if decade:
+        query = query.filter(Product.decade == decade)
+    if category:
+        query = query.filter(Product.category == category)
+        
     products = Product.query.all()
     return jsonify([product.to_dict() for product in products])
 
