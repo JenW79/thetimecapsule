@@ -47,21 +47,6 @@
   object-fit: cover;
 }
 
-.navigation-links .nav-link button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
-
-.navigation-links .nav-link button:hover {
-  background-color: #f0f0f0;
-}
-
 .profile-button:hover {
   background-color: #f0f0f0;
 }
