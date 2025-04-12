@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Products.css';
 
 const EditProductForm = ({ product, onProductUpdated, onCancel }) => {
