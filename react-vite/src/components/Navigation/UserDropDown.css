@@ -15,7 +15,7 @@
     display: flex;
     gap: 12px;
     align-items: center;
-    background-color: #8E92F3;
+    background-color: #242424;
     border-radius: 8px;
     padding: 10px;
   }
@@ -29,7 +29,7 @@
   
   .user-email {
     font-size: 12px;
-    color: rgb(54, 53, 53);
+    color: rgb(214, 213, 213);
     margin: 0;
   }
   
@@ -50,3 +50,19 @@
     background-color: #f4f4f4;
   }
   
+  .dropdown-icon {
+    margin-right: 8px;
+    font-size: 16px;
+    vertical-align: middle;
+    color: #FF69FF
+  }
+  .user-avatar-icon {
+    font-size: 40px;
+    color: #FF69FF;
+    background: #eee;
+    border-radius: 50%;
+    padding: 8px;
+  }
+  .user-name {
+    color: #FF69FF;
+  }
