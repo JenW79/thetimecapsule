@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
-// import "../../index.css";
 import { FaShoppingBag } from "react-icons/fa";
 
 function Navigation() {
@@ -19,43 +18,40 @@ function Navigation() {
           className="logo"
         />
       </div>
-      <div className="navigation-links">
-        <div className="nav-link">
-          <NavLink to="/" className="home-button">
-            <button>home</button>
-          </NavLink>
-        </div>
-        <div className="nav-link">
-          <NavLink to="/decades" className="decades-button">
-            <button>decades</button>
-          </NavLink>
-        </div>
-        <div className="nav-link">
-          <NavLink to="/toys" className="toys-button">
-            <button>toys</button>
-          </NavLink>
-        </div>
-        <div className="nav-link">
-          <NavLink to="/games" className="games-button">
-            <button>games</button>
-          </NavLink>
-        </div>
-        <div className="nav-link">
-          <NavLink to="/electronics" className="electronics-button">
-            <button>electronics</button>
-          </NavLink>
-        </div>
-        <div className="nav-link cart-container">
-          <NavLink to="/cart" className="cart-link">
-            <div className="cart-wrapper">
-              <FaShoppingBag size={24} />
-              {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
-            </div>
-          </NavLink>
-        </div>
-        <div className="profile-button">
-          <ProfileButton />
-        </div>
+
+      <div className="nav-link">
+        <NavLink to="/" className="home-button">
+          <button>home</button>
+        </NavLink>
+      </div>
+
+      <div className="nav-link">
+        <h1>decades</h1>
+      </div>
+
+      <div className="nav-link">
+        <h1>toys</h1>
+      </div>
+
+      <div className="nav-link">
+        <h1>games</h1>
+      </div>
+
+      <div className="nav-link">
+        <h1>electronics</h1>
+      </div>
+
+      <div className="nav-link cart-container">
+        <NavLink to="/cart" className="cart-link">
+          <div className="cart-wrapper">
+            <FaShoppingBag size={24} />
+            {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+          </div>
+        </NavLink>
+      </div>
+
+      <div className="profile-button">
+        <ProfileButton />
       </div>
     </div>
   );
