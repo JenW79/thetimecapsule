@@ -66,7 +66,6 @@
 
 import { NavLink } from "react-router-dom";
 import './LandingPage.css';
-import gridBackground from '../../assets/background-grid.png';
 import crescent from '../../assets/crescent.png';
 import rectangle from '../../assets/rectangle.png';
 import triangle from '../../assets/triangle.png';
@@ -77,8 +76,6 @@ import twoThousandsImage from '../../product-images/Apple-iPod-first-generation.
 function LandingPage() {
     return (
         <div className="landing-wrapper">
-            <img src={gridBackground} alt="Background Grid" className="background-grid" />
-
             <div className="we-got-it-wrapper">
                 <h1 className="we-got-it">we&apos;ve got it all</h1>
             </div>

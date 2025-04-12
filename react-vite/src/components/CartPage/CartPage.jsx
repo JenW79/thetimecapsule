@@ -112,53 +112,54 @@ const CartPage = () => {
   };
 
   return (
-    <div className="cart-page-container">
-      <h2>Your Cart</h2>
+    <div>
+      <h2>cart</h2>
       {!cartItems || cartItems.length === 0 ? (
         <div className="empty-cart">
           <p>Your cart is empty!</p>
           <p>Add some products to get started.</p>
         </div>
       ) : (
-        <div className="cart-items-container">
-          <ul className="cart-items-list">
+        <div>
+          <ul>
             {cartItems.map((item) => (
-              <li key={item.id} className="cart-item">
-                <div className="item-details">
-                  <h3 className="item-name">{item.name}</h3>
-                  <p className="item-price">${item.price}</p>
+              <li key={item.id}>
+                <div>
+                  <h3>{item.name}</h3>
+                  <p>price: ${item.price}</p>
+                  <p>quantity: {item.quantity}</p>
                 </div>
-                <div className="item-quantity-controls">
-                  <button onClick={() => handleDecrement(item.id)} className="quantity-btn" aria-label="Decrease quantity">-</button>
+                <div>
+                  <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">-</button>
                   <span className="quantity-display">{item.quantity}</span>
-                  <button onClick={() => handleIncrement(item.id)} className="quantity-btn" aria-label="Increase quantity">+</button>
+                  <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">+</button>
                 </div>
                 <div className="item-subtotal">
                   <p>${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
-                <button onClick={() => handleRemoveFromCart(item.id)} className="remove-btn" aria-label="Remove item">Remove</button>
+                <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">remove</button>
               </li>
             ))}
           </ul>
-          <div className="cart-summary">
-            <div className="cart-total">
-              <h3>Total: ${totalPrice}</h3>
+          <div>
+            <div>
+              <h3>total: ${totalPrice}</h3>
             </div>
-            <div className="cart-actions">
-              <button onClick={handleClearCart} className="clear-cart-button">Clear Cart</button>
-              <button onClick={handleProceedToCheckout} className="proceed-to-checkout-button">Proceed to Checkout</button>
+            <div>
+              <button onClick={handleClearCart}>clear cart</button>
+              <button onClick={handleProceedToCheckout}>continue to checkout</button>
             </div>
           </div>
         </div>
       )}
       <div className="available-products">
         <h3>Add New Item to Cart</h3>
-        <div className="product-grid">
+        <div>
           {availableProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <div key={product.id}>
               <h4>{product.name}</h4>
               <p>${product.price}</p>
-              <button onClick={() => handleAddToCart(product)} className="add-to-cart-button">Add to Cart</button>
+              <button onClick={() => handleAddToCart(product)}>add to cart</button>
             </div>
           ))}
         </div>

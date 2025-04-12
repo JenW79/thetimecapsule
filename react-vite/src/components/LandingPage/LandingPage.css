@@ -126,7 +126,7 @@
   overflow: hidden;
 }
 
-.background-grid {
+/* .background-grid {
   position: absolute;
   top: 0;
   left: 0;
@@ -136,8 +136,8 @@
   z-index: 0;
   pointer-events: none;
   /* opacity: 0.1; */
-  opacity: 10;
-}
+ /* opacity: 10;
+} */
 
 .landing-page {
   position: relative;
@@ -219,10 +219,10 @@
   text-decoration: none;
 }
 
-.nav-link {
+/* .nav-link {
   z-index: 3;
   margin-top: 20px;
-}
+} */
 
 .top-rated-products {
   margin-top: 100px;
