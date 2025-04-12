@@ -8,7 +8,6 @@ Create Date: 2025-04-04
 from alembic import op
 import sqlalchemy as sa
 
-# revision identifiers, used by Alembic.
 revision = '91ee7fd258b9'
 down_revision = None
 branch_labels = None
@@ -42,9 +41,6 @@ def upgrade():
         sa.PrimaryKeyConstraint('id')
     )
 
-    with op.batch_alter_table('products', schema=None) as batch_op:
-        batch_op.create_foreign_key('fk_products_owner_id','users', ['owner_id'], ['id'])
-
     op.create_table(
         'cart_items',
         sa.Column('id', sa.Integer(), nullable=False),
@@ -75,8 +71,8 @@ def upgrade():
 
     with op.batch_alter_table('reviews', schema=None) as batch_op:
         batch_op.alter_column('product_id',
-               existing_type=sa.INTEGER(),
-               nullable=False)
+                              existing_type=sa.INTEGER(),
+                              nullable=False)
 
     op.create_table(
         'favorites',
@@ -94,16 +90,26 @@ def upgrade():
 
 
 def downgrade():
-    with op.batch_alter_table('favorites', schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f('ix_favorites_id'))
-    op.drop_table('favorites')
+    try:
+        with op.batch_alter_table('favorites', schema=None) as batch_op:
+            batch_op.drop_index('ix_favorites_id')
+    except Exception:
+        pass
+
+    try:
+        op.drop_table('favorites')
+    except Exception:
+        pass
+
     with op.batch_alter_table('reviews', schema=None) as batch_op:
-        batch_op.alter_column('product_id',
-               existing_type=sa.INTEGER(),
-               nullable=True)
+        batch_op.alter_column('product_id', existing_type=sa.INTEGER(), nullable=True)
+
     op.drop_table('reviews')
     op.drop_table('cart_items')
+
     with op.batch_alter_table('products', schema=None) as batch_op:
-        batch_op.drop_constraint('fk_products_owner_id', type_='foreignkey')
+        if op.get_bind().dialect.name != 'sqlite':
+            batch_op.drop_constraint('fk_products_owner_id', type_='foreignkey')
+
     op.drop_table('products')
     op.drop_table('users')
