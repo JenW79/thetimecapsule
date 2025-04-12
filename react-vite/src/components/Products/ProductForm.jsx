@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
+// importing react is depreciated as Vite with React 17+ and JSX transform, 
+// you no longer need to import React in every file.
 import { useDispatch } from 'react-redux';
 import { createProduct } from '../../redux/products';
 import './Products.css';

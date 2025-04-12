@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+// importing react is depreciated as Vite with React 17+ and JSX transform, 
+// you no longer need to import React in every file.
 import { useDispatch } from 'react-redux';
-import { editProduct, removeProduct } from '../../redux/products';
+import { editProduct} from '../../redux/products';
 import { addToCart } from '../../redux/cart';
 import EditProductForm from './EditProductForm';
 import DeleteProduct from './DeleteProduct';
 import FavoriteButton from '../Favorites/FavoriteButton';
+
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
@@ -18,6 +21,7 @@ const ProductItem = ({ product }) => {
     await dispatch(editProduct(product.id, updatedData));
     setIsEditing(false);
   };
+
 
   return (
     <div className="product-item">
