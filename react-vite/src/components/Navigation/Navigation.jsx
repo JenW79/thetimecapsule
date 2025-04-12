@@ -24,23 +24,26 @@ function Navigation() {
           <button>home</button>
         </NavLink>
       </div>
-
       <div className="nav-link">
-        <h1>decades</h1>
+        <NavLink to="/products" className="decade-button">
+          <button>all nostaglia</button>
+        </NavLink>
       </div>
-
       <div className="nav-link">
-        <h1>toys</h1>
+        <NavLink to="/products?decade=80s" className="decade-button">
+          <button>80s</button>
+        </NavLink>
       </div>
-
       <div className="nav-link">
-        <h1>games</h1>
+        <NavLink to="/products?decade=90s" className="decade-button">
+          <button>90s</button>
+        </NavLink>
       </div>
-
       <div className="nav-link">
-        <h1>electronics</h1>
+        <NavLink to="/products?decade=00s" className="decade-button">
+          <button>00s</button>
+        </NavLink>
       </div>
-
       <div className="nav-link cart-container">
         <NavLink to="/cart" className="cart-link">
           <div className="cart-wrapper">

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify 
 from flask_login import login_required, current_user
 from app.models import db, Product
 from app.forms import ProductForm
@@ -16,8 +16,9 @@ def get_products():
         query = query.filter(Product.decade == decade)
     if category:
         query = query.filter(Product.category == category)
-        
-    products = Product.query.all()
+
+    products = query.all()
+
     return jsonify([product.to_dict() for product in products])
 
 #POST new product /api/products

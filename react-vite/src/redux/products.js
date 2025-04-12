@@ -7,17 +7,18 @@ export const FILTER_PRODUCTS = 'products/filter';
 export const SEARCH_PRODUCTS = 'products/search';
 
 // Action Creators
-const loadProducts = (products) => ({type: LOAD_PRODUCTS, products});
-const addProduct = (product) => ({type: ADD_PRODUCT, product});
-const updateProduct = (product) => ({type: UPDATE_PRODUCT, product});
-const deleteProduct = (productId) => ({type: DELETE_PRODUCT, productId});
-export const filterProducts = (filterCriteria) => ({type: FILTER_PRODUCTS, filterCriteria});
-export const searchProducts = (searchTerm) => ({type: SEARCH_PRODUCTS, searchTerm});
+const loadProducts = (products) => ({ type: LOAD_PRODUCTS, products });
+const addProduct = (product) => ({ type: ADD_PRODUCT, product });
+const updateProduct = (product) => ({ type: UPDATE_PRODUCT, product });
+const deleteProduct = (productId) => ({ type: DELETE_PRODUCT, productId });
+export const filterProducts = (filterCriteria) => ({ type: FILTER_PRODUCTS, filterCriteria });
+export const searchProducts = (searchTerm) => ({ type: SEARCH_PRODUCTS, searchTerm });
 
 // THUNKS
-export const fetchProducts = () => async (dispatch) => {
-    const res = await fetch('/api/products');
-    if (res.ok){
+
+export const fetchProducts = (query = "") => async (dispatch) => {
+    const res = await fetch(`/api/products${query}`);
+    if (res.ok) {
         const data = await res.json();
         dispatch(loadProducts(data));
         return data;
@@ -29,7 +30,7 @@ export const fetchProducts = () => async (dispatch) => {
 
 export const fetchProduct = (productId) => async (dispatch) => {
     const res = await fetch(`/api/products/${productId}`);
-    if (res.ok){
+    if (res.ok) {
         const data = await res.json();
         dispatch(addProduct(data));
         return data;
@@ -86,7 +87,7 @@ export const removeProduct = (productId) => async (dispatch) => {
 
 export const fetchProductsByCategory = (categoryId) => async (dispatch) => {
     const res = await fetch(`/api/categories/${categoryId}/products`);
-    if (res.ok){
+    if (res.ok) {
         const data = await res.json();
         dispatch(loadProducts(data));
         return data;
@@ -98,7 +99,7 @@ export const fetchProductsByCategory = (categoryId) => async (dispatch) => {
 
 export const fetchProductsBySearch = (searchTerm) => async (dispatch) => {
     const res = await fetch(`/api/products/search?term=${encodeURIComponent(searchTerm)}`);
-    if (res.ok){
+    if (res.ok) {
         const data = await res.json();
         dispatch(loadProducts(data));
         return data;
@@ -109,6 +110,7 @@ export const fetchProductsBySearch = (searchTerm) => async (dispatch) => {
 };
 
 // REDUCER
+
 const initialState = {};
 
 export default function productsReducer(state = initialState, action) {

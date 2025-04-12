@@ -1,39 +1,49 @@
 import { useEffect } from 'react';
-// importing react is deprecated as Vite with React 17+ and JSX transform, 
-// you no longer need to import React in every file.
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../redux/products';
 import ProductItem from './ProductItem';
+import { useLocation } from 'react-router-dom';
 import './Products.css';
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const productsObj = useSelector(state => state.products);
   const products = Object.values(productsObj);
-  
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const decade = queryParams.get('decade');
+  const selectedCategory = queryParams.get('category');
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (!products.length) {
+  let filteredProducts = products;
+
+  if (decade) {
+    filteredProducts = filteredProducts.filter(product => product.decade === decade);
+  }
+
+  if (selectedCategory) {
+    filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+  }
+
+  if (!filteredProducts.length) {
     return <div className="loading">Loading products...</div>;
   }
 
   return (
     <div className="product-list">
-      <h2>All Products</h2>
-      {products.length === 0 ? (
-        <p>No products found.</p>
-      ) : (
-        <div className="products-grid">
-          {products.map(product => (
-            <ProductItem 
-              key={product.id} 
-              product={product}
-            />
-          ))}
-        </div>
-      )}
+      <h2>
+        {decade ? `${decade} Products` : 'All Products'}
+        {selectedCategory ? ` - ${selectedCategory}` : ''}
+      </h2>
+      <div className="products-grid">
+        {filteredProducts.map(product => (
+          <ProductItem key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
 };
