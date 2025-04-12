@@ -1,4 +1,71 @@
 /* TODO: Add sitewide styles */
+
+/* START sitewide text */
+body {
+    font-family: "Poppins";
+    /* font-weight: regular; */
+    margin: auto;
+    background-image: url('./assets/background-grid.png');
+    background-repeat: repeat;
+    background-size: cover;
+    font-size: 16px;
+    color: #242424;
+}
+h1,
+h3,
+h5 {
+    font-family: "Ranchers", sans-serif;
+    text-transform: lowercase;
+    font-size: 36px;
+    color: #23134F;
+}
+h2,
+h4,
+h6 {
+    font-family: "Poppins", sans-serif;
+    text-transform: uppercase;
+    font-weight: regular;
+    font-size: 24px;
+    color: #242424;
+}
+/* ---start text media queries--- */
+
+/* ---end text media queries--- */
+/* END sitewide text */
+
+
+/* START sitewide button */
+button {
+    font-family: "Poppins", sans-serif;
+    text-transform: uppercase;
+    font-weight: regular;
+    font-size: 12px;
+    background-color: #E2E0DC;
+    color: #242424;
+    padding: 4px 10px;
+    border: none;
+    box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.6), 0px 8px 10px 2px rgba(0, 0, 0, 0.06);
+}
+button:active, button:hover {
+    background-color: #fff;
+}
+/* END sitewide button */
+
+
+/* START sitewide cursor */
+.clickable {
+    cursor: pointer;
+  }
+.selectable-text {
+    cursor: text;
+}
+/* ---start cursor trail--- */
+
+/* ---end cursor trail--- */
+/* END sitewide cursor */
+
+
+/* START profile button */
 .profile-button {
     border: none;
     background: transparent;
@@ -12,34 +79,10 @@
     justify-content: center;
     cursor: pointer;
 }
-
 .profile-icon {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
 }
-
-body {
-    font-family: "Poppins";
-    font-weight: regular;
-
-    background-image: url('./assets/background-grid.png');
-    background-repeat: repeat;
-    background-size: cover;
-}
-
-h1,
-h3,
-h5 {
-    font-family: "Ranchers", sans-serif;
-    text-transform: lowercase;
-}
-
-h2,
-h4,
-h6 {
-    font-family: "Poppins", sans-serif;
-    text-transform: uppercase;
-    font-weight: regular;
-}
+/* END profile button */
