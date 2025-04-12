@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
+// import "../../index.css";
 import { FaShoppingBag } from "react-icons/fa";
 
 function Navigation() {
@@ -21,27 +22,27 @@ function Navigation() {
       <div className="navigation-links">
         <div className="nav-link">
           <NavLink to="/" className="home-button">
-            <button className="button-style">Home</button>
+            <button>home</button>
           </NavLink>
         </div>
         <div className="nav-link">
           <NavLink to="/decades" className="decades-button">
-            <button className="button-style">Decades</button>
+            <button>decades</button>
           </NavLink>
         </div>
         <div className="nav-link">
           <NavLink to="/toys" className="toys-button">
-            <button className="button-style">Toys</button>
+            <button>toys</button>
           </NavLink>
         </div>
         <div className="nav-link">
           <NavLink to="/games" className="games-button">
-            <button className="button-style">Games</button>
+            <button>games</button>
           </NavLink>
         </div>
         <div className="nav-link">
           <NavLink to="/electronics" className="electronics-button">
-            <button className="button-style">Electronics</button>
+            <button>electronics</button>
           </NavLink>
         </div>
         <div className="nav-link cart-container">

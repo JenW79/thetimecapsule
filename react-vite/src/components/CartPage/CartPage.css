@@ -1,44 +1,44 @@
-.cart-page-container {
+/* .cart-page-container {
   padding: 20px;
   font-family: Arial, sans-serif;
-}
+} */
 
-.cart-items-container {
+/* .cart-items-container {
   margin-bottom: 20px;
-}
+} */
 
-.cart-items-list {
+/* .cart-items-list {
   list-style-type: none;
   padding: 0;
-}
+} */
 
-.cart-item {
+/* .cart-item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
-}
+} */
 
-.item-details {
+/* .item-details {
   flex: 1;
-}
+} */
 
-.item-name {
+/* .item-name {
   font-weight: bold;
-}
+} */
 
-.item-price {
+/* .item-price {
   color: black;
-}
+} */
 
-.item-quantity-controls {
+/* .item-quantity-controls {
   display: flex;
   align-items: center;
-}
+} */
 
-.quantity-btn {
+/* .quantity-btn {
   background-color: black;
   color: white;
   border: none;
@@ -49,18 +49,18 @@
 
 .quantity-btn:focus {
   outline: none;
-}
+} */
 
-.remove-btn {
+/* .remove-btn {
   background-color: black;
   color: white;
   padding: 5px 10px;
   border: none;
   cursor: pointer;
   margin-left: 10px;
-}
+} */
 
-.clear-cart-button,
+/* .clear-cart-button,
 .proceed-to-checkout-button {
   padding: 10px 20px;
   font-size: 16px;
@@ -86,38 +86,38 @@
 
 .proceed-to-checkout-button:hover {
   background-color: black;
-}
+} */
 
-.cart-summary {
+/* .cart-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+} */
 
-.cart-total h3 {
+/* .cart-total h3 {
   font-size: 18px;
   font-weight: bold;
-}
+} */
 
-.cart-actions {
+/* .cart-actions {
   display: flex;
   align-items: center;
-}
+} */
 
-.product-grid {
+/* .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
-}
+} */
 
-.product-card {
+/* .product-card {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
   text-align: center;
-}
+} */
 
-.add-to-cart-button {
+/* .add-to-cart-button {
   background-color: black;
   color: white;
   padding: 5px 10px;
@@ -128,7 +128,7 @@
 
 .add-to-cart-button:hover {
   background-color: black;
-}
+} */
 
 
 /* experimenting with styling code below */

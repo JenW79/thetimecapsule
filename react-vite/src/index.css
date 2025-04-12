@@ -1,1 +1,45 @@
 /* TODO: Add sitewide styles */
+.profile-button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+body {
+    font-family: "Poppins";
+    font-weight: regular;
+
+    background-image: url('./assets/background-grid.png');
+    background-repeat: repeat;
+    background-size: cover;
+}
+
+h1,
+h3,
+h5 {
+    font-family: "Ranchers", sans-serif;
+    text-transform: lowercase;
+}
+
+h2,
+h4,
+h6 {
+    font-family: "Poppins", sans-serif;
+    text-transform: uppercase;
+    font-weight: regular;
+}
