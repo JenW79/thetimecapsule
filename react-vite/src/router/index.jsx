@@ -3,8 +3,10 @@ import OrderFormPage from '../components/OrderFormPage/OrderFormPage';
 import CartPage from '../components/CartPage/CartPage'
 import Layout from './Layout';
 import ReviewList from '../components/Reviews/ReviewList';
+import CurrentUserReviews from "../components/Reviews/CurrentUserReviews";
 import LandingPage from '../components/LandingPage/LandingPage';
 import ProductList from '../components/Products/ProductList';
+
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +29,10 @@ export const router = createBrowserRouter([
         element: <ReviewList />,
       },
       {
+        path: "my-reviews",
+        element: <CurrentUserReviews />,
+      },
+      {
         path: "products",
         element: <ProductList />,
       },
@@ -42,6 +48,8 @@ export const router = createBrowserRouter([
         path: "products/2000s",
         element: <ProductList />,
       },
+
+      
     ],
   },
 ]);
