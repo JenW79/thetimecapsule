@@ -9,7 +9,7 @@ import DeleteProduct from './DeleteProduct';
 import FavoriteButton from '../Favorites/FavoriteButton';
 
 
-const ProductItem = ({ product }) => {
+const ProductItem = ({ product, onProductDeleted }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -45,7 +45,7 @@ const ProductItem = ({ product }) => {
               Edit
             </button>
             <DeleteProduct productId={product.id} />
-            <FavoriteButton productId={product.id} />
+            <FavoriteButton productId={product.id} onDeleted={onProductDeleted} />
             <button 
               className="add-to-cart-button"
               onClick={handleAddToCart}

@@ -109,6 +109,18 @@ export const fetchProductsBySearch = (searchTerm) => async (dispatch) => {
     }
 };
 
+export const fetchCurrentUserProducts = () => async (dispatch) => {
+    const res = await fetch('/api/products/current');
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(loadProducts(data)); 
+      return data;
+    } else {
+      const error = await res.json();
+      return error;
+    }
+  };
+
 // REDUCER
 
 const initialState = {};

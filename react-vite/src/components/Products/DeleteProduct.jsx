@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { removeProduct } from '../../redux/products';
 import './Products.css';
 
-const DeleteProduct = ({ productId }) => {
+const DeleteProduct = ({ productId, onDeleted }) => {
   const dispatch = useDispatch();
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ const DeleteProduct = ({ productId }) => {
     setLoading(true);
     try {
       await dispatch(removeProduct(productId));
+      if (onDeleted) onDeleted();
     } catch (error) {
       console.error('Error deleting product:', error);
     } finally {
