@@ -5,13 +5,13 @@ from app.forms.review_form import ReviewForm
 
 review_routes = Blueprint('reviews', __name__)
 
-#GET all reviews for a specific product
+#GET all reviews for a specific product /api/product<id>/reviews
 @review_routes.route('/products/<int:product_id>/reviews')
 def get_reviews(product_id):
     reviews = Review.query.filter(Review.product_id == product_id).all()
     return {"reviews": [review.to_dict() for review in reviews]}
 
-# POST a new review
+# POST a new review /api/products/<id>/reviews
 @review_routes.route('/products/<int:product_id>/reviews', methods=['POST'])
 @login_required
 def create_review(product_id):
@@ -30,7 +30,7 @@ def create_review(product_id):
         return new_review.to_dict()
     return {"errors": form.errors}, 400
 
-# PUT update a review
+# PUT update a review /api/reviews/<id>
 @review_routes.route('/reviews/<int:id>', methods=['PUT'])
 @login_required
 def update_review(id):
@@ -49,7 +49,7 @@ def update_review(id):
         return review.to_dict()
     return {"errors": form.errors}, 400
 
-#DELETE a review
+#DELETE a review /api/reviews/review<id>
 @review_routes.route('/reviews/<int:id>', methods=['DELETE'])
 @login_required
 def delete_review(id):
@@ -63,7 +63,7 @@ def delete_review(id):
     db.session.commit()
     return{"message": "Review has been deleted"}
 
-#GET all reviews for current user
+#GET all reviews for current user /api/reviews/current
 @review_routes.route('/reviews/current')
 @login_required
 def user_reviews():

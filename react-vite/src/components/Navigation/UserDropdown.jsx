@@ -28,11 +28,14 @@ export default function UserDropDown( { user, closeMenu }) {
         <div className="user-dropdown-section">
         <Link to="/my-reviews" className="user-dropdown-item" onClick={closeMenu}>
   <FiClipboard className="dropdown-icon" />
-  Purchases(Coming soon) and reviews
+  Purchases and reviews
 </Link>
           <div className="user-dropdown-item"> <FiMail className="dropdown-icon" />Messages(coming soon)</div>
           <div className="user-dropdown-item"><FiCreditCard className="dropdown-icon" />Credit balance: $0.00(coming soon)</div>
-          <div className="user-dropdown-item"><FiTag className="dropdown-icon" />Special offers(coming soon)</div>
+          <Link to="/my-products" className="user-dropdown-item" onClick={closeMenu}>
+  <FiTag className="dropdown-icon" />
+  My Listings
+</Link>
           <div className="user-dropdown-item"><FiGift className="dropdown-icon" />Registry(coming soon)</div>
         </div>
   
