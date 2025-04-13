@@ -25,6 +25,7 @@ class Review(db.Model):
             'user_id': self.user_id,
             'username': self.user.username if self.user else "Unknown",
             'product_id': self.product_id,
+            'product_name': self.product.name if self.product else "Unknown",
             'rating': self.rating,
             'review_text': self.review_text,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None,
