@@ -114,9 +114,9 @@ const CartPage = () => {
         </div>
       ) : (
         <div>
-          <ul>
+          <div>
             {cartItems.map((item) => (
-              <li key={item.id}>
+              <div key={item.id}>
                 <div>
                   <h3>{item.name}</h3>
                   <p>price: ${item.price}</p>
@@ -146,16 +146,16 @@ const CartPage = () => {
                 >
                   remove
                 </button>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
           <div>
             <div>
               <h3>total: ${totalPrice}</h3>
             </div>
             <div>
-              <button onClick={handleProceedToCheckout}>continue to checkout</button>
               <button onClick={handleClearCart}>clear cart</button>
+              <button onClick={handleProceedToCheckout}>continue to checkout</button>
             </div>
           </div>
         </div>

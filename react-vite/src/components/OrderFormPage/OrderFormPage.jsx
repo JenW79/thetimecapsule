@@ -369,6 +369,7 @@ const OrderFormPage = () => {
             )}
           </div>
 
+          <br />
           <div>
             <button type="button" onClick={handleCancel} disabled={isSubmitting}>back to cart</button>
             <button type="submit" disabled={isSubmitting}>{isSubmitting ? "Processing..." : "place order"}</button>
