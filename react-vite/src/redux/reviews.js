@@ -53,6 +53,15 @@ export const editReview = (reviewId, payload) => async (dispatch) => {
       dispatch(deleteReview(reviewId));
     }
   };
+  
+  export const fetchCurrentUserReviews = () => async (dispatch) => {
+    const res = await fetch(`/api/reviews/current`);
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(loadReviews(data.reviews));
+    }
+  };
+
 
   const initialState = {};
   

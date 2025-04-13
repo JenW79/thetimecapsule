@@ -8,7 +8,7 @@ import { fetchReviews } from "../../redux/reviews";
 
 const ReviewList = () => {
     const dispatch = useDispatch()
-    const { productId } = useParams()// not passed as a prop for now
+    const { productId } = useParams()
     const reviews = useSelector((state) => Object.values(state.reviews || {}));
     const sessionUser = useSelector((state) => state.session.user)
     const [showCreateModal, setShowCreateModal] = useState(false)

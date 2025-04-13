@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import { thunkLogout } from "../../redux/session"
+import { thunkLogout } from "../../redux/session";
+import { Link } from "react-router-dom";
 import { FiUser, FiClipboard, FiMail, FiGift, FiSettings, FiLogOut, FiCreditCard, FiTag } from "react-icons/fi";
 
 import './UserDropDown.css'
@@ -25,7 +26,10 @@ export default function UserDropDown( { user, closeMenu }) {
         </div>
   
         <div className="user-dropdown-section">
-          <div className="user-dropdown-item"><FiClipboard className="dropdown-icon" />Purchases and reviews</div>
+        <Link to="/my-reviews" className="user-dropdown-item" onClick={closeMenu}>
+  <FiClipboard className="dropdown-icon" />
+  Purchases(Coming soon) and reviews
+</Link>
           <div className="user-dropdown-item"> <FiMail className="dropdown-icon" />Messages(coming soon)</div>
           <div className="user-dropdown-item"><FiCreditCard className="dropdown-icon" />Credit balance: $0.00(coming soon)</div>
           <div className="user-dropdown-item"><FiTag className="dropdown-icon" />Special offers(coming soon)</div>
