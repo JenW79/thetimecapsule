@@ -11,6 +11,7 @@ import topRatedImage2 from '../../product-images/Pacman.jpg';
 import topRatedImage3 from '../../product-images/gameboy-original-all-sides.jpg';
 import periwinkleSprinkles from '../../assets/sprinkle-peri.png';
 import greenSprinkles from '../../assets/sprinkle-green.png';
+import bottomBackground from '../../assets/the-time-capsule-bottom-background.png';
 
 function LandingPage() {
     return (
@@ -126,6 +127,7 @@ function LandingPage() {
                             <button>Shop Now</button>
                         </NavLink>
                     </div>
+                    <img src={bottomBackground} className="bottom-background" alt="bottom background" />
                 </div>
             </div>
         </div>
