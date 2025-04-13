@@ -31,7 +31,7 @@ const OrderFormPage = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/signup");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -198,7 +198,7 @@ const OrderFormPage = () => {
           processOrderLocally(formDataToSubmit);
         }
       } else {
-        navigate("/signup");
+        navigate("/");
         return;
       }
     } catch (error) {

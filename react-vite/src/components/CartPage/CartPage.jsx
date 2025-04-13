@@ -154,8 +154,8 @@ const CartPage = () => {
               <h3>total: ${totalPrice}</h3>
             </div>
             <div>
-              <button onClick={handleClearCart}>clear cart</button>
               <button onClick={handleProceedToCheckout}>continue to checkout</button>
+              <button onClick={handleClearCart}>clear cart</button>
             </div>
           </div>
         </div>
