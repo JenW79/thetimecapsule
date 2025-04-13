@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import relationship
 from app.models.cart_item import CartItem
 from .db import add_prefix_for_prod
-
+import json
 # class Decade(enum.Enum):
 #     EIGHTIES = "80s"
 #     NINETIES = "90s"
@@ -40,12 +40,21 @@ class Product(db.Model):
     cart_items = db.relationship("CartItem", back_populates="product")
 
     def to_dict(self):
+        # For multiple product images in JSON arrays
+        images = []
+        if self.image_url:
+            try:
+                images = json.loads(self.image_url)
+            except (json.JSONDecodeError, TypeError):
+                images = [self.image_url] if self.image_url else []
+            
         return {
             "id": self.id,
             "name": self.name,
             "description": self.description,
             "price": round(self.price, 2),
-            "image_url": self.image_url,
+            "image_url": self.image_url, # JSON string
+            "images": images,  # parsed images
             "decade": self.decade,
             "category": self.category,
             "owner": {
