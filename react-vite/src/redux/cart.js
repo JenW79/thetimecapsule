@@ -5,41 +5,225 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const FETCH_CART = 'FETCH_CART';
 export const CLEAR_CART = 'CLEAR_CART';
 
-export const incrementItem = (productId) => ({
-  type: INCREMENT_ITEM,
-  payload: productId,
-});
+export const incrementItem = (productId) => {
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const cartItems = getState().cart.cartItems;
+        const item = cartItems.find(item => item.id === productId);
+        
+        if (item) {
+          const response = await fetch("/api/cart", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify([{
+              id: item.product_id || productId,
+              quantity: 1
+            }]),
+          });
+          
+          if (response.ok) {
+            dispatch({
+              type: INCREMENT_ITEM,
+              payload: productId,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error incrementing item:", error);
+      }
+    } else {
+      dispatch({
+        type: INCREMENT_ITEM,
+        payload: productId,
+      });
+    }
+  };
+};
 
-export const decrementItem = (productId) => ({
-  type: DECREMENT_ITEM,
-  payload: productId,
-});
+export const decrementItem = (productId) => {
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const cartItems = getState().cart.cartItems;
+        const item = cartItems.find(item => item.id === productId);
+        
+        if (item && item.quantity > 1) {
+          await fetch(`/api/cart/${productId}`, {
+            method: "DELETE",
+          });
+          
+          if (item.quantity > 1) {
+            await fetch("/api/cart", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify([{
+                id: item.product_id || productId,
+                quantity: item.quantity - 1
+              }]),
+            });
+          }
+          
+          dispatch({
+            type: DECREMENT_ITEM,
+            payload: productId,
+          });
+        } else if (item && item.quantity === 1) {
+          await fetch(`/api/cart/${productId}`, {
+            method: "DELETE",
+          });
+          
+          dispatch({
+            type: DECREMENT_ITEM,
+            payload: productId,
+          });
+        }
+      } catch (error) {
+        console.error("Error decrementing item:", error);
+      }
+    } else {
+      dispatch({
+        type: DECREMENT_ITEM,
+        payload: productId,
+      });
+    }
+  };
+};
 
 export const addToCart = (product) => {
-  return {
-    type: ADD_TO_CART,
-    payload: product,
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const response = await fetch("/api/cart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([{
+            id: product.id,
+            quantity: 1
+          }]),
+        });
+        
+        if (response.ok) {
+          dispatch({
+            type: ADD_TO_CART,
+            payload: product,
+          });
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      }
+    } else {
+      dispatch({
+        type: ADD_TO_CART,
+        payload: product,
+      });
+    }
   };
 };
 
-export const removeFromCart = (productId) => ({
-  type: REMOVE_FROM_CART,
-  payload: productId,
-});
+export const removeFromCart = (productId) => {
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const response = await fetch(`/api/cart/${productId}`, {
+          method: "DELETE",
+        });
+        
+        if (response.ok) {
+          dispatch({
+            type: REMOVE_FROM_CART,
+            payload: productId,
+          });
+        }
+      } catch (error) {
+        console.error("Error removing from cart:", error);
+      }
+    } else {
+      dispatch({
+        type: REMOVE_FROM_CART,
+        payload: productId,
+      });
+    }
+  };
+};
 
 export const fetchCart = () => {
-  return (dispatch) => {
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    dispatch({
-      type: FETCH_CART,
-      payload: cartItems,
-    });
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const response = await fetch("/api/cart");
+        if (response.ok) {
+          const data = await response.json();
+          dispatch({
+            type: FETCH_CART,
+            payload: data.cart_items || [],
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        dispatch({
+          type: FETCH_CART,
+          payload: cartItems,
+        });
+      }
+    } else {
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      dispatch({
+        type: FETCH_CART,
+        payload: cartItems,
+      });
+    }
   };
 };
 
-export const clearCart = () => ({
-  type: CLEAR_CART,
-});
+export const clearCart = () => {
+  return async (dispatch, getState) => {
+    const { session } = getState();
+    const isAuthenticated = session && session.user;
+    
+    if (isAuthenticated) {
+      try {
+        const response = await fetch("/api/cart", {
+          method: "DELETE",
+        });
+        
+        if (response.ok) {
+          dispatch({
+            type: CLEAR_CART,
+          });
+        }
+      } catch (error) {
+        console.error("Error clearing cart:", error);
+      }
+    } else {
+      dispatch({
+        type: CLEAR_CART,
+      });
+    }
+  };
+};
 
 const initialState = {
   cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
