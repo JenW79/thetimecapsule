@@ -67,3 +67,10 @@ def delete_product(id):
     db.session.delete(product)
     db.session.commit()
     return {"message": "Product deleted"}
+
+#GET all products owned by a user /api/products/current
+@product_routes.route('/current', methods=['GET'])
+@login_required
+def get_user_products():
+    user_products = Product.query.filter_by(owner_id=current_user.id).all()
+    return jsonify([product.to_dict() for product in user_products])
