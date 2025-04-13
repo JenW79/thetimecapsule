@@ -3,9 +3,12 @@ import './LandingPage.css';
 import crescent from '../../assets/crescent.png';
 import rectangle from '../../assets/rectangle.png';
 import triangle from '../../assets/triangle.png';
-import eightiesImage from '../../product-images/nintendo.jpeg';
+import eightiesImage from '../../product-images/nintendo.jpg';
 import ninetiesImage from '../../product-images/yellow-pokemon-gameboy-game.png';
 import twoThousandsImage from '../../product-images/Apple-iPod-first-generation.jpg';
+import topRatedImage1 from '../../product-images/red-blue-pokemon-gameboy-game.png';
+import topRatedImage2 from '../../product-images/super-nintendo.jpg';
+import topRatedImage3 from '../../product-images/gameboy-original-all-sides.jpg';
 
 function LandingPage() {
     return (
@@ -48,6 +51,30 @@ function LandingPage() {
                 </div>
 
                 <div className="top-rated-products">Top Rated Products</div>
+
+                <div className="top-rated-images-container">
+                    <div className="top-rated-item">
+                        <img src={topRatedImage1} alt="top rated nostalgia 1" />
+                        <span>red & blue pokemon gameboy games</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+                    <div className="top-rated-item">
+                        <img src={topRatedImage2} alt="top rated nostalgia 2" />
+                        <span>super nintendo console</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+                    <div className="top-rated-item">
+                        <img src={topRatedImage3} alt="top rated nostalgia 3" />
+                        <span>gameboy original</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+                </div>
             </div>
         </div>
     );
