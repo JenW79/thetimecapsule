@@ -1,0 +1,67 @@
+/* Shared grid layout */
+.product-list {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .product-list h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Grid for all products including MyProducts */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Loading/empty state */
+  .loading {
+    font-size: 1.25rem;
+    color: #777;
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .my-products-empty {
+    text-align: center;
+    margin: 4rem auto;
+    padding: 2rem;
+    max-width: 600px;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  }
+  
+  .my-products-empty h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  .my-products-empty p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #666;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background-color: #ff00aa97;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #0056b3;
+  }
+  

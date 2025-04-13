@@ -1,38 +1,45 @@
-import  { useState } from 'react';
-// importing react is depreciated as Vite with React 17+ and JSX transform, 
+import { useState } from "react";
+// importing react is depreciated as Vite with React 17+ and JSX transform,
 // you no longer need to import React in every file.
-import { useDispatch } from 'react-redux';
-import { createProduct } from '../../redux/products';
-import './Products.css';
+import { useDispatch } from "react-redux";
+import { createProduct } from "../../redux/products";
+import { useNavigate } from 'react-router-dom';
+import "./Products.css";
+
+
 
 const ProductForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: ''
+    name: "",
+    description: "",
+    price: "",
+    image_url: "",
+    decade: "",
+    category: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Basic validation
     if (!formData.name || !formData.description || !formData.price) {
-      setError('All fields are required');
+      setError("All fields are required");
       return;
     }
 
     if (isNaN(parseFloat(formData.price)) || parseFloat(formData.price) <= 0) {
-      setError('Price must be a positive number');
+      setError("Price must be a positive number");
       return;
     }
 
@@ -40,9 +47,12 @@ const ProductForm = () => {
       const productData = {
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price)
+        price: parseFloat(formData.price),
+        image_url: formData.image_url,
+        decade: formData.decade,
+        category: formData.category,
       };
-      
+
       const result = await dispatch(createProduct(productData));
       
       if (result.errors) {
@@ -50,24 +60,29 @@ const ProductForm = () => {
       } else {
         // Reset form after successful creation
         setFormData({
-          name: '',
-          description: '',
-          price: ''
+          name: "",
+          description: "",
+          price: "",
+          image_url: "",
+          decade: "",
+          category: "",
         });
-        setError('');
+        setError("");
+        navigate('/my-products');
       }
     } catch (error) {
-      setError('Error creating product. Please try again.');
-      console.error('Error creating product:', error);
+      setError("Error creating product. Please try again.");
+      console.error("Error creating product:", error);
     }
+    
   };
 
   return (
     <div className="product-form-container">
       <h2>Add New Product</h2>
-      
+
       {error && <p className="error-message">{error}</p>}
-      
+
       <form className="product-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Product Name</label>
@@ -80,7 +95,7 @@ const ProductForm = () => {
             placeholder="Enter product name"
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
@@ -92,7 +107,7 @@ const ProductForm = () => {
             rows="3"
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="price">Price ($)</label>
           <input
@@ -104,8 +119,49 @@ const ProductForm = () => {
             placeholder="Enter product price"
           />
         </div>
-        
-        <button type="submit" className="submit-button">Create Product</button>
+        <div className="form-group">
+          <label htmlFor="decade">Decade</label>
+          <select
+            id="decade"
+            name="decade"
+            value={formData.decade}
+            onChange={handleChange}
+          >
+            <option value="">Select a decade</option>
+            <option value="80s">1980s</option>
+            <option value="90s">1990s</option>
+            <option value="00s">2000s</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="category">Category</label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
+            <option value="">Select a category</option>
+            <option value="toy">Toy</option>
+            <option value="game">Game</option>
+            <option value="electronic">Electronic</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="image_url">Image URL</label>
+          <input
+            type="text"
+            id="image_url"
+            name="image_url"
+            value={formData.image_url}
+            onChange={handleChange}
+            placeholder="Enter image URL"
+          />
+        </div>
+
+        <button type="submit" className="submit-button">
+          Create Product
+        </button>
       </form>
     </div>
   );
