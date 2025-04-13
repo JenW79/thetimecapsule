@@ -1,0 +1,79 @@
+.my-products-empty {
+    text-align: center;
+    margin: 4rem auto;
+    padding: 2rem;
+    max-width: 600px;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  }
+  
+  .my-products-empty h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  .my-products-empty p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #666;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background-color: #ff66ff;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #9800b3;
+  }
+  .product-thumbnail {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+  }
+  
+  .product-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-item:hover .product-thumbnail img {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .my-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-button.small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background-color: #ff66ff;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .cta-button.small:hover {
+    background-color: #9800b3;
+  }
