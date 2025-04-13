@@ -73,10 +73,14 @@ def remove_item_from_cart(item_id):
 @cart_routes.route("/cart", methods=["DELETE"])
 def clear_cart():
     if current_user.is_authenticated:
+        cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+        for item in cart_items:
+            db.session.delete(item)
         db.session.commit()
         return jsonify({"message": "Cart cleared"}), 200
     else:
         return jsonify({"message": "Cart cleared"}), 200
+        
 @cart_routes.route("/checkout", methods=["POST"])
 @login_required
 def submit_order():
