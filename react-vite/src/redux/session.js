@@ -11,12 +11,21 @@ const removeUser = () => ({
 });
 
 export const thunkAuthenticate = () => async (dispatch) => {
-  const response = await fetch("/api/auth/");
+  try {
+    const response = await fetch("/api/auth/", {
+      credentials: "include" 
+    });
   if (response.ok) {
     const data = await response.json();
-    if (data.user === null) return;
-    dispatch(setUser(data.user || data));
+    if (data.user) dispatch(setUser(data.user));
+  } else if (response.status === 401) {
+    // No user session — skip silently
+  } else {
+    console.error("Unexpected auth error:", response.status);
   }
+} catch (err) {
+  console.error("Error during auth fetch:", err);
+}
 };
 
 export const thunkLogin = (credentials) => async (dispatch) => {
