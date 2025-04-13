@@ -53,7 +53,8 @@
 }
 
 .error-message {
-  color: red;
+  /* color: red; */
+  color: teal;    /* teal or red? */
   font-size: 13px;
   margin-top: -10px;
   margin-bottom: 10px;

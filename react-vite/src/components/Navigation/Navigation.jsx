@@ -26,7 +26,7 @@ function Navigation() {
       </div>
       <div className="nav-link">
         <NavLink to="/products" className="decade-button">
-          <button>all nostaglia</button>
+          <button>all nostalgia</button>
         </NavLink>
       </div>
       <div className="nav-link">

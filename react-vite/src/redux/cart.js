@@ -9,12 +9,12 @@ export const incrementItem = (productId) => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const cartItems = getState().cart.cartItems;
         const item = cartItems.find(item => item.id === productId);
-        
+
         if (item) {
           const response = await fetch("/api/cart", {
             method: "POST",
@@ -26,7 +26,7 @@ export const incrementItem = (productId) => {
               quantity: 1
             }]),
           });
-          
+
           if (response.ok) {
             dispatch({
               type: INCREMENT_ITEM,
@@ -50,17 +50,17 @@ export const decrementItem = (productId) => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const cartItems = getState().cart.cartItems;
         const item = cartItems.find(item => item.id === productId);
-        
+
         if (item && item.quantity > 1) {
           await fetch(`/api/cart/${productId}`, {
             method: "DELETE",
           });
-          
+
           if (item.quantity > 1) {
             await fetch("/api/cart", {
               method: "POST",
@@ -73,7 +73,7 @@ export const decrementItem = (productId) => {
               }]),
             });
           }
-          
+
           dispatch({
             type: DECREMENT_ITEM,
             payload: productId,
@@ -82,7 +82,7 @@ export const decrementItem = (productId) => {
           await fetch(`/api/cart/${productId}`, {
             method: "DELETE",
           });
-          
+
           dispatch({
             type: DECREMENT_ITEM,
             payload: productId,
@@ -104,7 +104,7 @@ export const addToCart = (product) => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const response = await fetch("/api/cart", {
@@ -117,7 +117,7 @@ export const addToCart = (product) => {
             quantity: 1
           }]),
         });
-        
+
         if (response.ok) {
           dispatch({
             type: ADD_TO_CART,
@@ -140,13 +140,13 @@ export const removeFromCart = (productId) => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const response = await fetch(`/api/cart/${productId}`, {
           method: "DELETE",
         });
-        
+
         if (response.ok) {
           dispatch({
             type: REMOVE_FROM_CART,
@@ -169,7 +169,7 @@ export const fetchCart = () => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const response = await fetch("/api/cart");
@@ -202,13 +202,13 @@ export const clearCart = () => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
-    
+
     if (isAuthenticated) {
       try {
         const response = await fetch("/api/cart", {
           method: "DELETE",
         });
-        
+
         if (response.ok) {
           dispatch({
             type: CLEAR_CART,

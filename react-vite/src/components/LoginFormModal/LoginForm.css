@@ -1,75 +1,77 @@
 /* Login Modal Container */
 .login-form-container {
-    width: 400px;
-    padding: 32px 24px;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
-    text-align: left;
-    font-family: "Helvetica Neue", sans-serif;
-    margin: auto;
-  }
+  width: 400px;
+  padding: 32px 24px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: left;
+  font-family: "Helvetica Neue", sans-serif;
+  margin: auto;
+}
 
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; 
-    width: 100%;
-  }
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
 
 /* Form Inputs */
 .login-form input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 16px;
-    border: 1.5px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: inherit;
-    box-sizing: border-box; 
-  }
-  .login-form label {
-    font-weight: 600;
-    display: block;
-    margin: 8px 0 4px 0;
-  }
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.login-form label {
+  font-weight: 600;
+  display: block;
+  margin: 8px 0 4px 0;
+}
 
 /* Login Button */
 .login-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #000;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 999px; 
-    cursor: pointer;
-    font-size: 15px;
-    margin-top: 4px;
-  }
+  width: 100%;
+  padding: 12px;
+  background-color: #000;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 4px;
+}
 
 /* Active Login Button */
 .login-button:not(.disabled-login):hover {
-    background-color: #4b4646;
+  background-color: #4b4646;
 }
 
 /* Disabled Login Button */
 .disabled-login {
-    background-color: lightgray !important;
-    cursor: not-allowed;
+  background-color: lightgray !important;
+  cursor: not-allowed;
 }
 
 /* Demo User Link */
 .demo-user-text {
-    margin-top: 10px;
-    color: #5a4d8b;
-    cursor: pointer;
-    text-decoration: underline;
+  margin-top: 10px;
+  color: #5a4d8b;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .error-text {
-    color: red;
-    font-size: 13px;
-    margin-top: -10px;
-    margin-bottom: 10px;
-  }
+  /* color: red; */
+  color: teal;    /* teal or red? */
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
