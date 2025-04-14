@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "../utils/fetchHelpers"; // all auth routes need credentials this is a helper function
+import { fetchWithAuth } from "../utils/fetchHelpers";
 
 export const INCREMENT_ITEM = 'INCREMENT_ITEM';
 export const DECREMENT_ITEM = 'DECREMENT_ITEM';
@@ -18,7 +18,7 @@ export const incrementItem = (productId) => {
         const item = cartItems.find(item => item.id === productId);
 
         if (item) {
-          const response = await fetchWithAuth("/api/cart", "POST", [{ //needs auth(even if users not signed in)
+          const response = await fetchWithAuth("/api/cart", "POST", [{
             id: item.product_id || productId,
             quantity: 1
           }]);
@@ -52,25 +52,20 @@ export const decrementItem = (productId) => {
         const cartItems = getState().cart.cartItems;
         const item = cartItems.find(item => item.id === productId);
 
-        // Delete existing
         if (item && item.quantity > 1) {
           await fetchWithAuth(`/api/cart/${productId}`, "DELETE");
-         //re-add with updated quantity
           if (item.quantity > 1) {
             await fetchWithAuth("/api/cart", "POST", [{
               id: item.product_id || productId,
               quantity: item.quantity - 1
             }]);
           }
-
           dispatch({
             type: DECREMENT_ITEM,
             payload: productId,
           });
         } else if (item && item.quantity === 1) {
-          // just delete
           await fetchWithAuth(`/api/cart/${productId}`, "DELETE");
-
           dispatch({
             type: DECREMENT_ITEM,
             payload: productId,
@@ -126,7 +121,6 @@ export const removeFromCart = (productId) => {
     if (isAuthenticated) {
       try {
         const response = await fetchWithAuth(`/api/cart/${productId}`, "DELETE");
-
         if (response.ok) {
           dispatch({
             type: REMOVE_FROM_CART,
@@ -154,10 +148,10 @@ export const fetchCart = () => {
       try {
         const response = await fetchWithAuth("/api/cart", "GET");
         if (response.ok) {
-          const data = await response.json();
+          const cartItems = await response.json();
           dispatch({
             type: FETCH_CART,
-            payload: data.cart_items || [],
+            payload: cartItems,
           });
         }
       } catch (error) {
@@ -186,7 +180,6 @@ export const clearCart = () => {
     if (isAuthenticated) {
       try {
         const response = await fetchWithAuth("/api/cart", "DELETE");
-
         if (response.ok) {
           dispatch({
             type: CLEAR_CART,
@@ -227,7 +220,6 @@ const cartReducer = (state = initialState, action) => {
             : { ...item, quantity: item.quantity - 1 }
           : item
       );
-
       const updatedItems = decrementedItems.filter(item => item !== null);
       localStorage.setItem('cartItems', JSON.stringify(updatedItems));
       return { ...state, cartItems: updatedItems };
@@ -235,7 +227,6 @@ const cartReducer = (state = initialState, action) => {
     case ADD_TO_CART: {
       const existingItem = state.cartItems.find(item => item.id === action.payload.id);
       let updatedItems;
-
       if (existingItem) {
         updatedItems = state.cartItems.map(item =>
           item.id === action.payload.id
@@ -246,7 +237,6 @@ const cartReducer = (state = initialState, action) => {
         const newItem = { ...action.payload, quantity: 1 };
         updatedItems = [...state.cartItems, newItem];
       }
-
       localStorage.setItem('cartItems', JSON.stringify(updatedItems));
       return { ...state, cartItems: updatedItems };
     }

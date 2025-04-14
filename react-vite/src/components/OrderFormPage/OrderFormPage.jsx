@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { clearCart } from "../../redux/cart";
+import { fetchCart, clearCart } from "../../redux/cart";
 import "./OrderFormPage.css";
 
 const OrderFormPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cartItems = useSelector(state => state.cart.cartItems);
-  const user = useSelector(state => state.session.user);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const user = useSelector((state) => state.session.user);
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -30,13 +30,17 @@ const OrderFormPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!user) {
       navigate("/");
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    const savedOrders = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+    const savedOrders = JSON.parse(localStorage.getItem("orderHistory") || "[]");
     if (savedOrders.length > 0) {
       setOrders(savedOrders);
     }
@@ -50,8 +54,10 @@ const OrderFormPage = () => {
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      return total + (item.price * item.quantity);
-    }, 0).toFixed(2);
+      const price = parseFloat(item.product?.price) || 0;
+  const quantity = parseInt(item.quantity) || 0;
+  return total + (price * quantity);
+}, 0).toFixed(2);
   };
 
   const handleChange = (e) => {
@@ -63,38 +69,25 @@ const OrderFormPage = () => {
   };
 
   const validateCardDetails = () => {
-    if (!['Credit Card', 'Debit Card'].includes(formData.payment_method)) {
-      return null;
-    }
+    if (!["Credit Card", "Debit Card"].includes(formData.payment_method)) return null;
 
     const expirationDatePattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
-    if (!expirationDatePattern.test(formData.expiration_date)) {
-      return "Expiration Date must be in MM/YY format.";
-    }
+    if (!expirationDatePattern.test(formData.expiration_date)) return "Expiration Date must be in MM/YY format.";
 
     const [expMonth, expYear] = formData.expiration_date.split("/").map(Number);
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear() % 100;
-
-    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-      return "Card is expired.";
-    }
+    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) return "Card is expired.";
 
     const cvvPattern = /^\d{3,4}$/;
-    if (!cvvPattern.test(formData.cvv)) {
-      return "CVV must be 3 or 4 digits.";
-    }
+    if (!cvvPattern.test(formData.cvv)) return "CVV must be 3 or 4 digits.";
 
     const cardNumberPattern = /^\d{16}$/;
-    if (!cardNumberPattern.test(formData.card_number)) {
-      return "Card Number must be exactly 16 digits.";
-    }
+    if (!cardNumberPattern.test(formData.card_number)) return "Card Number must be exactly 16 digits.";
 
     const zipCodePattern = /^\d+$/;
-    if (!zipCodePattern.test(formData.zip_code)) {
-      return "Zip Code must be a number.";
-    }
+    if (!zipCodePattern.test(formData.zip_code)) return "Zip Code must be a number.";
 
     return null;
   };
@@ -120,13 +113,13 @@ const OrderFormPage = () => {
 
     const formDataToSubmit = {
       ...formData,
-      zip_code: formData.zip_code ? parseInt(formData.zip_code, 10) : 0,
-      products: cartItems.map(item => ({
+      zip_code: parseInt(formData.zip_code, 10),
+      products: cartItems.map((item) => ({
         product_id: item.product_id,
-        name: item.name || "Unknown Product",
+        name: item.product.name,
         quantity: item.quantity,
-        price: item.price
-      }))
+        price: item.product.price,
+      })),
     };
 
     try {
@@ -134,13 +127,8 @@ const OrderFormPage = () => {
         try {
           const response = await fetch("/api/checkout", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              order_submission: true,
-              ...formDataToSubmit
-            }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order_submission: true, ...formDataToSubmit }),
           });
 
           if (!response.ok) {
@@ -159,7 +147,7 @@ const OrderFormPage = () => {
               zip_code: formData.zip_code,
               city: formData.city,
               state: formData.state,
-              country: formData.country
+              country: formData.country,
             },
             payment_method: formData.payment_method,
             items: data.order_details?.items || formDataToSubmit.products.map(product => ({
@@ -170,13 +158,17 @@ const OrderFormPage = () => {
               subtotal: product.price * product.quantity
             })),
             total_amount: data.order_details?.total_amount ||
-              formDataToSubmit.products.reduce((total, item) => total + (item.price * item.quantity), 0),
-            order_date: new Date().toISOString()
+              formDataToSubmit.products.reduce((total, item) => {
+                const price = parseFloat(item.price) || 0;
+                const quantity = parseInt(item.quantity) || 0;
+                return total + (price * quantity);
+              }, 0),
+            order_date: new Date().toISOString(),
           };
 
-          const savedOrders = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+          const savedOrders = JSON.parse(localStorage.getItem("orderHistory") || "[]");
           savedOrders.push(orderSummary);
-          localStorage.setItem('orderHistory', JSON.stringify(savedOrders));
+          localStorage.setItem("orderHistory", JSON.stringify(savedOrders));
           setOrders([...orders, orderSummary]);
 
           setFormData({
@@ -217,7 +209,7 @@ const OrderFormPage = () => {
         zip_code: orderData.zip_code,
         city: orderData.city,
         state: orderData.state,
-        country: orderData.country
+        country: orderData.country,
       },
       payment_method: orderData.payment_method,
       items: orderData.products.map(product => ({
@@ -225,19 +217,18 @@ const OrderFormPage = () => {
         product_name: product.name,
         quantity: product.quantity,
         price: product.price,
-        subtotal: product.price * product.quantity
+        subtotal: product.price * product.quantity,
       })),
       total_amount: orderData.products.reduce((total, item) =>
         total + (item.price * item.quantity), 0),
-      order_date: new Date().toISOString()
+      order_date: new Date().toISOString(),
     };
 
-    const savedOrders = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+    const savedOrders = JSON.parse(localStorage.getItem("orderHistory") || "[]");
     savedOrders.push(orderSummary);
-    localStorage.setItem('orderHistory', JSON.stringify(savedOrders));
-
-    setSuccessMessage("Order submitted successfully! Thank you for your purchase.");
+    localStorage.setItem("orderHistory", JSON.stringify(savedOrders));
     setOrders([...orders, orderSummary]);
+    setSuccessMessage("Order submitted successfully! Thank you for your purchase.");
 
     setFormData({
       first_name: "",
@@ -260,7 +251,7 @@ const OrderFormPage = () => {
     navigate("/cart");
   };
 
-  const showCardFields = ['Credit Card', 'Debit Card'].includes(formData.payment_method);
+  const showCardFields = ["Credit Card", "Debit Card"].includes(formData.payment_method);
 
   return (
     <div>
@@ -269,20 +260,34 @@ const OrderFormPage = () => {
       {cartItems.length > 0 && (
         <div>
           <h3>order summary</h3>
-          {cartItems.map((item, index) => (
-            <div key={index}>
-              <p>{item.name || "Product"}</p>
-              <p>qty: {item.quantity}</p>
-              <p>${(item.price * item.quantity).toFixed(2)}</p>
+          {cartItems.map((item) => (
+            <div key={item.id}>
+              <div>
+                {item.product.image_url ? (
+                  <img
+                    src={item.product.image_url}
+                    alt={item.product.name}
+                  />
+                ) : (
+                  <div>No Image</div>
+                )}
+              </div>
+
+              <div>
+                <h4>{item.product.name}</h4>
+                <p>quantity: {item.quantity}</p>
+                <p>price: ${item.product.price.toFixed(2)}</p>
+                <p>subtotal: ${(item.product.price * item.quantity).toFixed(2)}</p>
+              </div>
             </div>
           ))}
           <div>
-            <p>total:</p> ${calculateTotal()}
+            <h3>total: ${calculateTotal()}</h3>
           </div>
         </div>
       )}
 
-      < br />
+      <br />
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       {successMessage && <div className="success-message">{successMessage}</div>}
 
@@ -400,7 +405,11 @@ const OrderFormPage = () => {
               ))}
               <p>total: ${(
                 order.total_amount ||
-                (order.products || order.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                (order.products || order.items || []).reduce((sum, item) => {
+                  const price = parseFloat(item.price) || 0;
+                  const quantity = parseInt(item.quantity) || 0;
+                  return sum + (price * quantity);
+                }, 0)
               ).toFixed(2)}</p>
               {order.order_date && (
                 <p>date: {new Date(order.order_date).toLocaleDateString()}</p>
