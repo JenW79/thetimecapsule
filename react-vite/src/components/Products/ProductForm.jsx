@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // importing react is depreciated as Vite with React 17+ and JSX transform,
 // you no longer need to import React in every file.
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createProduct } from "../../redux/products";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "./Products.css";
 
-
-
 const ProductForm = () => {
+  const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // if user is not logged in
+    }
+  }, [user, navigate]);
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -54,9 +60,9 @@ const ProductForm = () => {
       };
 
       const result = await dispatch(createProduct(productData));
-      
-      if (result.errors) {
-        setError(result.errors);
+
+      if (result.errors || result.message) {
+        setError(result.errors || result.message);
       } else {
         // Reset form after successful creation
         setFormData({
@@ -68,20 +74,32 @@ const ProductForm = () => {
           category: "",
         });
         setError("");
-        navigate('/my-products');
+        navigate("/my-products");
       }
     } catch (error) {
       setError("Error creating product. Please try again.");
       console.error("Error creating product:", error);
     }
-    
   };
 
   return (
     <div className="product-form-container">
       <h2>Add New Product</h2>
 
-      {error && <p className="error-message">{error}</p>}
+      {/* {error && <p className="error-message">{error}</p>} this was throwing object errors */}
+
+      {error && typeof error === "object" ? (
+        <ul className="error-message">
+          {Object.entries(error).map(([field, messages]) => (
+            <li key={field}>
+              {field}:{" "}
+              {Array.isArray(messages) ? messages.join(", ") : messages}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        error && <p className="error-message">{error}</p>
+      )}
 
       <form className="product-form" onSubmit={handleSubmit}>
         <div className="form-group">
