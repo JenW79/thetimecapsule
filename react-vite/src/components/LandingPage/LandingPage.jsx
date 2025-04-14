@@ -10,7 +10,6 @@ import topRatedImage1 from '../../product-images/red-blue-pokemon-gameboy-game.p
 import topRatedImage2 from '../../product-images/Pacman.jpg';
 import topRatedImage3 from '../../product-images/gameboy-original-all-sides.jpg';
 import periwinkleSprinkles from '../../assets/sprinkle-peri.png';
-import greenSprinkles from '../../assets/sprinkle-green.png';
 import bottomBackground from '../../assets/the-time-capsule-bottom-background.png';
 
 function LandingPage() {
@@ -22,13 +21,6 @@ function LandingPage() {
 
             <div className="landing-page">
                 <h1 className="landing-title">Welcome to The Time Capsule!</h1>
-
-                {/* <div className="shape-row">
-                    <img src={crescent} alt="Crescent" className="shape" />
-                    <img src={rectangle} alt="Rectangle" className="shape" />
-                    <img src={triangle} alt="Triangle" className="shape" />
-                </div> */}
-
                 <div className="nostalgia-container">
                     <div className="nostalgia-item-wrapper">
                         <img src={crescent} alt="Crescent" className="shape shape-crescent" />
@@ -37,7 +29,7 @@ function LandingPage() {
                             <div className="nostalgia-info-box">
                                 <div className="nostalgia-text">
                                     <span>80s nostalgia</span>
-                                    < br/>
+                                    <br />
                                     <NavLink to="/products?decade=80s" className="shop-now-button">
                                         <button>Shop Now</button>
                                     </NavLink>
@@ -53,7 +45,7 @@ function LandingPage() {
                             <div className="nostalgia-info-box">
                                 <div className="nostalgia-text">
                                     <span>90s nostalgia</span>
-                                    < br/>
+                                    < br />
                                     <NavLink to="/products?decade=90s" className="shop-now-button">
                                         <button>Shop Now</button>
                                     </NavLink>
@@ -61,86 +53,65 @@ function LandingPage() {
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="nostalgia-item-wrapper">
-                        <img src={triangle} alt="Triangle" className="shape shape-triangle" />
-                        <div className="nostalgia-item">
-                            <img src={twoThousandsImage} className="circle-img" alt="00s nostalgia" />
-                            <div className="nostalgia-info-box">
-                                <div className="nostalgia-text">
-                                    <span>00s nostalgia</span>
-                                    < br/>
-                                    <NavLink to="/products?decade=00s" className="shop-now-button">
-                                        <button>Shop Now</button>
-                                    </NavLink>
-                                </div>
+                <div className="nostalgia-item-wrapper">
+                    <img src={triangle} alt="Triangle" className="shape shape-triangle" />
+                    <div className="nostalgia-item">
+                        <img src={twoThousandsImage} className="circle-img" alt="00s nostalgia" />
+                        <div className="nostalgia-info-box">
+                            <div className="nostalgia-text">
+                                <span>00s nostalgia</span>
+                                < br />
+                                <NavLink to="/products?decade=00s" className="shop-now-button">
+                                    <button>Shop Now</button>
+                                </NavLink>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="top-rated-wrapper">
-                    <h1 className="top-rated-products">Top Rated Products</h1>
-
-                    <div className="top-rated-images-container">
-                        <div className="top-rated-item">
-                            <div className="sprinkle-img-stack">
-                                <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles"
-                                    className="sprinkle-bg sprinkle-peri"
-                                />
-                                <img
-                                    src={greenSprinkles}
-                                    alt="Green Sprinkles"
-                                    className="sprinkle-bg sprinkle-green"
-                                />
-
-                            </div>
-                            <img src={topRatedImage1} className="square-img" alt="top rated nostalgia 1" />
-                            <span>red & blue pokemon gameboy games</span>
-                            <NavLink to="/products" className="shop-now-button">
-                                <button>Shop Now</button>
-                            </NavLink>
-                        </div>
-                        <div className="top-rated-item">
-                            <div className="sprinkle-img-stack">
-                                <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles"
-                                    className="sprinkle-bg sprinkle-peri"
-                                />
-                                <img
-                                    src={greenSprinkles}
-                                    alt="Green Sprinkles"
-                                    className="sprinkle-bg sprinkle-green"
-                                />
-
-                            </div>
-                            <img src={topRatedImage2} className="square-img" alt="top rated nostalgia 2" />
-                            <span>Pac-Man</span>
-                            <NavLink to="/products" className="shop-now-button">
-                                <button>Shop Now</button>
-                            </NavLink>
-                        </div>
-                        <div className="top-rated-item">
-                            <div className="sprinkle-img-stack">
-                                <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles"
-                                    className="sprinkle-bg sprinkle-peri"
-                                />
-                                <img
-                                    src={greenSprinkles}
-                                    alt="Green Sprinkles"
-                                    className="sprinkle-bg sprinkle-green"
-                                />
-
-                            </div>
-                            <img src={topRatedImage3} className="square-img" alt="top rated nostalgia 3" />
-                            <span>gameboy original</span>
-                            <NavLink to="/products" className="shop-now-button">
-                                <button>Shop Now</button>
-                            </NavLink>
-                        </div>
-                    </div>
-                </div>
-                <img src={bottomBackground} className="bottom-background" alt="bottom background" />
             </div>
-        </div>
+            <div className="top-rated-wrapper">
+                <h1 className="top-rated-products">Top Rated Products</h1>
+
+                <div className="top-rated-images-container">
+                    <div className="top-rated-item">
+                        <div className="top-rated-image-wrapper">
+                            <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles" className="sprinkle-bg sprinkle-peri" />
+                            <img src={topRatedImage1} className="square-img" alt="top rated nostalgia 1" />
+                        </div>
+                        <span>red & blue pokemon gameboy games</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+
+                    <div className="top-rated-item">
+                        <div className="top-rated-image-wrapper">
+                            <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles" className="sprinkle-bg sprinkle-peri" />
+                            <img src={topRatedImage2} className="square-img" alt="top rated nostalgia 2" />
+                        </div>
+                        <span>Pac-Man</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+
+                    <div className="top-rated-item">
+                        <div className="top-rated-image-wrapper">
+                            <img src={periwinkleSprinkles} alt="Periwinkle Sprinkles" className="sprinkle-bg sprinkle-peri" />
+                            <img src={topRatedImage3} className="square-img" alt="top rated nostalgia 3" />
+                        </div>
+                        <span>Gameboy Original</span>
+                        <NavLink to="/products" className="shop-now-button">
+                            <button>Shop Now</button>
+                        </NavLink>
+                    </div>
+                </div>
+
+                <img src={bottomBackground} className="bottom-background" alt="bottom background" />
+            </div >
+        </div >
     );
 }
 

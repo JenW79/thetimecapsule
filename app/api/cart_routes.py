@@ -94,26 +94,27 @@ def submit_order():
             form.zip_code.data = int(form_data.get('zip_code', 0))
         except (ValueError, TypeError):
             return jsonify({"error": "Zip code must be a number"}), 400
-            
         form.city.data = form_data.get('city')
         form.country.data = form_data.get('country')
         form.state.data = form_data.get('state')
         form.payment_method.data = form_data.get('payment_method')
-        form.expiration_date.data = form_data.get('expiration_date')
-        form.cvv.data = form_data.get('cvv')
-        form.card_number.data = form_data.get('card_number')
-        expiration_date = form.expiration_date.data
-        if not re.match(r"^(0[1-9]|1[0-2])\/\d{2}$", expiration_date):
-            return jsonify({"error": "Expiration date must be in MM/YY format."}), 400
-
-        cvv = form.cvv.data
-        if not re.match(r"^\d{3,4}$", cvv):
-            return jsonify({"error": "CVV must be 3 or 4 digits."}), 400
-
-        card_number = form.card_number.data
-        if not re.match(r"^\d{16}$", card_number):
-            return jsonify({"error": "Card number must be exactly 16 digits."}), 400
-
+        if form.payment_method.data in ['Credit Card', 'Debit Card']:
+            form.expiration_date.data = form_data.get('expiration_date')
+            form.cvv.data = form_data.get('cvv')
+            form.card_number.data = form_data.get('card_number')
+            expiration_date = form.expiration_date.data
+            if not re.match(r"^(0[1-9]|1[0-2])\/\d{2}$", expiration_date or ""):
+                return jsonify({"error": "Expiration date must be in MM/YY format."}), 400
+            cvv = form.cvv.data
+            if not re.match(r"^\d{3,4}$", cvv or ""):
+                return jsonify({"error": "CVV must be 3 or 4 digits."}), 400
+            card_number = form.card_number.data
+            if not re.match(r"^\d{16}$", card_number or ""):
+                return jsonify({"error": "Card number must be exactly 16 digits."}), 400
+        else:
+            form.expiration_date.data = None
+            form.cvv.data = None
+            form.card_number.data = None
         if form.validate():
             order_data = {
                 "first_name": form.first_name.data,
