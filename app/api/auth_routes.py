@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
@@ -36,13 +36,12 @@ def login():
     return form.errors, 401
 
 
-@auth_routes.route('/logout')
+@auth_routes.route('/logout', methods=['POST'])
+@login_required
 def logout():
-    """
-    Logs a user out
-    """
     logout_user()
-    return {'message': 'User logged out'}
+    return jsonify({"message": "Successfully logged out"})  
+#prevents CSRF vulnerabilities (GET logouts are insecure)
 
 
 @auth_routes.route('/signup', methods=['POST'])

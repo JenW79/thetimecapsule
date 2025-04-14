@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "../utils/fetchHelpers"; // needed to auth for credentials
+
 const LOAD_FAVORITES = 'favorites/load';
 const ADD_FAVORITE = 'favorites/add';
 const REMOVE_FAVORITE = 'favorites/remove';
@@ -9,18 +11,16 @@ const removeFavorite = (favoriteId) => ({type: REMOVE_FAVORITE, favoriteId });
 //THUNKS
 
 export const fetchFavorites = () => async (dispatch) => {
-    const res = await fetch('/api/favorites');
+  const res = await fetchWithAuth('/api/favorites', 'GET');
     if (res.ok){
         const data = await res.json()
         dispatch(loadFavorites(data))
     }
 }
 export const createFavorite = (productId) => async (dispatch) => {
-    const res = await fetch("/api/favorites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ product_id: productId }),
-    });
+  const res = await fetchWithAuth("/api/favorites", "POST", {
+    product_id: productId,
+  });
     if (res.ok) {
       const data = await res.json();
       dispatch(addFavorite(data));
@@ -31,9 +31,7 @@ export const createFavorite = (productId) => async (dispatch) => {
     }
   };
   export const deleteFavorite = (favoriteId) => async (dispatch) => {
-    const res = await fetch(`/api/favorites/${favoriteId}`, {
-      method: "DELETE",
-    });
+    const res = await fetchWithAuth(`/api/favorites/${favoriteId}`, "DELETE");
     if (res.ok) {
       dispatch(removeFavorite(favoriteId));
     }

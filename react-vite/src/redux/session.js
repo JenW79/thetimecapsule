@@ -1,38 +1,40 @@
-const SET_USER = 'session/setUser';
-const REMOVE_USER = 'session/removeUser';
+import { fetchWithAuth } from "../utils/fetchHelpers";
+
+const SET_USER = "session/setUser";
+const REMOVE_USER = "session/removeUser";
 
 const setUser = (user) => ({
   type: SET_USER,
-  payload: user
+  payload: user,
 });
 
 const removeUser = () => ({
-  type: REMOVE_USER
+  type: REMOVE_USER,
 });
 
 export const thunkAuthenticate = () => async (dispatch) => {
   try {
     const response = await fetch("/api/auth/", {
-      credentials: "include" 
+      credentials: "include",
     });
-  if (response.ok) {
-    const data = await response.json();
-    if (data.user) dispatch(setUser(data.user));
-  } else if (response.status === 401) {
-    // No user session — skip silently
-  } else {
-    console.error("Unexpected auth error:", response.status);
+    if (response.ok) {
+      const data = await response.json();
+      if (data.user) dispatch(setUser(data.user));
+    } else if (response.status === 401) {
+      // No user session — skip silently
+    } else {
+      console.error("Unexpected auth error:", response.status);
+    }
+  } catch (err) {
+    console.error("Error during auth fetch:", err);
   }
-} catch (err) {
-  console.error("Error during auth fetch:", err);
-}
 };
 
 export const thunkLogin = (credentials) => async (dispatch) => {
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials)
+    body: JSON.stringify(credentials),
   });
 
   if (response.ok) {
@@ -51,7 +53,7 @@ export const thunkSignup = (user) => async (dispatch) => {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   });
 
   if (response.ok) {
@@ -66,8 +68,13 @@ export const thunkSignup = (user) => async (dispatch) => {
 };
 
 export const thunkLogout = () => async (dispatch) => {
-  await fetch("/api/auth/logout");
+  const res = await fetchWithAuth("/api/auth/logout", "POST");
   dispatch(removeUser());
+  if (res.ok) {
+    dispatch(removeUser());
+  } else {
+    console.error("Logout failed");
+  }
 };
 
 const initialState = { user: null };

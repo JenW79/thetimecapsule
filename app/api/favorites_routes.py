@@ -20,7 +20,7 @@ def get_favorites():
     } for fav in favorites])
 
 #POST /api/favorites
-@favorites_routes.route('/', methods=['POST'])
+@favorites_routes.route('', methods=['POST'])
 @login_required
 def add_favorite():
     data = request.get_json()
@@ -34,7 +34,14 @@ def add_favorite():
     db.session.add(favorite)
     db.session.commit()
 
-    return jsonify({'id': favorite.id, 'product_id': favorite.product_id}), 201
+    return jsonify({
+  'id': favorite.id,
+  'product': {
+    'id': favorite.product.id,
+    'name': favorite.product.name,
+    'price': favorite.product.price
+  }
+}), 201
 
 #DELETE /api/favorites/:id
 @favorites_routes.route('/<int:id>', methods=["DELETE"])

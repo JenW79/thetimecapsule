@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "../utils/fetchHelpers"; //needed to auth with credentials
+
 // Action Types
 export const LOAD_PRODUCTS = "products/load";
 export const ADD_PRODUCT = "products/add";
@@ -49,11 +51,7 @@ export const fetchProduct = (productId) => async (dispatch) => {
 };
 
 export const createProduct = (payload) => async (dispatch) => {
-  const res = await fetch("/api/products", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const res = await fetchWithAuth("/api/products", "POST", payload)
   if (res.ok) {
     const data = await res.json();
     dispatch(addProduct(data));
@@ -65,11 +63,7 @@ export const createProduct = (payload) => async (dispatch) => {
 };
 
 export const editProduct = (productId, payload) => async (dispatch) => {
-  const res = await fetch(`/api/products/${productId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const res = await fetchWithAuth(`/api/products/${productId}`, "PUT", payload);
   if (res.ok) {
     const data = await res.json();
     dispatch(updateProduct(data));
@@ -81,9 +75,7 @@ export const editProduct = (productId, payload) => async (dispatch) => {
 };
 
 export const removeProduct = (productId) => async (dispatch) => {
-  const res = await fetch(`/api/products/${productId}`, {
-    method: "DELETE",
-  });
+  const res = await fetchWithAuth(`/api/products/${productId}`, "DELETE");
   if (res.ok) {
     dispatch(deleteProduct(productId));
     return { message: "Product deleted" };
@@ -120,7 +112,7 @@ export const fetchProductsBySearch = (searchTerm) => async (dispatch) => {
 };
 
 export const fetchCurrentUserProducts = () => async (dispatch) => {
-  const res = await fetch("/api/products/current");
+  const res = await fetchWithAuth("/api/products/current", "GET");
   if (res.ok) {
     const data = await res.json();
     dispatch(loadProducts(data));
