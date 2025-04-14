@@ -45,7 +45,12 @@ db.init_app(app)
 Migrate(app, db)
 
 # Application Security
-CORS(app)
+# CORS(app)
+# CORS edited to allow in development
+if os.environ.get("FLASK_ENV") == "production":
+    CORS(app, supports_credentials=True, origins=["https://thetimecapsule.onrender.com"])
+else:
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 
 # Since we are deploying with Docker and Flask,

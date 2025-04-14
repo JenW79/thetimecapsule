@@ -15,12 +15,13 @@ const FavoriteButton = ({ productId }) => {
   
   const handleToggleFavorite = async () => {
     if (favorite) {
-      // Remove from favorites using the favorite's id (not the product id)
       await dispatch(deleteFavorite(favorite.id));
     } else {
-      // Add to favorites using the product id
       await dispatch(createFavorite(productId));
     }
+  
+    // // Refresh state
+    // await dispatch(fetchFavorites());
   };
 
   return (
