@@ -1,3 +1,10 @@
+// crsf auth helper function
+const getCSRFToken = () => {
+    const match = document.cookie.match(/csrf_token=([^;]+)/);
+    return match ? match[1] : '';
+  };
+  
+
 // Action Types
 export const LOAD_PRODUCTS = 'products/load';
 export const ADD_PRODUCT = 'products/add';
