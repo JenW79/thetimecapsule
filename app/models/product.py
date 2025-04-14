@@ -3,6 +3,7 @@ from sqlalchemy import DateTime, ForeignKey
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from app.models.cart_item import CartItem
+from app.models.review import Review
 from .db import add_prefix_for_prod
 import json
 # class Decade(enum.Enum):
@@ -15,6 +16,7 @@ import json
 #     GAME = "game"
 #     ELECTRONIC = "electronic"
 # 
+
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -35,9 +37,9 @@ class Product(db.Model):
 
     # Relationships
     owner = db.relationship("User", back_populates="products")
-    favorited_by = db.relationship("Favorite", back_populates="product", cascade="all, delete-orphan")
-    reviews = db.relationship("Review", back_populates="product")
-    cart_items = db.relationship("CartItem", back_populates="product")
+    favorited_by = db.relationship("Favorite", back_populates="product")
+    reviews = db.relationship(Review, back_populates="product", cascade="all, delete-orphan")
+    cart_items = db.relationship("CartItem", back_populates="product", cascade="all, delete-orphan")
 
     def to_dict(self):
         # For multiple product images in JSON arrays
@@ -47,7 +49,7 @@ class Product(db.Model):
                 images = json.loads(self.image_url)
             except (json.JSONDecodeError, TypeError):
                 images = [self.image_url] if self.image_url else []
-            
+      
         return {
             "id": self.id,
             "name": self.name,
@@ -62,5 +64,5 @@ class Product(db.Model):
                 "username": self.owner.username
             } if self.owner else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "review_count": len(self.reviews)
+            "reviews": [review.to_dict() for review in self.reviews]
         }

@@ -8,6 +8,7 @@ import LandingPage from "../components/LandingPage/LandingPage";
 import ProductList from "../components/Products/ProductList";
 import MyProducts from "../components/Products/MyProducts";
 import ProductForm from "../components/Products/ProductForm";
+import ProductDetail from "../components/Products/ProductDetail"
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
         path: "/products/new",
         element: <ProductForm />,
       },
+      {
+        path: "products/:id",
+        element: <ProductDetail />, 
+      }
     ],
   },
 ]);

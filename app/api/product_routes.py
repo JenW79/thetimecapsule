@@ -21,6 +21,15 @@ def get_products():
 
     return jsonify([product.to_dict() for product in products])
 
+# GET single product by ID
+@product_routes.route('/<int:id>')
+def get_product_by_id(id):
+    product = Product.query.get(id)
+    if not product:
+        return {"error": "Product not found"}, 404
+
+    return product.to_dict(), 200
+
 #POST new product /api/products
 @product_routes.route('/', methods=['POST'])
 @login_required

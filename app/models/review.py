@@ -19,15 +19,16 @@ class Review(db.Model):
     user = db.relationship('User', back_populates='reviews')
     product = db.relationship('Product', back_populates='reviews')
 
-    def to_dict(self):
+    def to_dict(self): 
         return {
             'id': self.id,
-            'user_id': self.user_id,
-            'username': self.user.username if self.user else "Unknown",
             'product_id': self.product_id,
-            'product_name': self.product.name if self.product else "Unknown",
             'rating': self.rating,
             'review_text': self.review_text,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None,
-            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if self.updated_at else None
-    }
+            'user': {
+                'id': self.user.id,
+                'username': self.user.username
+            } if self.user else None,
+            'created_at': self.created_at.strftime('%B %d, %Y at %-I:%M %p') if self.created_at else None,
+            'updated_at': self.updated_at.strftime('%B %d, %Y at %-I:%M %p') if self.updated_at else None
+        }

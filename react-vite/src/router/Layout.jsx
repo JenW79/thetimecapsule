@@ -4,13 +4,17 @@ import { useDispatch } from "react-redux";
 import { ModalProvider, Modal } from "../context/Modal";
 import { thunkAuthenticate } from "../redux/session";
 import { fetchCart } from "../redux/cart";
+import { fetchFavorites } from "../redux/favorites"
 import Navigation from "../components/Navigation/Navigation";
 
 export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    dispatch(thunkAuthenticate()).then(() => dispatch(fetchCart())).then(() => setIsLoaded(true));
+    dispatch(thunkAuthenticate())
+      .then(() => dispatch(fetchCart()))
+      .then(() => dispatch(fetchFavorites()))
+      .then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
