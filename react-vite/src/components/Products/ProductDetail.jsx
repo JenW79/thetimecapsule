@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductById } from '../../redux/products';
+import { fetchProduct } from '../../redux/products';
 import ProductItem from './ProductItem';
 import ReviewList from '../Reviews/ReviewList';
 import './Products.css';
@@ -11,12 +11,10 @@ const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   
-  const product = useSelector(state => 
-    state.products.find(product => product.id === parseInt(id))
-  );
+  const product = useSelector(state => state.products[parseInt(id)]);
   
   useEffect(() => {
-    dispatch(fetchProductById(id));
+    dispatch(fetchProduct(id));
   }, [dispatch, id]);
   
   if (!product) {
@@ -28,6 +26,7 @@ const ProductDetail = () => {
       <ProductItem product={product} />
       <ReviewList />
     </div>
+    
   );
 };
 

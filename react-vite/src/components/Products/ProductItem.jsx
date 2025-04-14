@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
-// importing react is depreciated as Vite with React 17+ and JSX transform, 
-// you no longer need to import React in every file.
-import { useDispatch } from 'react-redux';
-import { editProduct} from '../../redux/products';
-import { addToCart } from '../../redux/cart';
-import EditProductForm from './EditProductForm';
-import DeleteProduct from './DeleteProduct';
-import FavoriteButton from '../Favorites/FavoriteButton';
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { editProduct } from "../../redux/products";
+import { addToCart } from "../../redux/cart";
+import EditProductForm from "./EditProductForm";
+import DeleteProduct from "./DeleteProduct";
+import FavoriteButton from "../Favorites/FavoriteButton";
+import CreateReviewModal from '../Reviews/CreateReviewModal';
+import { fetchProduct } from '../../redux/products';
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [productImages, setProductImages] = useState([]);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
@@ -23,52 +24,69 @@ const ProductItem = ({ product }) => {
   };
 
   // Determine if we're on a product detail page or a listing page
-  const isDetailPage = window.location.pathname.includes(`/product/${product.id}`);
+  const isDetailPage = window.location.pathname.includes(
+    `/product/${product.id}`
+  );
 
   // Process the product images when the product changes
   useEffect(() => {
     const parseImages = () => {
       console.log("Processing images for product:", product.id);
       console.log("Raw product data:", product);
-      
+      console.log("Product from Redux:", product)
+
       // If product has a pre-parsed images array, use it
-      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      if (
+        product.images &&
+        Array.isArray(product.images) &&
+        product.images.length > 0
+      ) {
         console.log("Using pre-parsed images array:", product.images);
         return product.images;
       }
-      
+
       // Try to parse the image_url if it looks like JSON
-      if (typeof product.image_url === 'string') {
+      if (typeof product.image_url === "string") {
         try {
           // Handle case where the string might have extra quotes or formatting issues
-          let cleanedString = product.image_url.replace(/^"|"$/g, '');
-          
+          let cleanedString = product.image_url.replace(/^"|"$/g, "");
+
           // Check if it starts with a bracket (likely an array)
-          if (cleanedString.trim().startsWith('[')) {
+          if (cleanedString.trim().startsWith("[")) {
             const parsedImages = JSON.parse(cleanedString);
-            console.log("Successfully parsed JSON array from image_url:", parsedImages);
-            return Array.isArray(parsedImages) ? parsedImages : [product.image_url];
+            console.log(
+              "Successfully parsed JSON array from image_url:",
+              parsedImages
+            );
+            return Array.isArray(parsedImages)
+              ? parsedImages
+              : [product.image_url];
           }
         } catch (e) {
           console.error("Failed to parse image_url as JSON:", e);
         }
-        
+
         // If it's a comma-separated string, split it
-        if (product.image_url.includes(',')) {
-          const splitImages = product.image_url.split(',').map(url => url.trim());
-          console.log("Split comma-separated image string into array:", splitImages);
+        if (product.image_url.includes(",")) {
+          const splitImages = product.image_url
+            .split(",")
+            .map((url) => url.trim());
+          console.log(
+            "Split comma-separated image string into array:",
+            splitImages
+          );
           return splitImages;
         }
-        
+
         // Just use the single image_url
         console.log("Using image_url as single image:", product.image_url);
         return [product.image_url];
       }
-      
+
       console.log("No valid images found, using placeholder");
-      return ['/assets/placeholder.png'];
+      return ["/assets/placeholder.png"];
     };
-    
+
     const images = parseImages();
     console.log("Final processed images:", images);
     setProductImages(images);
@@ -79,13 +97,13 @@ const ProductItem = ({ product }) => {
     if (index < productImages.length) {
       return productImages[index];
     }
-    return productImages[0] || '/assets/placeholder.png';
+    return productImages[0] || "/assets/placeholder.png";
   };
 
   return (
     <div className={isDetailPage ? "product-detail" : "product-item"}>
       {isEditing ? (
-        <EditProductForm 
+        <EditProductForm
           product={product}
           onProductUpdated={handleProductUpdate}
           onCancel={() => setIsEditing(false)}
@@ -99,25 +117,57 @@ const ProductItem = ({ product }) => {
                 <h1 className="product-title">{product.name}</h1>
                 <p className="product-description">{product.description}</p>
                 <p className="product-price">${product.price.toFixed(2)}</p>
-                <button 
+                <button
                   className="add-to-cart-button"
                   onClick={handleAddToCart}
                 >
                   add to cart
                 </button>
               </div>
+              {product.reviews && product.reviews.length > 0 && (
+                <div className="product-reviews">
+                  <h4>Reviews:</h4>
+                  <ul>
+                    {product.reviews.map((review) => (
+                      <li key={review.id}>
+                        <strong>{review.user.username}</strong>:{" "}
+                        {review.comment} ⭐{review.rating}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button
+                className="leave-review-button"
+                onClick={() => setShowReviewModal(true)}
+              >
+                Leave a Review
+              </button>
+
+              {showReviewModal && (
+                <CreateReviewModal
+                  productId={product.id}
+                  onClose={() => {
+                    setShowReviewModal(false);
+                    dispatch(fetchProduct(product.id)); // re-fetch updated product
+                  }}
+                />
+              )}
               <div className="product-gallery">
                 {/* Generate gallery images dynamically based on available images */}
-                {[0, 1, 2, 3].map(index => (
+                {[0, 1, 2, 3].map((index) => (
                   <div key={index} className="gallery-image">
-                    <img 
-                      src={getImageByIndex(index)} 
-                      alt={`${product.name} view ${index + 1}`} 
+                    <img
+                      src={getImageByIndex(index)}
+                      alt={`${product.name} view ${index + 1}`}
                     />
                   </div>
                 ))}
                 <div className="pattern-image">
-                  <img src="/assets/sprinkle-green.png" alt="Decorative pattern" />
+                  <img
+                    src="/assets/sprinkle-green.png"
+                    alt="Decorative pattern"
+                  />
                 </div>
               </div>
             </div>
@@ -130,9 +180,9 @@ const ProductItem = ({ product }) => {
               <h3>{product.name}</h3>
               <p className="product-description">{product.description}</p>
               <p className="product-price">${product.price.toFixed(2)}</p>
-              
+
               <div className="product-actions">
-                <button 
+                <button
                   className="edit-button"
                   onClick={() => setIsEditing(true)}
                 >
@@ -140,7 +190,7 @@ const ProductItem = ({ product }) => {
                 </button>
                 <DeleteProduct productId={product.id} />
                 <FavoriteButton productId={product.id} />
-                <button 
+                <button
                   className="add-to-cart-button"
                   onClick={handleAddToCart}
                 >
