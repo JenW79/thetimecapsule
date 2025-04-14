@@ -31,5 +31,5 @@ class CartItem(db.Model):
             "is_ordered": self.is_ordered
         }
 
-def __repr__(self):
-        return f"<CartItem {self.id} - {self.product.name}>"
+    def __repr__(self):
+            return f"<CartItem {self.id} - {self.product.name}>"
