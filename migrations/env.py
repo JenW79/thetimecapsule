@@ -99,8 +99,14 @@ def run_migrations_online():
             if environment == "production":
                 context.execute(f"SET search_path TO {SCHEMA}")
             context.run_migrations()
+print("=== Alembic Env Debug ===")
+print("Using FLASK_ENV:", environment)
+print("Using SCHEMA:", SCHEMA)
+print("Using DATABASE_URL:", os.environ.get("DATABASE_URL"))
+print("=========================")
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
