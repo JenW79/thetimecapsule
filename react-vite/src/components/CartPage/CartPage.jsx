@@ -17,7 +17,6 @@ const CartPage = () => {
   const cartItems = useSelector((state) => state.cart.cartItems || []);
   const prevCartItemsRef = useRef();
   const navigate = useNavigate();
-
   const sessionUser = useSelector((state) => state.session.user);
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -35,7 +34,6 @@ const CartPage = () => {
   useEffect(() => {
     const handleOutsideClick = (e) => {
       const clickedScrollbar = e.clientX >= document.documentElement.clientWidth;
-
       if (!clickedScrollbar) {
         if (
           showSignupModal &&
@@ -44,7 +42,6 @@ const CartPage = () => {
         ) {
           setShowSignupModal(false);
         }
-
         if (
           showLoginModal &&
           loginModalRef.current &&
@@ -60,6 +57,28 @@ const CartPage = () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [showSignupModal, showLoginModal]);
+
+  useEffect(() => {
+    if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
+      prevCartItemsRef.current = cartItems;
+      try {
+        const total = cartItems.reduce(
+          (sum, item) => {
+            const price = parseFloat(item.product?.price) || 0;
+            const quantity = parseInt(item.quantity) || 0;
+            return sum + price * quantity;
+          }, 0);
+        setTotalPrice(total);
+
+      } catch (err) {
+        setError('Failed to calculate total price');
+      }
+    }
+  }, [cartItems]);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   const handleIncrement = (productId) => {
     dispatch(incrementItem(productId));
@@ -77,25 +96,6 @@ const CartPage = () => {
     dispatch(clearCart());
   };
 
-  useEffect(() => {
-    if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-      prevCartItemsRef.current = cartItems;
-      try {
-        const total = cartItems.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        );
-        setTotalPrice(total.toFixed(2));
-      } catch (err) {
-        setError('Failed to calculate total price');
-      }
-    }
-  }, [cartItems]);
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   const handleProceedToCheckout = () => {
     if (!sessionUser) {
       setShowSignupModal(true);
@@ -103,6 +103,10 @@ const CartPage = () => {
     }
     navigate('/checkout');
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
@@ -114,49 +118,40 @@ const CartPage = () => {
         </div>
       ) : (
         <div>
-          <div>
-            {cartItems.map((item) => (
-              <div key={item.id}>
+          {cartItems.map((item) => (
+            <div key={item.id} className="cart-item">
+              <div className="cart-item-image">
+                {item.product.image_url ? (
+                  <img
+                    src={item.product.image_url}
+                    alt={item.product.name} />
+                ) : (
+                  <div>No Image</div>
+                )}
+              </div>
+
+              <div className="cart-item-details">
+                <h3>{item.product.name}</h3>
+                <p>price: ${item.product.price.toFixed(2)}</p>
                 <div>
-                  <h3>{item.name}</h3>
-                  <p>price: ${item.price}</p>
-                  <p>quantity: {item.quantity}</p>
-                </div>
-                <div>
-                  <button
-                    onClick={() => handleDecrement(item.id)}
-                    aria-label="Decrease quantity"
-                  >
-                    -
-                  </button>
-                  <span className="quantity-display">{item.quantity}</span>
-                  <button
-                    onClick={() => handleIncrement(item.id)}
-                    aria-label="Increase quantity"
-                  >
-                    +
-                  </button>
+                  <span>qty: {item.quantity}</span>
+                  < br />
+                  <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">-</button>
+                  <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">+</button>
                 </div>
                 <div className="item-subtotal">
-                  <p>${(item.price * item.quantity).toFixed(2)}</p>
+                  <p>subtotal: ${(item.product.price * item.quantity).toFixed(2)}</p>
                 </div>
-                <button
-                  onClick={() => handleRemoveFromCart(item.id)}
-                  aria-label="Remove item"
-                >
-                  remove
-                </button>
+                <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">Remove</button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+
           <div>
-            <div>
-              <h3>total: ${totalPrice}</h3>
-            </div>
-            <div>
-              <button onClick={handleClearCart}>clear cart</button>
-              <button onClick={handleProceedToCheckout}>continue to checkout</button>
-            </div>
+          <h3>total: ${totalPrice.toFixed(2)}</h3>
+
+            <button onClick={handleClearCart}>clear cart</button>
+            <button onClick={handleProceedToCheckout}>continue to checkout</button>
           </div>
         </div>
       )}

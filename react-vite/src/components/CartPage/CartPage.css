@@ -243,3 +243,32 @@
   }
 }
 */
+
+
+
+
+
+
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.cart-item-image img {
+  width: 120px;
+  height: auto;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-details button {
+  margin-top: 8px;
+}

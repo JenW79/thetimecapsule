@@ -17,6 +17,7 @@ def get_cart():
             if product:
                 item_dict['price'] = product.price
                 item_dict['name'] = product.name
+                item_dict['image_url'] = product.image_url
             cart_items_with_details.append(item_dict)
 
         return jsonify({'cart_items': cart_items_with_details}), 200
@@ -80,7 +81,7 @@ def clear_cart():
         return jsonify({"message": "Cart cleared"}), 200
     else:
         return jsonify({"message": "Cart cleared"}), 200
-        
+
 @cart_routes.route("/checkout", methods=["POST"])
 @login_required
 def submit_order():
