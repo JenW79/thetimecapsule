@@ -55,9 +55,9 @@ const OrderFormPage = () => {
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
       const price = parseFloat(item.product?.price) || 0;
-  const quantity = parseInt(item.quantity) || 0;
-  return total + (price * quantity);
-}, 0).toFixed(2);
+      const quantity = parseInt(item.quantity) || 0;
+      return total + (price * quantity);
+    }, 0).toFixed(2);
   };
 
   const handleChange = (e) => {
