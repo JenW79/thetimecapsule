@@ -26,10 +26,12 @@ from flask_cors import CORS
 
 if os.environ.get("FLASK_ENV") == "production":
     CORS(app, supports_credentials=True, origins=["https://thetimecapsule.onrender.com"])
-else:
+elif os.environ.get("FLASK_ENV") == "development":
     CORS(app, supports_credentials=True, origins=[
         "http://localhost:5173", "http://127.0.0.1:5173"
     ])
+else:
+    CORS(app, supports_credentials=True, origins=["https://timecapsule-dev-preview.onrender.com"])
 
 
 # Setup login manager
