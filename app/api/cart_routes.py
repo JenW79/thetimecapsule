@@ -8,21 +8,24 @@ cart_routes = Blueprint('cart', __name__)
 
 @cart_routes.route("/cart")
 def get_cart():
+    cart_items_with_details = []
     if current_user.is_authenticated:
         cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-        cart_items_with_details = []
-        for item in cart_items:
-            item_dict = item.to_dict()
-            product = Product.query.get(item.product_id)
-            if product:
-                item_dict['price'] = product.price
-                item_dict['name'] = product.name
-                item_dict['image_url'] = product.image_url
-            cart_items_with_details.append(item_dict)
-
-        return jsonify({'cart_items': cart_items_with_details}), 200
     else:
-        return jsonify({"cart_items": []}), 200
+        cart_items = session.get('cart', [])
+    for item in cart_items:
+        item_dict = item.to_dict() if isinstance(item, CartItem) else item
+        product_id = item_dict['product_id'] if isinstance(item_dict, dict) else item.product_id
+        product = Product.query.get(product_id) if isinstance(item_dict, dict) else None
+        if product:
+            item_dict['product'] = {
+                'id': product.id,
+                'name': product.name,
+                'price': float(product.price),
+                'image_url': product.image_url,
+            }
+        cart_items_with_details.append(item_dict)
+    return jsonify(cart_items_with_details), 200
 
 @cart_routes.route("/cart", methods=["POST"])
 def add_to_cart():
@@ -30,23 +33,30 @@ def add_to_cart():
     for product in products:
         product_id = product.get('id')
         quantity = product.get('quantity', 1)
-
         product_obj = Product.query.get(product_id)
-
         if not product_obj:
             return jsonify({"error": "Product not found"}), 404
-
         if current_user.is_authenticated:
             cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_obj.id).first()
-
             if cart_item:
                 cart_item.quantity += quantity
             else:
                 cart_item = CartItem(user_id=current_user.id, product_id=product_obj.id, quantity=quantity)
                 db.session.add(cart_item)
-
             db.session.commit()
         else:
+            cart = session.get('cart', [])
+            existing_item = next((item for item in cart if item['product_id'] == product_obj.id), None)
+            if existing_item:
+                existing_item['quantity'] += quantity
+            else:
+                cart.append({
+                    'product_id': product_obj.id,
+                    'name': product_obj.name,
+                    'quantity': quantity,
+                    'price': product_obj.price,
+                })
+            session['cart'] = cart
             return jsonify({
                 "message": "Product added to cart",
                 "product": {
@@ -56,7 +66,6 @@ def add_to_cart():
                     'price': product_obj.price
                 }
             }), 201
-
     return jsonify({"message": "Products added to cart"}), 201
 
 @cart_routes.route("/cart/<int:item_id>", methods=["DELETE"])
@@ -69,6 +78,9 @@ def remove_item_from_cart(item_id):
         db.session.commit()
         return jsonify({"message": "Item removed from cart"}), 200
     else:
+        cart = session.get('cart', [])
+        cart = [item for item in cart if item['product_id'] != item_id]
+        session['cart'] = cart
         return jsonify({"message": "Item removed from cart"}), 200
 
 @cart_routes.route("/cart", methods=["DELETE"])
@@ -80,6 +92,7 @@ def clear_cart():
         db.session.commit()
         return jsonify({"message": "Cart cleared"}), 200
     else:
+        session['cart'] = []
         return jsonify({"message": "Cart cleared"}), 200
 
 @cart_routes.route("/checkout", methods=["POST"])
@@ -127,14 +140,11 @@ def submit_order():
                 "state": form.state.data,
                 "payment_method": form.payment_method.data,
             }
-
             cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
             if not cart_items:
                 return jsonify({"error": "Your cart is empty!"}), 400
-
             total_price = 0
             items_summary = []
-            
             for item in cart_items:
                 product = Product.query.get(item.product_id)
                 if product:
@@ -145,11 +155,8 @@ def submit_order():
                         'quantity': item.quantity,
                         'price': product.price
                     })
-
                     db.session.delete(item)
-
                 db.session.commit()
-
             return jsonify({
                 "message": "Order form submitted successfully",
                 "order_data": order_data,
@@ -160,5 +167,4 @@ def submit_order():
             }), 200
         else:
             return jsonify({"error": "Form validation failed.", "details": form.errors}), 400
-
     return jsonify({"error": "Invalid request format."}), 400
