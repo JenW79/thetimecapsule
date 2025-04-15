@@ -94,9 +94,9 @@ def run_migrations_online():
         if environment == "production":
             try:
                  connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")
-                 print(f"✅ Created or verified schema `{SCHEMA}` exists.")
+                 print(f" Created or verified schema `{SCHEMA}` exists.")
             except Exception as e:
-                 print(f"❌ Error creating schema `{SCHEMA}`: {e}")
+                 print(f" Error creating schema `{SCHEMA}`: {e}")
                  
 
         # Set search path to your schema (only in production)
@@ -104,9 +104,9 @@ def run_migrations_online():
             if environment == "production":
                 try:
                     connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")
-                    print(f"✅ Created schema `{SCHEMA}` (or already exists)")
+                    print(f" Created schema `{SCHEMA}` (or already exists)")
                 except Exception as e:
-                    print(f"❌ Failed to create schema `{SCHEMA}`: {e}")
+                    print(f" Failed to create schema `{SCHEMA}`: {e}")
 
 
 
