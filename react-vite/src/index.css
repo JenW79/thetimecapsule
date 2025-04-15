@@ -5,9 +5,9 @@ body {
     font-family: "Poppins";
     /* font-weight: regular; */
     margin: auto;
-    background-image: url('./assets/background-grid.png');
+    background-image: url('./assets/background-grid.png') !important;
     background-repeat: repeat;
-    background-size: cover;
+    background-size: auto !important;
     font-size: 16px;
     color: #242424;
 }
