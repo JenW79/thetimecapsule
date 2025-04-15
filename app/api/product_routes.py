@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, Product
 from app.forms import ProductForm
+from flask_wtf.csrf import validate_csrf
+from wtforms.validators import ValidationError
 
 product_routes = Blueprint('products', __name__)
 
@@ -31,10 +33,22 @@ def get_product_by_id(id):
     return product.to_dict(), 200
 
 #POST new product /api/products
-@product_routes.route('/', methods=['POST'])
+@product_routes.route('/', methods=['POST'], strict_slashes=False)
 @login_required
 def create_product():
+    from flask_wtf.csrf import validate_csrf
+    from wtforms.validators import ValidationError
+    from app.forms import ProductForm
+    from flask import request
+
+    try:
+        validate_csrf(request.headers.get('X-CSRFToken'))
+    except ValidationError:
+        return {'errors': {'csrf_token': ['The CSRF token is missing or invalid.']}}, 400
+
     form = ProductForm()
+    form['csrf_token'].data = request.cookies.get('csrf_token') 
+
     if form.validate_on_submit():
         new_product = Product(
             name=form.name.data,
@@ -48,7 +62,10 @@ def create_product():
         db.session.add(new_product)
         db.session.commit()
         return new_product.to_dict(), 201
+
     return {"errors": form.errors}, 400
+
+
 
 #PUT edit a product /api/products/<id>
 @product_routes.route('/<int:id>', methods=['PUT'])
@@ -83,3 +100,11 @@ def delete_product(id):
 def get_user_products():
     user_products = Product.query.filter_by(owner_id=current_user.id).all()
     return jsonify([product.to_dict() for product in user_products])
+
+# @product_routes.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
+# def test_methods():
+#     return jsonify({
+#         "method": request.method,
+#         "data": request.get_json(),
+#         "message": "This route is reachable!"
+#     })

@@ -10,3 +10,4 @@ class ProductForm(FlaskForm):
     image_url = StringField('Image URL')
     decade = StringField('Decade', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired()])
+    
