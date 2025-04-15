@@ -5,9 +5,16 @@ import "./Navigation.css";
 import { FaShoppingBag } from "react-icons/fa";
 
 function Navigation() {
-  const cartCount = useSelector((state) =>
-    state.cart.cartItems.reduce((total, item) => total + item.quantity, 0)
-  );
+//   const cartCount = useSelector((state) =>
+//     state.cart.cartItems.reduce((total, item) => total + item.quantity, 0)
+//   ); was crashing the site. please fix or keep the change below
+
+const cartCount = useSelector((state) => {
+  const cartItems = state.cart?.cartItems || [];
+  return Array.isArray(cartItems)
+    ? cartItems.reduce((total, item) => total + item.quantity, 0)
+    : 0;
+});
 
   return (
     <div className="navbar">
