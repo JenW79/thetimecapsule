@@ -76,10 +76,10 @@ def upgrade():
     sa.Column('review_text', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id']),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id']),
     sa.PrimaryKeyConstraint('id')
-    )
+)
     # ### end Alembic commands ###
 
 
