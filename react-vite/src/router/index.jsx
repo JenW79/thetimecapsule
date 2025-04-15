@@ -8,7 +8,8 @@ import LandingPage from "../components/LandingPage/LandingPage";
 import ProductList from "../components/Products/ProductList";
 import MyProducts from "../components/Products/MyProducts";
 import ProductForm from "../components/Products/ProductForm";
-import ProductDetail from "../components/Products/ProductDetail"
+import ProductDetail from "../components/Products/ProductDetail";
+import FavoritesList from "../components/Favorites/FavoritesList";
 
 export const router = createBrowserRouter([
   {
@@ -60,8 +61,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "products/:id",
-        element: <ProductDetail />, 
-      }
+        element: <ProductDetail />,
+      },
+      {
+        path: "/favorites",
+        element: <FavoritesList />,
+      },
     ],
   },
 ]);
