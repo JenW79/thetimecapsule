@@ -27,7 +27,7 @@ function LandingPage() {
                         <div className="nostalgia-item">
                             <img src={eightiesImage} className="circle-img" alt="80s nostalgia" />
                             <div className="nostalgia-info-box">
-                                <div className="nostalgia-text">
+                                <div className="nostalgia-text-wrapper">
                                     <span>80s nostalgia</span>
                                     <br />
                                     <NavLink to="/products?decade=80s" className="shop-now-button">
@@ -43,7 +43,7 @@ function LandingPage() {
                         <div className="nostalgia-item">
                             <img src={ninetiesImage} className="circle-img" alt="90s nostalgia" />
                             <div className="nostalgia-info-box">
-                                <div className="nostalgia-text">
+                                <div className="nostalgia-text-wrapper">
                                     <span>90s nostalgia</span>
                                     < br />
                                     <NavLink to="/products?decade=90s" className="shop-now-button">
@@ -60,7 +60,7 @@ function LandingPage() {
                     <div className="nostalgia-item">
                         <img src={twoThousandsImage} className="circle-img" alt="00s nostalgia" />
                         <div className="nostalgia-info-box">
-                            <div className="nostalgia-text">
+                            <div className="nostalgia-text-wrapper">
                                 <span>00s nostalgia</span>
                                 < br />
                                 <NavLink to="/products?decade=00s" className="shop-now-button">
@@ -108,9 +108,8 @@ function LandingPage() {
                         </NavLink>
                     </div>
                 </div>
-
-                <img src={bottomBackground} className="bottom-background" alt="bottom background" />
             </div >
+            <img src={bottomBackground} className="bottom-background" alt="bottom background" />
         </div >
     );
 }
