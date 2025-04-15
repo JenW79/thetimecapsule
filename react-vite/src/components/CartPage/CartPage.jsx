@@ -102,13 +102,36 @@ const CartPage = () => {
           {cartItems.map((item) => (
             <div key={item.id} className="cart-item">
               <div className="cart-item-image">
-                  {item.product?.image_url ? (
-                  <img src={item.product.image_url} alt={item.product.name} />
-                ) : (
-                  <div>No Image</div>
-                )}
+                {(() => {
+                  let imageUrls = [];
+
+                  if (Array.isArray(item.product?.image_url)) {
+                    imageUrls = item.product.image_url;
+                  } else if (typeof item.product?.image_url === "string") {
+                    try {
+                      const parsed = JSON.parse(item.product.image_url);
+                      imageUrls = Array.isArray(parsed) ? parsed : [parsed];
+                    } catch {
+                      imageUrls = [item.product.image_url];
+                    }
+                  }
+
+                  return imageUrls.length ? (
+                    <div>
+                      {imageUrls.map((url, idx) => (
+                        <img
+                          key={idx}
+                          src={url}
+                          alt={`${item.product?.name} ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div>No Image</div>
+                  );
+                })()}
               </div>
-                <div className="cart-item-details">
+              <div className="cart-item-details">
                 <h3>{item.product?.name}</h3>
                 <p>
                   price: $

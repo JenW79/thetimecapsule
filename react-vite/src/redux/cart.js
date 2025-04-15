@@ -149,6 +149,7 @@ export const fetchCart = () => {
         const response = await fetchWithAuth("/api/cart", "GET");
         if (response.ok) {
           const cartItems = await response.json();
+          console.log("Cart Items:", cartItems);
           dispatch({
             type: FETCH_CART,
             payload: cartItems,
