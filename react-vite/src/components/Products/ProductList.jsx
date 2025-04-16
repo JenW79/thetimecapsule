@@ -29,6 +29,15 @@ const ProductList = () => {
     filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
   }
 
+  // hide products owned
+  const sessionUser = useSelector((state) => state.session.user);
+  if (sessionUser) {
+    filteredProducts = filteredProducts.filter(
+      (product) => product.owner?.id !== sessionUser.id
+    );
+  } 
+  //hide products owned ^
+
   if (!filteredProducts.length) {
     return <div className="loading">Loading products...</div>;
   }

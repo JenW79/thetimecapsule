@@ -76,13 +76,13 @@
 //   };
 
 //   const nextImage = () => {
-//     setCurrentImageIndex((prevIndex) => 
+//     setCurrentImageIndex((prevIndex) =>
 //       prevIndex + 1 >= productImages.length ? 0 : prevIndex + 1
 //     );
 //   };
 
 //   const prevImage = () => {
-//     setCurrentImageIndex((prevIndex) => 
+//     setCurrentImageIndex((prevIndex) =>
 //       prevIndex - 1 < 0 ? productImages.length - 1 : prevIndex - 1
 //     );
 //   };
@@ -165,9 +165,9 @@
 //                       &#10094;
 //                     </button>
 //                   )}
-//                   <img 
-//                     src={getImageByIndex(currentImageIndex)} 
-//                     alt={`${product.name} view ${currentImageIndex + 1}`} 
+//                   <img
+//                     src={getImageByIndex(currentImageIndex)}
+//                     alt={`${product.name} view ${currentImageIndex + 1}`}
 //                   />
 //                   {productImages.length > 1 && (
 //                     <button className="image-nav next-image" onClick={nextImage}>
@@ -178,8 +178,8 @@
 //                   {productImages.length > 1 && (
 //                     <div className="image-indicators">
 //                       {productImages.map((_, index) => (
-//                         <span 
-//                           key={index} 
+//                         <span
+//                           key={index}
 //                           className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
 //                           onClick={() => setCurrentImageIndex(index)}
 //                         />
@@ -194,9 +194,9 @@
 //                       &#10094;
 //                     </button>
 //                   )}
-//                   <img 
-//                     src={getImageByIndex(currentImageIndex)} 
-//                     alt={`${product.name} view ${currentImageIndex + 1}`} 
+//                   <img
+//                     src={getImageByIndex(currentImageIndex)}
+//                     alt={`${product.name} view ${currentImageIndex + 1}`}
 //                   />
 //                   {productImages.length > 1 && (
 //                     <button className="image-nav next-image" onClick={nextImage}>
@@ -207,8 +207,8 @@
 //                   {productImages.length > 1 && (
 //                     <div className="image-indicators">
 //                       {productImages.map((_, index) => (
-//                         <span 
-//                           key={index} 
+//                         <span
+//                           key={index}
 //                           className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
 //                           onClick={() => setCurrentImageIndex(index)}
 //                         />
@@ -247,7 +247,7 @@
 
 // export default ProductItem;
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editProduct } from "../../redux/products";
 import { addToCart } from "../../redux/cart";
 import EditProductForm from "./EditProductForm";
@@ -259,6 +259,10 @@ import "./Products.css";
 
 const ProductItem = ({ product, customThumbnailClass }) => {
   const dispatch = useDispatch();
+  //preventing non-owners from editing/deleting products
+  const sessionUser = useSelector((state) => state.session.user);
+  const isOwner = sessionUser?.id === product?.owner?.id;
+  //preventing non-owners from editing/deleting products
   const [isEditing, setIsEditing] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -324,13 +328,13 @@ const ProductItem = ({ product, customThumbnailClass }) => {
   };
 
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => 
+    setCurrentImageIndex((prevIndex) =>
       prevIndex + 1 >= productImages.length ? 0 : prevIndex + 1
     );
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => 
+    setCurrentImageIndex((prevIndex) =>
       prevIndex - 1 < 0 ? productImages.length - 1 : prevIndex - 1
     );
   };
@@ -350,7 +354,22 @@ const ProductItem = ({ product, customThumbnailClass }) => {
               <div className="product-info">
                 <h1 className="product-title">{product.name}</h1>
                 <p className="product-description">{product.description}</p>
-                <p className="product-price">${product.price?.toFixed(2) || '0.00'}</p>
+                <p className="product-price">
+                  ${product.price?.toFixed(2) || "0.00"}
+                </p>
+                {/* If owner they can see the edit button */}
+                {isOwner && (
+                  <div className="product-owner-actions">
+                    <button
+                      className="edit-button"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Edit
+                    </button>
+                    {/* If owner they can see the edit button */}
+                    <DeleteProduct productId={product.id} />
+                  </div>
+                )}
                 <button
                   className="add-to-cart-button"
                   onClick={handleAddToCart}
@@ -418,27 +437,45 @@ const ProductItem = ({ product, customThumbnailClass }) => {
               <div className="product-info-wrapper">
                 <h3>{product.name}</h3>
                 <p className="product-description">{product.description}</p>
-                <p className="product-price">${product.price?.toFixed(2) || '0.00'}</p>
+                <p className="product-price">
+                  ${product.price?.toFixed(2) || "0.00"}
+                </p>
+
+                {/* making product actions conditional for owner/not owner */}
 
                 <div className="product-actions">
-                  <button
-                    className="edit-button"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit
-                  </button>
-                  <DeleteProduct productId={product.id} />
-                  <FavoriteButton productId={product.id} />
-                  <button
-                    className="add-to-cart-button"
-                    onClick={handleAddToCart}
-                  >
-                    Add to Cart
-                  </button>
+                  {isOwner && (
+                    <>
+                      <button
+                        className="edit-button"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit
+                      </button>
+                      <DeleteProduct productId={product.id} />
+                    </>
+                  )}
+                  
+                  {/* making product actions conditional for owner/not owner */}
+                  {!isOwner && (
+                    <>
+                      <FavoriteButton productId={product.id} />
+                      <button
+                        className="add-to-cart-button"
+                        onClick={handleAddToCart}
+                      >
+                        Add to Cart
+                      </button>
+                    </>
+                    /// making product actions conditional on owner/not owner above and below
+                  )}
                 </div>
               </div>
+              {/* making product actions conditional for owner/not owner */}
 
-              <div className={`product-images-grid grid-${productImages.length}`}>
+              <div
+                className={`product-images-grid grid-${productImages.length}`}
+              >
                 {productImages.length > 0 ? (
                   productImages.map((imageUrl, index) => (
                     <div key={index} className="product-image-wrapper">
