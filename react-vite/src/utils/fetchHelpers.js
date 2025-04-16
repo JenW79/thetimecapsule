@@ -2,7 +2,7 @@ export const getCSRFToken = () => {
     const match = document.cookie.match(/csrf_token=([^;]+)/);
     return match ? match[1] : '';
   };
-  
+
   export const fetchWithAuth = async (url, method = 'GET', body = null) => {
     const config = {
       method,

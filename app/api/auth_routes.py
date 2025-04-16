@@ -70,3 +70,8 @@ def unauthorized():
     Returns unauthorized JSON when flask-login authentication fails
     """
     return {'errors': {'message': 'Unauthorized'}}, 401
+
+# Auth route (helper)
+@auth_routes.route('/csrf/', methods=["GET"])
+def csrf_token():
+    return {'message': 'CSRF cookie set'}

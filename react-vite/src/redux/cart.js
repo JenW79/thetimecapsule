@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "../utils/fetchHelpers";
 
+
 export const INCREMENT_ITEM = 'INCREMENT_ITEM';
 export const DECREMENT_ITEM = 'DECREMENT_ITEM';
 export const ADD_TO_CART = 'ADD_TO_CART';
@@ -83,7 +84,7 @@ export const decrementItem = (productId) => {
   };
 };
 
-export const addToCart = (product) => {
+export const addToCart = (product, quantity = 1) => {
   return async (dispatch, getState) => {
     const { session } = getState();
     const isAuthenticated = session && session.user;
@@ -92,22 +93,36 @@ export const addToCart = (product) => {
       try {
         const response = await fetchWithAuth("/api/cart", "POST", [{
           id: product.id,
-          quantity: 1
+          quantity: quantity
         }]);
 
         if (response.ok) {
           dispatch({
             type: ADD_TO_CART,
-            payload: product,
+            payload: {
+              id: product.id,
+              product_id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.image_url,
+              quantity: quantity
+            }
           });
         }
       } catch (error) {
-        console.error("Error adding to cart:", error);
+        console.error("Error adding item to cart:", error);
       }
     } else {
       dispatch({
         type: ADD_TO_CART,
-        payload: product,
+        payload: {
+          id: product.id,
+          product_id: product.id,
+          name: product.name,
+          price: product.price,
+          image_url: product.image_url,
+          quantity: quantity
+        }
       });
     }
   };
@@ -149,6 +164,7 @@ export const fetchCart = () => {
         const response = await fetchWithAuth("/api/cart", "GET");
         if (response.ok) {
           const cartItems = await response.json();
+          console.log("Cart Items:", cartItems);
           dispatch({
             type: FETCH_CART,
             payload: cartItems,
@@ -156,14 +172,25 @@ export const fetchCart = () => {
         }
       } catch (error) {
         console.error("Error fetching cart:", error);
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        dispatch({
-          type: FETCH_CART,
-          payload: cartItems,
-        });
       }
     } else {
-      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+      cartItems = cartItems.map(item => {
+        if (item.product) return item;
+        return {
+          id: item.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          product: {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image_url: item.image_url
+          }
+        };
+      });
+
       dispatch({
         type: FETCH_CART,
         payload: cartItems,
@@ -230,12 +257,11 @@ const cartReducer = (state = initialState, action) => {
       if (existingItem) {
         updatedItems = state.cartItems.map(item =>
           item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + action.payload.quantity }
             : item
         );
       } else {
-        const newItem = { ...action.payload, quantity: 1 };
-        updatedItems = [...state.cartItems, newItem];
+        updatedItems = [...state.cartItems, action.payload];
       }
       localStorage.setItem('cartItems', JSON.stringify(updatedItems));
       return { ...state, cartItems: updatedItems };

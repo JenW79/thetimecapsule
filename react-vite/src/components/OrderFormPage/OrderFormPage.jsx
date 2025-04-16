@@ -55,9 +55,9 @@ const OrderFormPage = () => {
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
       const price = parseFloat(item.product?.price) || 0;
-  const quantity = parseInt(item.quantity) || 0;
-  return total + (price * quantity);
-}, 0).toFixed(2);
+      const quantity = parseInt(item.quantity) || 0;
+      return total + (price * quantity);
+    }, 0).toFixed(2);
   };
 
   const handleChange = (e) => {
@@ -263,14 +263,32 @@ const OrderFormPage = () => {
           {cartItems.map((item) => (
             <div key={item.id}>
               <div>
-                {item.product.image_url ? (
-                  <img
-                    src={item.product.image_url}
-                    alt={item.product.name}
-                  />
-                ) : (
-                  <div>No Image</div>
-                )}
+                {(() => {
+                  let imageUrls = [];
+
+                  if (Array.isArray(item.product?.image_url)) {
+                    imageUrls = item.product.image_url;
+                  } else if (typeof item.product?.image_url === "string") {
+                    try {
+                      const parsed = JSON.parse(item.product.image_url);
+                      imageUrls = Array.isArray(parsed) ? parsed : [parsed];
+                    } catch {
+                      imageUrls = [item.product.image_url];
+                    }
+                  }
+
+                  return imageUrls.length ? (
+                    imageUrls.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url || "/placeholder-image.jpg"}
+                        alt={item.product?.name || "Product"}
+                      />
+                    ))
+                  ) : (
+                    <div>No Image</div>
+                  );
+                })()}
               </div>
 
               <div>

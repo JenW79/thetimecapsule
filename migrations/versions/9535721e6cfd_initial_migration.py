@@ -1,8 +1,14 @@
-"""images array test
+"""Initial migration
 
-Revision ID: 155c9ac0532a
+<<<<<<<< HEAD:migrations/versions/ce7b497fe702_initial_migration.py
+Revision ID: ce7b497fe702
 Revises: 
-Create Date: 2025-04-13 17:14:09.723977
+Create Date: 2025-04-15 04:21:06.717371
+========
+Revision ID: 9535721e6cfd
+Revises: 
+Create Date: 2025-04-15 17:27:41.653585
+>>>>>>>> 4107160d3dfe7ff3e17f1d2a7780da5b9e0620fb:migrations/versions/9535721e6cfd_initial_migration.py
 
 """
 from alembic import op
@@ -10,7 +16,11 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '155c9ac0532a'
+<<<<<<<< HEAD:migrations/versions/ce7b497fe702_initial_migration.py
+revision = 'ce7b497fe702'
+========
+revision = '9535721e6cfd'
+>>>>>>>> 4107160d3dfe7ff3e17f1d2a7780da5b9e0620fb:migrations/versions/9535721e6cfd_initial_migration.py
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -76,10 +86,10 @@ def upgrade():
     sa.Column('review_text', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id']),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id']),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
-)
+    )
     # ### end Alembic commands ###
 
 

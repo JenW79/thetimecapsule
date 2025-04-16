@@ -11,16 +11,17 @@ import { useNavigate } from 'react-router-dom';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './CartPage.css';
+import greenSprinkles from '../../assets/sprinkle-green.png';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems || []);
-  const prevCartItemsRef = useRef();
+  const cartItems = useSelector((state) =>
+    Array.isArray(state.cart.cartItems) ? state.cart.cartItems : []
+  );
   const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.session.user);
 
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
 
@@ -52,104 +53,120 @@ const CartPage = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showSignupModal, showLoginModal]);
 
-  useEffect(() => {
-    if (JSON.stringify(prevCartItemsRef.current) !== JSON.stringify(cartItems)) {
-      prevCartItemsRef.current = cartItems;
-      try {
-        const total = cartItems.reduce(
-          (sum, item) => {
-            const price = parseFloat(item.product?.price) || 0;
-            const quantity = parseInt(item.quantity) || 0;
-            return sum + price * quantity;
-          }, 0);
-        setTotalPrice(total);
-
-      } catch (err) {
-        setError('Failed to calculate total price');
-      }
-    }
-  }, [cartItems]);
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  const handleIncrement = (productId) => {
-    dispatch(incrementItem(productId));
+  const calculateTotal = () => {
+    return cartItems
+      .reduce((total, item) => {
+        const price = parseFloat(item.product?.price) || 0;
+        const quantity = parseInt(item.quantity) || 0;
+        return total + price * quantity;
+      }, 0)
+      .toFixed(2);
   };
 
-  const handleDecrement = (productId) => {
-    dispatch(decrementItem(productId));
-  };
-
-  const handleRemoveFromCart = (productId) => {
-    dispatch(removeFromCart(productId));
-  };
-
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  };
+  const handleIncrement = (productId) => dispatch(incrementItem(productId));
+  const handleDecrement = (productId) => dispatch(decrementItem(productId));
+  const handleRemoveFromCart = (productId) => dispatch(removeFromCart(productId));
+  const handleClearCart = () => dispatch(clearCart());
 
   const handleProceedToCheckout = () => {
     if (!sessionUser) {
       setShowSignupModal(true);
       return;
     }
-    navigate('/checkout');
+    navigate("/checkout");
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
-      <h2>cart</h2>
-      {!cartItems || cartItems.length === 0 ? (
+      <h1>cart</h1>
+      {!Array.isArray(cartItems) || cartItems.length === 0 ? (
         <div className="empty-cart">
           <p>Your cart is empty!</p>
           <p>Add some products to get started.</p>
         </div>
       ) : (
-        <div>
-          {cartItems.map((item) => (
-            <div key={item.id} className="cart-item">
-              <div className="cart-item-image">
-                {item.product.image_url ? (
-                  <img
-                    src={item.product.image_url}
-                    alt={item.product.name} />
-                ) : (
-                  <div>No Image</div>
-                )}
-              </div>
+        <div className="cart-items-grid">
+          {cartItems.map((item) => {
+            let imageUrls = [];
 
-              <div className="cart-item-details">
-                <h3>{item.product.name}</h3>
-                <p>price: ${item.product.price.toFixed(2)}</p>
-                <div>
-                  <span>qty: {item.quantity}</span>
-                  < br />
-                  <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">-</button>
-                  <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">+</button>
+            if (Array.isArray(item.product?.image_url)) {
+              imageUrls = item.product.image_url;
+            } else if (typeof item.product?.image_url === "string") {
+              try {
+                const parsed = JSON.parse(item.product.image_url);
+                imageUrls = Array.isArray(parsed) ? parsed : [parsed];
+              } catch {
+                imageUrls = [item.product.image_url];
+              }
+            }
+
+            return (
+              <div key={item.id} className="cart-item">
+                <div className="cart-item-image">
+                  {imageUrls.length ? (
+                    imageUrls.map((url, idx) => (
+                      <div className="cart-image-wrapper" key={idx}>
+                        <img
+                          src={greenSprinkles}
+                          alt="Green Sprinkles"
+                          className="sprinkle-bg sprinkle-green"
+                        />
+                        <img
+                          src={url || "/placeholder-image.jpg"}
+                          alt={item.product?.name || "Product"}
+                          className="product-image"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div>No Image</div>
+                  )}
                 </div>
-                <div className="item-subtotal">
-                  <p>subtotal: ${(item.product.price * item.quantity).toFixed(2)}</p>
+                <div className="cart-item-details">
+                  <p>{item.product?.name}</p>
+                  <p>
+                    price: $
+                    {item.product?.price
+                      ? parseFloat(item.product.price).toFixed(2)
+                      : "N/A"}
+                  </p>
+                  <div>
+                    <p>qty: {item.quantity}</p>
+                    <br />
+                    <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">
+                      -
+                    </button>
+                    <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">
+                      +
+                    </button>
+                  </div>
+                  <div className="item-subtotal">
+                    <p>
+                      subtotal: $
+                      {item.product?.price && item.quantity
+                        ? (item.product.price * item.quantity).toFixed(2)
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">
+                    remove
+                  </button>
                 </div>
-                <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">Remove</button>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           <div>
-          <h3>total: ${totalPrice.toFixed(2)}</h3>
-
+            <h3>total: ${calculateTotal()}</h3>
+            <h1>i want it all</h1>
             <button onClick={handleClearCart}>clear cart</button>
             <button onClick={handleProceedToCheckout}>continue to checkout</button>
           </div>
