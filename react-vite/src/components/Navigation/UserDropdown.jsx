@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { thunkLogout } from "../../redux/session";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   FiUser,
   FiClipboard,
@@ -17,11 +18,13 @@ import "./UserDropDown.css";
 
 export default function UserDropDown({ user, closeMenu }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
-    dispatch(thunkLogout());
+    await dispatch(thunkLogout());
     if (closeMenu) closeMenu();
+    navigate("/"); // Redirect them to the homepage. 
   };
 
   return (
