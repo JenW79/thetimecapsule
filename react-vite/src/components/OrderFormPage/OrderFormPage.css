@@ -165,12 +165,14 @@
   /* background-color: #ffebee; */
   background-color: #e8f5e9;
   /* color: #c62828; */
-  color: teal;    /* teal or #e8f5e9? */
+  color: teal;
+  /* teal or #e8f5e9? */
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 20px;
   /* border-left: 4px solid #c62828; */
-  border-left: 4px solid #005F5F;   /* #c62828 or #005F5F? */
+  border-left: 4px solid #005F5F;
+  /* #c62828 or #005F5F? */
 }
 
 .success-message {
@@ -184,6 +186,20 @@
   /* border-left: 4px solid #2e7d32; */
   /* border-left: 4px solid purple; */
   border-left: 4px solid #005F5F;
+}
+
+.product-image {
+  /* width: 150px; */
+  /* width: 250px; */
+  /* height: 150px; */
+  object-fit: cover;
+  max-width: 300px;
+  /* height: auto; */
+
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
+  display: block;
 }
 
 /* .order-history {
