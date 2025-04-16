@@ -15,9 +15,16 @@
   
   /* Individual review styling */
   .review-item {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eaeaea;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+  }
+  .review-item:hover {
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
   }
   
   /* Star rating */
