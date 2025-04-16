@@ -10,6 +10,7 @@ import MyProducts from "../components/Products/MyProducts";
 import ProductForm from "../components/Products/ProductForm";
 import ProductDetail from "../components/Products/ProductDetail";
 import FavoritesList from "../components/Favorites/FavoritesList";
+import ProtectedRoute from "../utils/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -21,8 +22,13 @@ export const router = createBrowserRouter([
       },
       {
         path: "checkout",
-        element: <OrderFormPage />,
+        element: (
+          <ProtectedRoute>
+            <OrderFormPage />
+          </ProtectedRoute>
+        ),
       },
+
       {
         path: "cart",
         element: <CartPage />,
@@ -33,7 +39,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "my-reviews",
-        element: <CurrentUserReviews />,
+        element: (
+          <ProtectedRoute>
+            <CurrentUserReviews />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "products",
@@ -53,11 +63,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/my-products",
-        element: <MyProducts />,
+        element: (
+          <ProtectedRoute>
+            <MyProducts />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/products/new",
-        element: <ProductForm />,
+        element: (
+          <ProtectedRoute>
+            <ProductForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "products/:id",
@@ -65,7 +83,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/favorites",
-        element: <FavoritesList />,
+        element: (
+          <ProtectedRoute>
+            <FavoritesList />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

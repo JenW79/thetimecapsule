@@ -21,6 +21,19 @@ from .config import Config
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 
+
+from flask_cors import CORS
+
+if os.environ.get("FLASK_ENV") == "production":
+    CORS(app, supports_credentials=True, origins=["https://thetimecapsule.onrender.com"])
+elif os.environ.get("FLASK_ENV") == "development":
+    CORS(app, supports_credentials=True, origins=[
+        "http://localhost:5173", "http://127.0.0.1:5173"
+    ])
+else:
+    CORS(app, supports_credentials=True, origins=["https://timecapsule-dev-preview.onrender.com"])
+
+
 # Setup login manager
 login = LoginManager(app)
 login.login_view = 'auth.unauthorized'
@@ -41,16 +54,24 @@ app.register_blueprint(review_routes, url_prefix='/api')
 app.register_blueprint(product_routes, url_prefix='/api/products')
 app.register_blueprint(favorites_routes, url_prefix='/api/favorites')
 
+if os.environ.get("FLASK_ENV") == "production":
+    app.config.update(
+        SESSION_COOKIE_SAMESITE='Strict',  # or 'None' if cross-site
+        SESSION_COOKIE_SECURE=True
+    )
+else:
+    app.config.update(
+        SESSION_COOKIE_SAMESITE=None,
+        SESSION_COOKIE_SECURE=False
+    )
+
 db.init_app(app)
 Migrate(app, db)
 
 # Application Security
 # CORS(app)
 # CORS edited to allow in development
-if os.environ.get("FLASK_ENV") == "production":
-    CORS(app, supports_credentials=True, origins=["https://thetimecapsule.onrender.com"])
-else:
-    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+
 
 
 # Since we are deploying with Docker and Flask,
@@ -72,8 +93,8 @@ def inject_csrf_token(response):
         'csrf_token',
         generate_csrf(),
         secure=True if os.environ.get('FLASK_ENV') == 'production' else False,
-        samesite='Strict' if os.environ.get('FLASK_ENV') == 'production' else None,
-        httponly=True
+        samesite='None' if os.environ.get('FLASK_ENV') == 'production' else None, #revert to strict if needed.
+        httponly=False
     )
     return response
 
