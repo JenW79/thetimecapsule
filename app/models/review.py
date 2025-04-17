@@ -29,6 +29,6 @@ class Review(db.Model):
                 'id': self.user.id,
                 'username': self.user.username
             } if self.user else None,
-            'created_at': self.created_at.strftime('%B %d, %Y at %-I:%M %p') if self.created_at else None,
-            'updated_at': self.updated_at.strftime('%B %d, %Y at %-I:%M %p') if self.updated_at else None
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.created_at.isoformat() if self.created_at else None,
         }
