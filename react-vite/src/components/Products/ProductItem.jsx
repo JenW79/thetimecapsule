@@ -359,6 +359,15 @@ const ProductItem = ({ product, customThumbnailClass }) => {
                 <p className="product-price">
                   ${product.price?.toFixed(2) || "0.00"}
                 </p>
+                {/* added average rating */}
+                {typeof product.average_rating === "number" ? (
+                  <p className="product-rating">
+                    ⭐ {product.average_rating.toFixed(1)} / 5
+                  </p>
+                ) : (
+                  <p className="product-rating no-reviews">No reviews yet</p>
+                )}
+
                 {/* If owner they can see the edit button */}
                 {isOwner && (
                   <div className="product-owner-actions">
@@ -443,6 +452,14 @@ const ProductItem = ({ product, customThumbnailClass }) => {
                   ${product.price?.toFixed(2) || "0.00"}
                 </p>
 
+                {typeof product.average_rating === "number" ? (
+                  <p className="product-rating">
+                    ⭐ {product.average_rating.toFixed(1)} / 5
+                  </p>
+                ) : (
+                  <p className="product-rating no-reviews">No reviews yet</p>
+                )}
+
                 {/* making product actions conditional for owner/not owner */}
 
                 <div className="product-actions">
@@ -457,14 +474,17 @@ const ProductItem = ({ product, customThumbnailClass }) => {
                       <DeleteProduct productId={product.id} />
                     </>
                   )}
-                  
+
                   {/* making product actions conditional for owner/not owner */}
                   {!isOwner && (
                     <>
                       <button>
-                      <Link to={`/products/${product.id}`} className="learn-more-button">
-                        Learn More
-                      </Link>
+                        <Link
+                          to={`/products/${product.id}`}
+                          className="learn-more-button"
+                        >
+                          Learn More
+                        </Link>
                       </button>
                       <FavoriteButton productId={product.id} />
                       <button
