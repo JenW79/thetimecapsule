@@ -1,3 +1,9 @@
+/* Made some groundwork changes as all shapes are rendering to the left on landing page, 
+got the shapes behind the other items as wireframe wants,
+but didnt want to do too much since I didnt want to overstep Andrea, 
+hoping maybe it will help you figure out the placement! 
+I didn't remove any of your code either -Jen */
+
 .landing-wrapper {
   position: relative;
   width: 100%;
@@ -53,17 +59,21 @@
 }
 
 .nostalgia-container {
-  margin-top: 50px;
+  /* margin-top: 50px;
   display: flex;
   /* justify-content: center; */
   /* align-items: center; */
   /* gap: 50px; */
   /* gap: 30px; */
-  gap: 20px;
+  /* gap: 20px;
   z-index: 3;
 
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 30px;
 }
 
 .nostalgia-item {
@@ -82,7 +92,8 @@
 }
 
 .nostalgia-item-wrapper {
-  /* position: relative; */
+  position: relative;  
+  /* adding back in ^^ */
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -93,6 +104,8 @@
   width: calc(33.33% - 20px);
   margin-bottom: 50px;
   max-width: 33.33%;
+  flex: 0 0 calc(33.33% - 40px);
+  max-width: 300px;
 }
 
 .shop-now-button {
@@ -183,6 +196,8 @@
   height: clamp(180px, 20vw, 280px);
   border-radius: 50%;
   object-fit: cover;
+  position: relative;
+  z-index: 1;
   /* max-width: 280px;
   max-height: 280px;
   min-width: 180px;
@@ -270,20 +285,46 @@ sprinkle-bg.sprinkle-peri {
 }
 
 .shape-crescent {
-  /* position: absolute; */
-  top: 100px;
-  left: -80px;
+  position: absolute;
+  /* adding back in ^^ */
+  /* top: 100px;
+  left: -80px; */
+  top: -20px;
+  left: -40px;
 }
 
 .shape-rectangle {
-  /* position: absolute; */
-  top: 50px;
-  left: -50px;
+  position: absolute;
+  /* top: 50px;
+  left: -50px; */
+  top: -20px;
+  right: -40px;
 }
 
 .shape-triangle {
-  top: 120px;
-  left: -20px;
+  position: absolute; 
+  /* top: 120px;
+  left: -20px; */
+  bottom: -20px;
+  left: 20px;
+}
+
+/* First wrapper (80s) */
+.nostalgia-item-wrapper:nth-child(1) .shape-crescent {
+  top: 0;
+  left: -30px;
+}
+
+/* Second wrapper (90s) */
+.nostalgia-item-wrapper:nth-child(2) .shape-rectangle {
+  top: 10px;
+  right: -30px;
+}
+
+/* Third wrapper (00s) */
+.nostalgia-item-wrapper:nth-child(3) .shape-triangle {
+  bottom: -10px;
+  left: 30px;
 }
 
 .bottom-background {
@@ -354,4 +395,17 @@ sprinkle-bg.sprinkle-peri {
 
 .nostalgia-text-wrapper span {
   margin-bottom: 10px;
+}
+
+/* for small screens */
+
+@media (max-width: 768px) {
+  .nostalgia-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nostalgia-item-wrapper {
+    max-width: 90%;
+  }
 }
