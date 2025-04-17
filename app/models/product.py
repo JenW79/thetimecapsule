@@ -2,8 +2,9 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from sqlalchemy import DateTime, ForeignKey
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from app.models.cart_item import CartItem
 from app.models.review import Review
+from app.models.cart_item import CartItem
+
 from .db import add_prefix_for_prod
 import json
 # class Decade(enum.Enum):
@@ -64,5 +65,9 @@ class Product(db.Model):
                 "username": self.owner.username
             } if self.owner else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "reviews": [review.to_dict() for review in self.reviews]
+            "reviews": [review.to_dict() for review in self.reviews],
+            "average_rating": (
+               round(sum([r.rating for r in self.reviews]) / len(self.reviews), 1)
+               if self.reviews else None
+              )
         }

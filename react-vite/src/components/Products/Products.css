@@ -162,7 +162,10 @@ cursor: pointer;
   object-fit: cover;
 }
 
-
+.product-rating.no-reviews {
+  color: #999;
+  font-style: italic;
+}
 
 .product-container {
 display: grid;
@@ -206,7 +209,13 @@ border-color: #ffcccc;
 color: #ff6666;
 }
 
-/* Product form CSS */
+.product-rating {
+  font-size: 1rem;
+  color: #ffc107; /* gold star */
+  margin: 4px 0;
+}
+
+/* Product form CSS below */
 .product-form-container {
   max-width: 600px;
   margin: 0 auto;
