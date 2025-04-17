@@ -51,9 +51,9 @@ export default function CurrentUserReviews() {
               <div className="user-name">{review.product_name}</div>
               <div className="review-date">
                 Posted on: {formatDate(review.created_at)}{" "}
-                {/* ✅ NOW it's scoped */}
+                
               </div>
-              <p className="review-description">{review.review_text}</p>
+              <p className="review-description">{review.comment}</p>
               <div className="review-actions">
                 <button
                   className="edit-review-button"
