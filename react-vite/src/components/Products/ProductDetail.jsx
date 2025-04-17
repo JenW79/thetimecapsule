@@ -7,6 +7,7 @@ import FavoriteButton from '../Favorites/FavoriteButton';
 import CreateReviewModal from '../Reviews/CreateReviewModal';
 import './Products.css';
 import '../Reviews/Reviews.css';
+import "../Favorites/Favorites.css";
 
 const ProductDetail = () => {
   const { id } = useParams();
