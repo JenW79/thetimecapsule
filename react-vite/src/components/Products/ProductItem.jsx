@@ -257,6 +257,7 @@ import FavoriteButton from "../Favorites/FavoriteButton";
 import CreateReviewModal from "../Reviews/CreateReviewModal";
 import { fetchProduct } from "../../redux/products";
 import "./Products.css";
+import "../Favorites/Favorites.css";
 
 const ProductItem = ({ product, customThumbnailClass }) => {
   const dispatch = useDispatch();

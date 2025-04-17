@@ -1,20 +1,35 @@
-/* Favorite button styling */
 .favorite-button {
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: 14px !important;
     text-transform: lowercase;
-    background: #E2E0DC;
-    border: none;
-    color: #1D1147;
-    font-size: 18px;
+    background-color: #E2E0DC !important;
+    border: none !important;
+    color: #1D1147 !important;
     cursor: pointer;
-    transition: color 0.2s;
-    }
-    
-    .favorite-button.active {
-    color: #ff66ff;
-    }
-    
-    .favorite-button:hover {
-    color: #ff99ff;
-    }
+    transition: background-color 0.2s ease, color 0.2s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Favorite active state */
+  .favorite-button.favorite-active {
+    color: #ff66ff !important;
+    background-color: #ffffff !important;
+  }
+  
+  /* Hover state - comes after the base and active states in CSS cascade */
+  .favorite-button:hover {
+    color: #ff99ff !important;
+    background-color: #ffffff !important;
+  }
+  
+  /* Active + hover combined state */
+  .favorite-button.favorite-active:hover {
+    color: #ff66ff !important;
+    background-color: #ffffff !important;
+  }
+  
+  /* Clear any potential conflicting styles */
+  .favorite-button:active {
+    background-color: #ffffff !important;
+  }
