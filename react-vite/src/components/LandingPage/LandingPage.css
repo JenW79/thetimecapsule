@@ -264,6 +264,7 @@
 /* for small screens */
 
 @media (max-width: 768px) {
+
   .nostalgia-container,
   .top-rated-images-container {
     flex-direction: column;

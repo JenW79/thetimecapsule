@@ -109,7 +109,7 @@ const CartPage = () => {
             }
 
             return (
-              <div key={item.id} className="cart-item">
+              <div key={item.id} className="cart-item-container">
                 <div className="cart-item-image">
                   {imageUrls.length ? (
                     imageUrls.map((url, idx) => (

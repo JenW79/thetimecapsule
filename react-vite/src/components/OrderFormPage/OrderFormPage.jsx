@@ -261,7 +261,6 @@ const OrderFormPage = () => {
         <div>
           <h3>order summary</h3>
           {cartItems.map((item) => (
-            // <div key={item.id} className="cart-item-row">
             <div key={item.id}>
               <div>
                 {(() => {
@@ -296,7 +295,6 @@ const OrderFormPage = () => {
                 })()}
               </div>
 
-              {/* <div className="cart-item-details"> */}
               <div>
                 <h4>{item.product.name}</h4>
                 <p>quantity: {item.quantity}</p>
@@ -421,7 +419,6 @@ const OrderFormPage = () => {
               <p>payment method: {order.payment_method}</p>
               <p>products:</p>
               {(order.products || order.items || []).map((product, idx) => (
-                // <div key={idx} className="cart-image-wrapper">
                 <div key={idx}>
                   <p>{product.name || product.product_name}</p>
                   <p>quantity: {product.quantity}</p>
