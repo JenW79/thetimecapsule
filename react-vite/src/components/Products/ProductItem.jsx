@@ -248,6 +248,7 @@
 // export default ProductItem;
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import { editProduct } from "../../redux/products";
 import { addToCart } from "../../redux/cart";
 import EditProductForm from "./EditProductForm";
@@ -459,6 +460,11 @@ const ProductItem = ({ product, customThumbnailClass }) => {
                   {/* making product actions conditional for owner/not owner */}
                   {!isOwner && (
                     <>
+                      <button>
+                      <Link to={`/products/${product.id}`} className="learn-more-button">
+                        Learn More
+                      </Link>
+                      </button>
                       <FavoriteButton productId={product.id} />
                       <button
                         className="add-to-cart-button"

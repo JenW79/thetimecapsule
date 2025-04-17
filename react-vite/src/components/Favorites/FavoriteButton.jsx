@@ -30,7 +30,8 @@ const FavoriteButton = ({ productId }) => {
       onClick={handleToggleFavorite}
       aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
     >
-      {favorite ? '❤️' : '🤍'}
+      {/* {favorite ? '❤️' : '🤍'} */}
+      🩷
     </button>
   );
 };
