@@ -29,33 +29,6 @@
   margin-right: 20px;
 }
 
-/* .profile-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  width: 40px;
-  height: 40px;
-}
-
-.profile-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-button:hover {
-  background-color: #f0f0f0;
-} */
-
-
-
-
-
-
 .profile-button {
   border: none;
   background: transparent;
@@ -107,4 +80,19 @@
 /* Prevent bullet points */
 .profile-dropdown-item::marker {
   display: none;
+}
+
+.cart-link {
+  color: #280353;
+  text-decoration: none;
+}
+
+.cart-link:visited,
+.cart-link:active,
+.cart-link:hover {
+  color: #280353;
+}
+
+.cart-wrapper svg {
+  color: inherit;
 }
