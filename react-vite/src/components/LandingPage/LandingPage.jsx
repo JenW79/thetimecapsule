@@ -24,6 +24,7 @@ function LandingPage() {
         <h1 className="landing-title">Welcome to The Time Capsule!</h1>
         <MouseSprinkles /> 
         <div className="nostalgia-container">
+          <MouseSprinkles />
           <div className="nostalgia-set">
             <img src={crescent} alt="Crescent" className="shape shape-crescent" />
             <img src={eightiesImage} className="circle-img" alt="80s nostalgia" />
