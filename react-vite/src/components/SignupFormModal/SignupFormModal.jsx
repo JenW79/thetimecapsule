@@ -17,21 +17,32 @@ function SignupFormModal({ embedded = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      return setErrors({
-        confirmPassword: "Confirm Password must match Password",
-      });
+    const newErrors = {};
+  
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      newErrors.email = "Please enter a valid email address.";
     }
-
+  
+    if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+  
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password must match Password.";
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      return setErrors(newErrors);
+    }
+  
     const serverResponse = await dispatch(
       thunkSignup({
-        email: email.toLowerCase(), // ensures always lowercase(as server expects)
+        email: email.toLowerCase(),
         username,
         password,
       })
     );
-
+  
     if (serverResponse) {
       setErrors(serverResponse);
     } else {
