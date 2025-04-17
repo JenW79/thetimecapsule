@@ -19,11 +19,6 @@ function LandingPage() {
       <div className="we-got-it-wrapper">
         <h1 className="we-got-it">we&apos;ve got it all</h1>
       </div>
-  return (
-    <div className="landing-wrapper">
-      <div className="we-got-it-wrapper">
-        <h1 className="we-got-it">we&apos;ve got it all</h1>
-      </div>
 
       <div className="landing-page">
         <h1 className="landing-title">Welcome to The Time Capsule!</h1>
