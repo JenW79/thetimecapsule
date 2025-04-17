@@ -10,13 +10,6 @@ function Navigation() {
     return items.reduce((total, item) => total + item.quantity, 0);
   });
 
-  // const cartCount = useSelector((state) => {
-  //   const cartItems = state.cart?.cartItems || [];
-  //   return Array.isArray(cartItems)
-  //     ? cartItems.reduce((total, item) => total + item.quantity, 0)
-  //     : 0;
-  // });
-
   return (
     <div className="navbar">
       <div className="logo-container">
