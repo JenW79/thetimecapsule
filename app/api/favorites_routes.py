@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from app.models import db, Favorite, Product
 from datetime import datetime
+import json
 
 favorites_routes= Blueprint('favorites', __name__)
 
@@ -9,13 +10,23 @@ favorites_routes= Blueprint('favorites', __name__)
 @favorites_routes.route('')
 @login_required
 def get_favorites():
-    favorites = Favorite.query.filter_by(user_id = current_user.id).all()
+    favorites = Favorite.query.filter_by(user_id=current_user.id).all()
     return jsonify([{
-         'id': fav.id,
+        'id': fav.id,
         'product': {
             'id': fav.product.id,
             'name': fav.product.name,
-            'price': fav.product.price
+            'price': fav.product.price,
+            'image_url': (
+                json.loads(fav.product.image_url)[0]
+                if fav.product.image_url and fav.product.image_url.startswith("[")
+                else fav.product.image_url
+            ),
+            'images': (
+                json.loads(fav.product.image_url)
+                if fav.product.image_url and fav.product.image_url.startswith("[")
+                else [fav.product.image_url]
+            )
         }
     } for fav in favorites])
 
