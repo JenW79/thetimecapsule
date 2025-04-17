@@ -1,0 +1,20 @@
+/* Favorite button styling */
+.favorite-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    text-transform: lowercase;
+    background: #E2E0DC;
+    border: none;
+    color: #1D1147;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+    }
+    
+    .favorite-button.active {
+    color: #ff66ff;
+    }
+    
+    .favorite-button:hover {
+    color: #ff99ff;
+    }
