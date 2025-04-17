@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-// importing react is depreciated as Vite with React 17+ and JSX transform,
-// you no longer need to import React in every file.
+
 import { useDispatch, useSelector } from "react-redux";
 import { createProduct } from "../../redux/products";
 import { useNavigate } from "react-router-dom";

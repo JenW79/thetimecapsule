@@ -7,6 +7,7 @@ import { fetchCart } from "../redux/cart";
 import { fetchFavorites } from "../redux/favorites"
 import Navigation from "../components/Navigation/Navigation";
 
+
 export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);

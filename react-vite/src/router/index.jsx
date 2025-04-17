@@ -49,18 +49,18 @@ export const router = createBrowserRouter([
         path: "products",
         element: <ProductList />,
       },
-      {
-        path: "products/1980s",
-        element: <ProductList />,
-      },
-      {
-        path: "products/1990s",
-        element: <ProductList />,
-      },
-      {
-        path: "products/2000s",
-        element: <ProductList />,
-      },
+      // { removing hardcoded paths due to rendering issues.
+      //   path: "products/1980s",
+      //   element: <ProductList />,
+      // },
+      // {
+      //   path: "products/1990s",
+      //   element: <ProductList />,
+      // },
+      // {
+      //   path: "products/2000s",
+      //   element: <ProductList />,
+      // },
       {
         path: "/my-products",
         element: (

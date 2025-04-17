@@ -1,7 +1,4 @@
 import { useEffect } from 'react'; 
-//importing react is depreciated as Vite with React 17+ 
-// and JSX transform, 
-// you no longer need to import React in every file.
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavorites } from '../../redux/favorites';
 import ProductItem from '../Products/ProductItem';
@@ -19,7 +16,7 @@ const FavoritesList = () => {
   if (!favorites || !favorites.length) {
     return <div className="loading">Loading favorites...</div>;
   }
-
+  console.log("Favorite Products:", favorites);
   return (
     <div className="favorites-list">
       <h2>Your Favorite Products</h2>

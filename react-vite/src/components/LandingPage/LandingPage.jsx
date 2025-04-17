@@ -1,18 +1,24 @@
 import { NavLink } from "react-router-dom";
-import './LandingPage.css';
-import crescent from '../../assets/crescent.png';
-import rectangle from '../../assets/rectangle.png';
-import triangle from '../../assets/triangle.png';
-import eightiesImage from '../../product-images/nintendo.jpg';
-import ninetiesImage from '../../product-images/yellow-pokemon-gameboy-game.png';
-import twoThousandsImage from '../../product-images/Apple-iPod-first-generation.jpg';
-import topRatedImage1 from '../../product-images/red-blue-pokemon-gameboy-game.png';
-import topRatedImage2 from '../../product-images/Pacman.jpg';
-import topRatedImage3 from '../../product-images/gameboy-original-all-sides.jpg';
-import periwinkleSprinkles from '../../assets/sprinkle-peri.png';
-import bottomBackground from '../../assets/the-time-capsule-bottom-background.png';
+import "./LandingPage.css";
+import crescent from "../../assets/crescent.png";
+import rectangle from "../../assets/rectangle.png";
+import triangle from "../../assets/triangle.png";
+import eightiesImage from "../../product-images/nintendo.jpg";
+import ninetiesImage from "../../product-images/yellow-pokemon-gameboy-game.png";
+import twoThousandsImage from "../../product-images/Apple-iPod-first-generation.jpg";
+import topRatedImage1 from "../../product-images/red-blue-pokemon-gameboy-game.png";
+import topRatedImage2 from "../../product-images/Pacman.jpg";
+import topRatedImage3 from "../../product-images/gameboy-original-all-sides.jpg";
+import periwinkleSprinkles from "../../assets/sprinkle-peri.png";
+import bottomBackground from "../../assets/the-time-capsule-bottom-background.png";
+import MouseSprinkles from "../MouseSprinkles";
 
 function LandingPage() {
+  return (
+    <div className="landing-wrapper">
+      <div className="we-got-it-wrapper">
+        <h1 className="we-got-it">we&apos;ve got it all</h1>
+      </div>
   return (
     <div className="landing-wrapper">
       <div className="we-got-it-wrapper">
