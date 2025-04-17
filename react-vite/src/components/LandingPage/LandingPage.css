@@ -264,12 +264,14 @@
 /* for small screens */
 
 @media (max-width: 768px) {
-  .nostalgia-container {
+  .nostalgia-container,
+  .top-rated-images-container {
     flex-direction: column;
     align-items: center;
   }
 
-  .nostalgia-item-wrapper {
+  .nostalgia-set,
+  .top-rated-wrapper {
     max-width: 90%;
   }
 }

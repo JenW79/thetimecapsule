@@ -279,14 +279,16 @@ const OrderFormPage = () => {
                   }
 
                   return imageUrls.length ? (
-                    <div className="product-image-wrapper">
-                    {imageUrls.map((url, idx) => (
-                      <img
-                        key={idx}
-                        src={url || "/placeholder-image.jpg"}
-                        alt={item.product?.name || "Product"}
-                      />
-                    ))}
+                    <div className="product-images-container">
+                      {imageUrls.map((url, idx) => (
+                        <div className="product-image-wrapper" key={idx}>
+                          <img
+                            key={idx}
+                            src={url || "/placeholder-image.jpg"}
+                            alt={item.product?.name || "Product"}
+                          />
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div>No Image</div>
