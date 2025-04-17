@@ -41,24 +41,33 @@
 
 .shape {
   position: absolute;
-  width: 30vw;
+  /* width: 30vw; */
+  width: 100%;
   height: auto;
   opacity: 1;
   z-index: 0;
   max-width: 400px;
+  min-width: 330px;
+
+  margin-bottom: 20px;
 }
 
 .nostalgia-container {
   margin-top: 50px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* gap: 50px; */
+  /* gap: 30px; */
+  gap: 20px;
   z-index: 3;
+
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .nostalgia-item {
-  position: relative;
+  /* position: relative; */
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -68,15 +77,22 @@
   margin: 10px;
   text-align: center;
   color: #280353;
+
+  width: 100%;
 }
 
 .nostalgia-item-wrapper {
-  position: relative;
+  /* position: relative; */
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  flex-direction: row;
-  gap: 20px;
+  /* flex-direction: row; */
+  flex-direction: column;
+  /* gap: 20px; */
+  text-align: center;
+  width: calc(33.33% - 20px);
+  margin-bottom: 50px;
+  max-width: 33.33%;
 }
 
 .shop-now-button {
@@ -124,19 +140,24 @@
 }
 
 .top-rated-item {
-  /* position: relative; */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   /* width: auto; */
   width: 200px;
-  margin-bottom: 20px;
+  min-height: 300px;
+
+  /* margin-bottom: 20px; */
+
   /* padding: 15px;
   margin: 10px; */
   color: white;
   text-transform: uppercase;
-  z-index: 3;
+  /* z-index: 3; */
+  z-index: 2;
+  justify-content: space-between;
   /* z-index: 1; */
   /* max-width: none; */
 }
@@ -156,15 +177,17 @@
 }
 
 .circle-img {
-  width: 20vw;
-  height: 20vw;
+  /* width: 20vw;
+  height: 20vw; */
+  width: clamp(180px, 20vw, 280px);
+  height: clamp(180px, 20vw, 280px);
   border-radius: 50%;
   object-fit: cover;
-  max-width: 280px;
+  /* max-width: 280px;
   max-height: 280px;
   min-width: 180px;
-  min-height: 180px;
-  transform: translate(-20px, 20px);
+  min-height: 180px; */
+  /* transform: translate(-20px, 20px); */
 }
 
 .square-img {
@@ -247,13 +270,13 @@ sprinkle-bg.sprinkle-peri {
 }
 
 .shape-crescent {
-  position: absolute;
+  /* position: absolute; */
   top: 100px;
   left: -80px;
 }
 
 .shape-rectangle {
-  position: absolute;
+  /* position: absolute; */
   top: 50px;
   left: -50px;
 }
@@ -289,13 +312,27 @@ sprinkle-bg.sprinkle-peri {
   /* display: block; */
   /* aspect-ratio: 1 / 1; */
   /* max-width: 300px; */
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 12px;
+  z-index: 1;
 }
 
 .top-rated-item .square-img {
-  width: 20vw;
+  /* width: 20vw;
   height: 20vw;
   max-width: 300px;
-  max-height: 300px;
+  max-height: 300px; */
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
 }
 
 .shape img {
