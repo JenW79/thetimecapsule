@@ -29,6 +29,7 @@ class Review(db.Model):
                 'id': self.user.id,
                 'username': self.user.username
             } if self.user else None,
+            'product_name': self.product.name if self.product else None, 
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.created_at.isoformat() if self.created_at else None,
         }
