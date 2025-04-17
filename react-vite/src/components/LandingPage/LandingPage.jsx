@@ -22,6 +22,7 @@ function LandingPage() {
 
       <div className="landing-page">
         <h1 className="landing-title">Welcome to The Time Capsule!</h1>
+        <MouseSprinkles /> 
         <div className="nostalgia-container">
           <div className="nostalgia-set">
             <img src={crescent} alt="Crescent" className="shape shape-crescent" />

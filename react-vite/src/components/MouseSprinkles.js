@@ -3,8 +3,6 @@ import "./MouseSprinkles.css";
 
 export default function MouseSprinkles() {
   useEffect(() => {
-    console.log("🌟 Sparkle effect activated");
-
     const sparkleCount = 30;
     const sparkles = [];
 
