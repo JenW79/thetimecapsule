@@ -1,21 +1,39 @@
-
 # 🕹️ Retro Marketplace API Documentation  
 _A vintage-themed eCommerce API for 80s, 90s, and 00s lovers_
 
-## PRODUCTS
+---
+
+## 🛍️ PRODUCTS
 
 ### `GET /api/products`
-**Description:** Fetch all available retro products  
+**Description:** Fetch all available retro products.  
 **Auth:** Optional  
+**Query Params:**
+- `decade` – Filter by decade (`80s`, `90s`, `00s`)
+- `category` – Filter by category (`toy`, `game`, `electronic`)
+
+**Example Request:**
+```http
+GET /api/products?decade=90s&category=toy
+```
+
 **Example Response:**
 ```json
 [
   {
     "id": 1,
     "name": "Game Boy Color",
+    "description": "Classic handheld console in atomic purple.",
     "price": 79.99,
     "image_url": "https://...",
-    "owner": { "id": 2, "username": "retroQueen90" }
+    "decade": "90s",
+    "category": "electronic",
+    "owner": {
+      "id": 2,
+      "username": "retroQueen90"
+    },
+    "created_at": "2025-04-17T17:40:00",
+    "review_count": 3
   }
 ]
 ```
@@ -25,13 +43,35 @@ _A vintage-themed eCommerce API for 80s, 90s, and 00s lovers_
 ### `POST /api/products`
 **Description:** Add a new product (e.g., Tamagotchi, VHS tapes)  
 **Auth:** Required  
+
 **Body Example:**
 ```json
 {
   "name": "Polly Pocket",
   "description": "Classic 90s mini playset in great condition.",
   "price": 24.50,
-  "image_url": "https://..."
+  "image_url": "https://...",
+  "decade": "90s",
+  "category": "toy"
+}
+```
+
+**Success Response:** `201 Created`
+```json
+{
+  "id": 5,
+  "name": "Polly Pocket",
+  "description": "Classic 90s mini playset in great condition.",
+  "price": 24.5,
+  "image_url": "https://...",
+  "decade": "90s",
+  "category": "toy",
+  "owner": {
+    "id": 2,
+    "username": "retroQueen90"
+  },
+  "created_at": "2025-04-17T17:45:00",
+  "review_count": 0
 }
 ```
 
@@ -40,10 +80,33 @@ _A vintage-themed eCommerce API for 80s, 90s, and 00s lovers_
 ### `PUT /api/products/:id`
 **Description:** Update a product listing (owner only)  
 **Auth:** Required  
+
 **Body Example:**
 ```json
 {
-  "price": 19.99
+  "name": "Updated Name",
+  "description": "Updated description",
+  "price": 29.99,
+  "image_url": "https://new-url.com"
+}
+```
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "Updated Name",
+  "description": "Updated description",
+  "price": 29.99,
+  "image_url": "https://new-url.com",
+  "decade": "90s",
+  "category": "electronic",
+  "owner": {
+    "id": 2,
+    "username": "retroQueen90"
+  },
+  "created_at": "2025-04-17T17:40:00",
+  "review_count": 3
 }
 ```
 
@@ -59,155 +122,72 @@ _A vintage-themed eCommerce API for 80s, 90s, and 00s lovers_
 
 ---
 
-## FAVORITES
+## ⭐ FAVORITES _(Coming Soon)_
 
-### `GET /api/favorites`
-**Description:** View your favorited retro goodies  
-**Auth:** Required  
-**Example Response:**
-```json
-[
-  {
-    "id": 1,
-    "product": {
-      "id": 5,
-      "name": "Lisa Frank Stickers",
-      "price": 12.00
-    }
-  }
-]
-```
+### `GET /api/favorites`  
+View user's favorited items.  
+**Auth:** Required
+
+### `POST /api/favorites`  
+Favorite a product.  
+**Auth:** Required
+
+### `DELETE /api/favorites/:id`  
+Remove a product from favorites.  
+**Auth:** Required
 
 ---
 
-### `POST /api/favorites`
-**Description:** Favorite a product (like Pokémon cards or lava lamps)  
-**Auth:** Required  
-**Body Example:**
-```json
-{
-  "product_id": 5
-}
-```
+## ✍️ REVIEWS _(Coming Soon)_
+
+### `GET /api/products/:id/reviews`  
+Fetch reviews for a specific product.  
+**Auth:** Optional
+
+### `POST /api/products/:id/reviews`  
+Create a review.  
+**Auth:** Required
+
+### `PUT /api/reviews/:id`  
+Edit a review.  
+**Auth:** Required
+
+### `DELETE /api/reviews/:id`  
+Delete a review.  
+**Auth:** Required
 
 ---
 
-### `DELETE /api/favorites/:id`
-**Description:** Unfavorite a product  
-**Auth:** Required  
-**Response:**
-```json
-{ "message": "Removed from favorites" }
-```
+## 🛒 CART + CHECKOUT _(Coming Soon)_
+
+### `GET /api/cart`  
+View current user's cart items.  
+**Auth:** Required
+
+### `POST /api/cart`  
+Add item to cart.  
+**Auth:** Required
+
+### `DELETE /api/cart/:item_id`  
+Remove item from cart.  
+**Auth:** Required
+
+### `POST /api/checkout`  
+Complete checkout.  
+**Auth:** Required
 
 ---
 
-## REVIEWS
+## 🧾 ERROR FORMAT
 
-### `GET /api/products/:id/reviews`
-**Description:** View reviews for a specific product (e.g., "Walkman with cassette tape")  
-**Auth:** Optional  
-**Example Response:**
+Errors return a consistent structure:
 ```json
-[
-  {
-    "id": 1,
-    "user": { "id": 3, "username": "mixtapez4life" },
-    "rating": 5,
-    "comment": "It works perfectly! Took me back to '99."
-  }
-]
+{ "errors": { "field": "message" } }
 ```
 
----
-
-### `POST /api/products/:id/reviews`
-**Description:** Leave a review on a product  
-**Auth:** Required  
-**Body Example:**
+Example:
 ```json
-{
-  "rating": 4,
-  "comment": "Awesome Sega Genesis, just needed cleaning."
-}
+{ "errors": { "price": "Price must be a positive number" } }
 ```
 
----
 
-### `PUT /api/reviews/:id`
-**Description:** Edit your review  
-**Auth:** Required  
-**Body Example:**
-```json
-{
-  "rating": 3,
-  "comment": "Changed my mind, the Furby talks too much."
-}
-```
-
----
-
-### `DELETE /api/reviews/:id`
-**Description:** Remove your review  
-**Auth:** Required  
-**Response:**
-```json
-{ "message": "Review deleted" }
-```
-
----
-
-## CART + CHECKOUT
-
-### `GET /api/cart`
-**Description:** View all items in your cart (e.g., NSYNC CDs, Beanie Babies)  
-**Auth:** Required  
-**Example Response:**
-```json
-[
-  {
-    "id": 1,
-    "product": {
-      "id": 8,
-      "name": "Y2K Denim Jacket",
-      "price": 45.00
-    },
-    "quantity": 1
-  }
-]
-```
-
----
-
-### `POST /api/cart`
-**Description:** Add a product to your cart  
-**Auth:** Required  
-**Body Example:**
-```json
-{
-  "product_id": 8,
-  "quantity": 2
-}
-```
-
----
-
-### `DELETE /api/cart/:item_id`
-**Description:** Remove an item from your cart  
-**Auth:** Required  
-**Response:**
-```json
-{ "message": "Item removed from cart" }
-```
-
----
-
-### `POST /api/checkout`
-**Description:** Complete your purchase (and score some retro treasures)  
-**Auth:** Required  
-**Response:**
-```json
-{ "message": "Checkout successful! Enjoy your nostalgia trip!" }
-```
-
----

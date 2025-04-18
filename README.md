@@ -72,11 +72,32 @@
 
 ---
 
-## 🧭 Coming Soon
+## 📁 Project Assets
 
-- 📊 Database schema map  
-- 🔌 API endpoints documentation  
-- 🎨 Frontend screenshots and style guide  
+### 🧱 Database Schema
+
+![Database Schema](./docs/schema.png)  
+
+
+---
+
+### 🎨 Style Guide
+
+![Style Guide](./docs/styleguide-preview.png)  
+
+
+---
+
+### 🖼️ Landing Page Mockup
+
+![Landing Page](./docs/timecapsule.site.png)
+
+---
+
+## 📖 API Reference
+
+📄 [View API Documentation (APIendpoints.md)](./docs/APIendpoints.md)
+
 - ✅ Feature roadmap
 
 ---
