@@ -122,7 +122,7 @@ GET /api/products?decade=90s&category=toy
 
 ---
 
-## ⭐ FAVORITES _(Coming Soon)_
+## ⭐ FAVORITES
 
 ### `GET /api/favorites`  
 View user's favorited items.  
@@ -138,19 +138,42 @@ Remove a product from favorites.
 
 ---
 
-## ✍️ REVIEWS _(Coming Soon)_
+## ✍️ REVIEWS 
 
 ### `GET /api/products/:id/reviews`  
 Fetch reviews for a specific product.  
 **Auth:** Optional
-
+**Response:**
+```json
+{[{
+    "id": 1,
+    "user": { "id": 3, "username": "mixtapez4life" },
+    "rating": 5,
+    "comment": "It works perfectly! Took me back to '99."
+  }]
+  }
+```
 ### `POST /api/products/:id/reviews`  
 Create a review.  
 **Auth:** Required
+**Response:**
+```json
+{
+  "rating": 4,
+  "comment": "Awesome Sega Genesis, just needed cleaning."
+}
+```
 
 ### `PUT /api/reviews/:id`  
 Edit a review.  
 **Auth:** Required
+**Response**
+```json
+{
+  "rating": 3,
+  "comment": "Changed my mind, the Furby talks too much."
+}
+```
 
 ### `DELETE /api/reviews/:id`  
 Delete a review.  
@@ -158,16 +181,40 @@ Delete a review.
 
 ---
 
-## 🛒 CART + CHECKOUT _(Coming Soon)_
+## 🛒 CART + CHECKOUT 
 
 ### `GET /api/cart`  
 View current user's cart items.  
 **Auth:** Required
+**Response**
+```json
+{
+  [
+  {
+    "id": 1,
+    "product": {
+      "id": 8,
+      "name": "Y2K Denim Jacket",
+      "price": 45.00
+    },
+    "quantity": 1
+  }
+]
+}
+```
 
 ### `POST /api/cart`  
 Add item to cart.  
 **Auth:** Required
-
+**Response**
+```json
+{
+ {
+  "product_id": 8,
+  "quantity": 2
+}
+}
+```
 ### `DELETE /api/cart/:item_id`  
 Remove item from cart.  
 **Auth:** Required
