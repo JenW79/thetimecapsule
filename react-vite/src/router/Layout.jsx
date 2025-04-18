@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ModalProvider, Modal } from "../context/Modal";
 import { thunkAuthenticate } from "../redux/session";
 import { fetchCart } from "../redux/cart";
@@ -11,13 +11,17 @@ import Navigation from "../components/Navigation/Navigation";
 export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    dispatch(thunkAuthenticate())
-      .then(() => dispatch(fetchCart()))
-      .then(() => dispatch(fetchFavorites()))
-      .then(() => setIsLoaded(true));
-  }, [dispatch]);
+  const sessionUser = useSelector((state) => state.session.user);
 
+  useEffect(() => {
+    dispatch(thunkAuthenticate()).then(() => {
+      dispatch(fetchCart());
+      if (sessionUser) {
+        dispatch(fetchFavorites());
+      }
+      setIsLoaded(true);
+    });
+  }, [dispatch, sessionUser]);
   return (
     <>
       <ModalProvider>
