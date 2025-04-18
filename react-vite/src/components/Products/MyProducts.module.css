@@ -1,3 +1,60 @@
+/* Force productCard content to stack vertically */
+.productCard :global(.product-info-wrapper) {
+  grid-row: auto;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.productCard h3 {
+  font-size: 1.25rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.productCard p {
+  margin: 0.25rem 0;
+}
+
+.productCard :global(.product-item) {
+  display: block;
+}
+
+/* Override global grid styles for MyProducts */
+.productCard :global(.product-images-grid) {
+  display: block;
+  margin-bottom: 10px;
+  order: -1;
+  margin-top: 16px;
+}
+
+.productCard :global(.product-image-wrapper) {
+  width: 100% !important;
+  height: 200px !important;
+  border-radius: 8px;
+  overflow: hidden;
+  border: none;
+  background-color: #f0f0f0;
+}
+
+.productCard :global(.product-image-wrapper img) {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.productCard :global(.product-images-grid) > div:not(:first-child) {
+  display: none; /* only show first image */
+}
+
+.productCard :global(.product-actions) {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
 .myProductsPage {
   padding: 2rem 1rem;
 }
