@@ -6,11 +6,14 @@
   padding: 10px 20px;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -26,7 +29,8 @@
 }
 
 .nav-link {
-  margin-right: 20px;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .profile-button {
@@ -41,6 +45,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .profile-icon {
@@ -95,4 +100,36 @@
 
 .cart-wrapper svg {
   color: inherit;
+}
+
+.nav-links-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex: 1;
+}
+
+/* I haven't completed the smaller screen settings */
+/* for small screens */
+
+@media (max-width: 767px) {
+  .nav-links-container {
+    gap: 8px;
+  }
+
+  .nav-link button {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+
+  .logo {
+    width: 120px;
+  }
+
+  .profile-button {
+    width: 32px;
+    height: 32px;
+  }
 }
