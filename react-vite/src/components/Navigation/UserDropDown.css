@@ -4,7 +4,7 @@
     right: 0;
     width: 280px;
     background: white;
-    border-radius: 12px;
+    /* border-radius: 12px; */
     box-shadow: 0 2px 12px rgba(0,0,0,0.15);
     font-family: Helvetica, sans-serif;
     z-index: 9999;
@@ -15,8 +15,8 @@
     display: flex;
     gap: 12px;
     align-items: center;
-    background-color: #242424;
-    border-radius: 8px;
+    background-color: #1d1147;
+    /* border-radius: 8px; */
     padding: 10px;
   }
   
@@ -24,7 +24,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #ccc;
+    background: #e2e0dc;
   }
   
   .user-email {
@@ -43,11 +43,21 @@
     padding: 8px 10px;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 6px;
+    /* border-radius: 6px; */
   }
   
   .user-dropdown-item:hover {
-    background-color: #f4f4f4;
+    background-color: #e2e0dc;
+  }
+
+  .user-dropdown-item a {
+    text-decoration: none;
+    color: #242424;
+  }
+
+  .user-dropdown-item:active a, .user-dropdown-item:hover a{
+    text-decoration: none;
+    color: #242424;
   }
   
   .dropdown-icon {
@@ -59,10 +69,10 @@
   .user-avatar-icon {
     font-size: 40px;
     color: #FF69FF;
-    background: #eee;
+    background: #e2e0dc;
     border-radius: 50%;
     padding: 8px;
   }
   .user-name {
-    color: #FF69FF;
+    color: #ffffff;
   }
