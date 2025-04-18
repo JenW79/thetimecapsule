@@ -72,7 +72,7 @@ const ReviewList = () => {
   // };
   return (
     <div className="reviews-section">
-      <h2 className="reviews-title">reviews</h2>
+      <h1 className="reviews-title">reviews</h1>
 
       {reviews.length === 0 && <p className="no-reviews">No reviews yet.</p>}
 

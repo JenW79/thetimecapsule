@@ -69,10 +69,10 @@ const ProductList = () => {
 
   return (
     <div className="product-list">
-      <h2>
+      <h1>
         {decade ? `${decade} Products` : 'All Products'}
         {selectedCategory ? ` - ${selectedCategory}` : ''}
-      </h2>
+      </h1>
       <div className="products-grid">
         {filteredProducts.map(product => (
           <ProductItem key={product.id} product={product} />
