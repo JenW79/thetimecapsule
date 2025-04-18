@@ -99,7 +99,7 @@ const ProductDetail = () => {
           
           {product.average_rating && (
             <p className="product-rating">
-              ⭐ {product.average_rating.toFixed(1)} / 5
+              ⭐ <span className="rating-text">{product.average_rating.toFixed(1)} / 5</span>
             </p>
           )}
 
@@ -139,7 +139,7 @@ const ProductDetail = () => {
       </div>
 
       <div className="reviews-section">
-        <h2 className="reviews-title">Reviews</h2>
+        <h1 className="reviews-title">Reviews</h1>
         {product.reviews && product.reviews.length > 0 ? (
           <div className="review-list">
             {product.reviews.map((review) => (
