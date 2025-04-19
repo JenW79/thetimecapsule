@@ -85,7 +85,7 @@ const CartPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
+    <div className="cart-page-wrapper">
       <h1>cart</h1>
       {!Array.isArray(cartItems) || cartItems.length === 0 ? (
         <div className="empty-cart">
@@ -165,10 +165,12 @@ const CartPage = () => {
           })}
 
           <div>
-            <h3>total: ${calculateTotal()}</h3>
-            <h1>i want it all</h1>
+            <h2>total: ${calculateTotal()}</h2>
+            <h3>i want it all</h3>
+            <div className="cart-actions">
             <button onClick={handleClearCart}>clear cart</button>
             <button onClick={handleProceedToCheckout}>continue to checkout</button>
+            </div>
           </div>
         </div>
       )}
