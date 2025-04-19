@@ -59,7 +59,7 @@
     text-transform: lowercase;
     background-color: #E2E0DC !important;
     border: none !important;
-    color: #1D1147 !important;
+    color: #ff66ff !important;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
     position: relative;
