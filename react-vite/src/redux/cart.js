@@ -10,6 +10,11 @@ export const CLEAR_CART = 'CLEAR_CART';
 
 export const incrementItem = (productId) => {
   return async (dispatch, getState) => {
+    if (!productId || typeof productId !== 'number') {
+      console.warn("Invalid productId in incrementItem:", productId);
+      return;
+    }
+
     const { session } = getState();
     const isAuthenticated = session && session.user;
 
@@ -30,6 +35,8 @@ export const incrementItem = (productId) => {
               payload: productId,
             });
           }
+        } else {
+          console.warn("Item not found in cart for ID:", productId);
         }
       } catch (error) {
         console.error("Error incrementing item:", error);
@@ -86,10 +93,15 @@ export const decrementItem = (productId) => {
 
 export const addToCart = (product, quantity = 1) => {
   return async (dispatch, getState) => {
+    if (!product || typeof product.id !== 'number') {
+      console.warn("Invalid product in addToCart:", product);
+      return;
+    }
+    
     const { session } = getState();
     const isAuthenticated = session && session.user;
-
-    if (isAuthenticated) {
+    
+    if (isAuthenticated) {    
       try {
         const response = await fetchWithAuth("/api/cart", "POST", [{
           id: product.id,
