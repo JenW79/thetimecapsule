@@ -5,9 +5,11 @@ from app.forms.review_form import ReviewForm
 
 review_routes = Blueprint('reviews', __name__)
 
-#GET all reviews for a specific product /api/product<id>/reviews
+#GET all reviews for a specific product /api/products/<id>/reviews
 @review_routes.route('/products/<int:product_id>/reviews')
 def get_reviews(product_id):
+    if product_id <= 0:
+        return {"error": "Invalid product ID"}, 400
     reviews = Review.query.filter(Review.product_id == product_id).all()
     return {"reviews": [review.to_dict() for review in reviews]}
 
@@ -15,6 +17,9 @@ def get_reviews(product_id):
 @review_routes.route('/products/<int:product_id>/reviews', methods=['POST'])
 @login_required
 def create_review(product_id):
+    if product_id <= 0:
+        return {"error": "Invalid product ID"}, 400
+
     form = ReviewForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
@@ -49,21 +54,21 @@ def update_review(id):
         return review.to_dict()
     return {"errors": form.errors}, 400
 
-#DELETE a review /api/reviews/review<id>
+#DELETE a review /api/reviews/<id>
 @review_routes.route('/reviews/<int:id>', methods=['DELETE'])
 @login_required
 def delete_review(id):
     review = Review.query.get(id)
     if not review:
-        return{"error": "Review not found"}, 404
+        return {"error": "Review not found"}, 404
     if review.user_id != current_user.id:
-        return{'error': "Review not available"}, 403
+        return {'error': "Review not available"}, 403
     
     db.session.delete(review)
     db.session.commit()
-    return{"message": "Review has been deleted"}
+    return {"message": "Review has been deleted"}
 
-#GET all reviews for current user /api/reviews/current
+#GET all reviews for the current user /api/reviews/current
 @review_routes.route('/reviews/current')
 @login_required
 def user_reviews():
