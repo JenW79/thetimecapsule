@@ -23,6 +23,7 @@ h1{
     text-transform: lowercase;
     font-size: 36px;
     color: #23134F;
+    text-align: center;
 }
 
 h3,
@@ -38,7 +39,7 @@ h4,
 h6 {
     font-family: "Poppins", sans-serif;
     text-transform: uppercase;
-    font-weight: regular;
+    font-weight: normal;
     font-size: 24px;
     color: #242424;
 }

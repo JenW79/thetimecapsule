@@ -93,11 +93,22 @@
 
 /* for small screens */
 @media (max-width: 768px) {
+  .cart-items-grid {
+    display: flex;
+    max-width: 1000px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    flex-direction: column;
+}
   .cart-image-wrapper {
     flex-direction: column;
     align-items: center;
   }
 
+}
+@media (max-width: 560px) {
   .cart-item-container {
     max-width: 90%;
     flex-direction: column;
