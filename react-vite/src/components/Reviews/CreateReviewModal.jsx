@@ -13,7 +13,7 @@ const CreateReviewModal = ({ productId, onClose }) => {
     e.preventDefault();
 
     const result = await dispatch(
-      createReview(productId, { rating, review_text })
+      createReview(Number(productId), { rating, review_text })
     );
 
     if (result.errors) {

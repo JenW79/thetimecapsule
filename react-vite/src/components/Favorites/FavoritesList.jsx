@@ -1,4 +1,4 @@
-import { useEffect } from 'react'; 
+import { useEffect, useMemo } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavorites } from '../../redux/favorites';
 import ProductItem from '../Products/ProductItem';
@@ -7,13 +7,13 @@ import './Favorites.css';
 const FavoritesList = () => {
   const dispatch = useDispatch();
   const favoritesObj = useSelector(state => state.favorites);
-  const favorites = Object.values(favoritesObj);
-  
+  const favorites = useMemo(() => Object.values(favoritesObj), [favoritesObj]);
+
   useEffect(() => {
     dispatch(fetchFavorites());
   }, [dispatch]);
 
-  if (!favorites || !favorites.length) {
+  if (!favorites || favorites.length === 0) {
     return <div className="loading">Loading favorites...</div>;
   }
 

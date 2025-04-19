@@ -21,7 +21,7 @@ const DeleteProduct = ({ productId, onDeleted }) => {
   const handleConfirmDelete = async () => {
     setLoading(true);
     try {
-      await dispatch(removeProduct(productId));
+      await dispatch(removeProduct(Number(productId)));
       if (onDeleted) onDeleted();
     } catch (error) {
       console.error('Error deleting product:', error);
