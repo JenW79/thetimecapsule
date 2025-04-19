@@ -38,13 +38,13 @@ export const fetchProducts =
     }
   };
 
-  export const fetchProduct = (productId) => async (dispatch) => {
-    if (!productId || typeof productId !== "number" || productId <= 0) {
-      console.warn("Invalid productId in fetchProduct:", productId);
-      return { error: "Invalid product ID." };
-    }
-  
-    const res = await fetch(`/api/products/${productId}`);  
+export const fetchProduct = (productId) => async (dispatch) => {
+  if (!productId || typeof productId !== "number" || productId <= 0) {
+    console.warn("Invalid productId in fetchProduct:", productId);
+    return { error: "Invalid product ID." };
+  }
+
+  const res = await fetch(`/api/products/${productId}`);
   if (res.ok) {
     const data = await res.json();
     dispatch(addProduct(data));
@@ -56,7 +56,7 @@ export const fetchProducts =
 };
 
 export const createProduct = (payload) => async (dispatch) => {
-  const res = await fetchWithAuth("/api/products", "POST", payload)
+  const res = await fetchWithAuth("/api/products", "POST", payload);
   if (res.ok) {
     const data = await res.json();
     dispatch(addProduct(data));

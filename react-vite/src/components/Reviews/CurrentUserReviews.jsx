@@ -7,7 +7,16 @@ import "./Reviews.css";
 export default function CurrentUserReviews() {
   const dispatch = useDispatch();
   const rawReviews = useSelector((state) => state.reviews);
-  const reviews = useMemo(() => Object.values(rawReviews), [rawReviews]);
+  
+  const reviews = useMemo(() => {
+    
+    const reviewsData = rawReviews.reviews || rawReviews;
+    
+    const reviewsArray = Object.values(reviewsData);
+    
+    return reviewsArray;
+  }, [rawReviews]);
+  
   const [editReview, setEditReview] = useState(null);
 
   useEffect(() => {
@@ -21,55 +30,74 @@ export default function CurrentUserReviews() {
   };
 
   const renderStars = (rating) => {
-    return "★".repeat(rating) + "☆".repeat(5 - rating);
+    if (typeof rating !== 'number' || isNaN(rating)) {
+      return "☆☆☆☆☆";
+    }
+    const validRating = Math.min(5, Math.max(0, Math.floor(rating)));
+    return "★".repeat(validRating) + "☆".repeat(5 - validRating);
   };
 
   const formatDate = (timestamp) => {
+    if (!timestamp) return "Unknown date";
     const date = new Date(timestamp);
     return isNaN(date.getTime()) ? "Invalid date" : date.toLocaleString();
   };
   
   console.log("All reviews:", reviews);
+  
+  if (!Array.isArray(reviews)) {
+    return (
+      <div className="reviews-section">
+        <h1 className="reviews-title">MY REVIEWS</h1>
+        <p className="no-reviews">Error loading reviews. Please try again later.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="reviews-section">
       <h1 className="reviews-title">MY REVIEWS</h1>
       {reviews.length === 0 ? (
-        <p className="no-reviews">You haven’t written any reviews yet.</p>
+        <p className="no-reviews">You haven&apos;t written any reviews yet.</p>
       ) : (
         <div className="review-list">
-          {reviews.map((review) => (
+          {reviews.map((review) => {
+            if (!review || typeof review !== 'object' || !review.id) {
+              return null;
+            }
             
-            <div className="review-item" key={review.id}>
-              {review.product_image && (
-                <img
-                  src={review.product_image}
-                  alt={review.product_name}
-                  className="review-product-image"
-                />
-              )}
-              <div className="star-rating">{renderStars(review.rating)}</div>
-              <div className="user-name">{review.product_name}</div>
-              <div className="review-date">
-                Posted on: {formatDate(review.created_at)}{" "}
-                
+            return (
+              <div className="review-item" key={review.id}>
+                {review.product_image && (
+                  <img
+                    src={review.product_image}
+                    alt={review.product_name || "Product"}
+                    className="review-product-image"
+                  />
+                )}
+                <div className="star-rating">{renderStars(review.rating)}</div>
+                <div className="user-name">{review.product_name || "Unknown Product"}</div>
+                <div className="review-date">
+                  Posted on: {formatDate(review.created_at)}
+                </div>
+                <p className="review-description">{review.comment || "No comment provided"}</p>
+                <div className="review-actions">
+                  <button
+                    className="edit-review-button"
+                    onClick={() => setEditReview(review)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-review-button"
+                    onClick={() => handleDelete(review.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <p className="review-description">{review.comment}</p>
-              <div className="review-actions">
-                <button
-                  className="edit-review-button"
-                  onClick={() => setEditReview(review)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="delete-review-button"
-                  onClick={() => handleDelete(review.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

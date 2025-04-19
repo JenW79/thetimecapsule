@@ -24,6 +24,7 @@ export const fetchReviews = (productId) => async (dispatch) => {
     dispatch(loadReviews(data.reviews));
   }
 };
+
 export const createReview = (productId, payload) => async (dispatch) => {
   if (typeof productId !== "number" || productId <= 0) {
     console.warn("Invalid productId in createReview:", productId);
@@ -44,6 +45,7 @@ export const createReview = (productId, payload) => async (dispatch) => {
     return error;
   }
 };
+
 export const editReview = (reviewId, payload) => async (dispatch) => {
   const res = await fetchWithAuth(`/api/reviews/${reviewId}`, "PUT", payload);
   if (res.ok) {
@@ -55,6 +57,7 @@ export const editReview = (reviewId, payload) => async (dispatch) => {
     return error;
   }
 };
+
 export const removeReview = (reviewId) => async (dispatch) => {
   const res = await fetchWithAuth(`/api/reviews/${reviewId}`, "DELETE");
   if (res.ok) {
@@ -76,26 +79,34 @@ export const fetchCurrentUserReviews = () => async (dispatch) => {
   }
 };
 
-const initialState = {};
+const initialState = {
+  reviews: {},
+};
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
-    case LOAD_REVIEWS: {
-      const newState = {};
-      action.reviews.forEach((review) => {
-        newState[review.id] = review;
-      });
-      return newState;
-    }
+    case LOAD_REVIEWS:
+      return {
+        ...state,
+        reviews: action.reviews.reduce((acc, review) => {
+          acc[review.id] = review;
+          return acc;
+        }, {}),
+      };
+
     case ADD_REVIEW:
-      return { ...state, [action.review.id]: action.review };
+      return { ...state, reviews: { ...state.reviews, [action.review.id]: action.review } };
+
     case UPDATE_REVIEW:
-      return { ...state, [action.review.id]: action.review };
-    case DELETE_REVIEW: {
-      const stateCopy = { ...state };
-      delete stateCopy[action.reviewId];
-      return stateCopy;
-    }
+      return { ...state, reviews: { ...state.reviews, [action.review.id]: action.review } };
+
+    case DELETE_REVIEW:
+      {
+        const newReviews = { ...state.reviews };
+        delete newReviews[action.reviewId];
+        return { ...state, reviews: newReviews };
+      }
+
     default:
       return state;
   }
