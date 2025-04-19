@@ -16,18 +16,19 @@ const FavoritesList = () => {
   if (!favorites || !favorites.length) {
     return <div className="loading">Loading favorites...</div>;
   }
-  console.log("Favorite Products:", favorites);
+
   return (
-    <div className="favorites-list">
-      <h2>Your Favorite Products</h2>
+    <div className="favorites-section">
+      <h2 className="favorites-title">Your Favorite Products</h2>
       {favorites.length === 0 ? (
-        <p className="no-favorites-message">You haven&apos;t added any favorites yet.</p>
+        <p className="no-favorites-message">You haven’t added any favorites yet.</p>
       ) : (
         <div className="favorites-grid">
           {favorites.map(favorite => (
             <ProductItem 
               key={favorite.id} 
               product={favorite.product}
+              isFavorite={true}  
             />
           ))}
         </div>
