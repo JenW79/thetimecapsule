@@ -4,6 +4,12 @@ from app.models import db, CartItem, Product
 from app.forms import OrderForm
 import re
 
+def is_valid_id(value):
+    try:
+        return isinstance(int(value), int) and int(value) > 0
+    except (ValueError, TypeError):
+        return False
+
 cart_routes = Blueprint("cart", __name__)
 
 @cart_routes.route("/cart")
@@ -27,6 +33,8 @@ def get_cart():
         cart_items = session.get("cart", [])
         for item in cart_items:
             product_id = item.get("product_id")
+            if not is_valid_id(product_id):
+                return {"error": "Invalid product ID"}, 400
             product = Product.query.get(product_id)
             if product:
                 item_dict = {
@@ -50,7 +58,16 @@ def add_to_cart():
     products = request.json
     for product in products:
         product_id = product.get("id")
-        quantity = product.get("quantity", 1)
+        if not is_valid_id(product_id):
+            return jsonify({"error": "Invalid product ID"}), 400
+
+        try:
+            quantity = int(product.get("quantity", 1))
+            if quantity <= 0:
+                raise ValueError
+        except (ValueError, TypeError):
+            return jsonify({"error": "Invalid quantity"}), 400
+
         product_obj = Product.query.get(product_id)
         if not product_obj:
             return jsonify({"error": "Product not found"}), 404
@@ -173,6 +190,8 @@ def submit_order():
     items_summary = []
 
     for item in cart_items:
+        if not is_valid_id(item.product_id):
+            return {"error": "Invalid product ID"}, 400
         product = Product.query.get(item.product_id)
         if product:
             total_price += product.price * item.quantity

@@ -26,6 +26,13 @@ def get_products():
 # GET single product by ID
 @product_routes.route('/<int:id>')
 def get_product_by_id(id):
+    try:
+        id = int(id)
+        if id <= 0:
+            return {"error": "Invalid product ID"}, 400
+    except (ValueError, TypeError):
+        return {"error": "Invalid product ID"}, 400
+
     product = Product.query.get(id)
     if not product:
         return {"error": "Product not found"}, 404
@@ -36,11 +43,6 @@ def get_product_by_id(id):
 @product_routes.route('/', methods=['POST'], strict_slashes=False)
 @login_required
 def create_product():
-    from flask_wtf.csrf import validate_csrf
-    from wtforms.validators import ValidationError
-    from app.forms import ProductForm
-    from flask import request
-
     try:
         validate_csrf(request.headers.get('X-CSRFToken'))
     except ValidationError:
@@ -65,20 +67,35 @@ def create_product():
 
     return {"errors": form.errors}, 400
 
-
-
 #PUT edit a product /api/products/<id>
 @product_routes.route('/<int:id>', methods=['PUT'])
 @login_required
 def update_product(id):
+    try:
+        id = int(id)
+        if id <= 0:
+            return {"error": "Invalid product ID"}, 400
+    except (ValueError, TypeError):
+        return {"error": "Invalid product ID"}, 400
+
     product = Product.query.get(id)
     if not product or product.owner_id != current_user.id:
         return {"error": "Unauthorized or not found"}, 403
 
     data = request.get_json()
+    if 'price' in data:
+        try:
+            price = float(data['price'])
+            if price < 0:
+                return {"error": "Price must be positive"}, 400
+            product.price = price
+        except ValueError:
+            return {"error": "Invalid price format"}, 400
+
     for field in ['name', 'description', 'price', 'image_url']:
         if field in data:
             setattr(product, field, data[field])
+
     db.session.commit()
     return product.to_dict()
 
@@ -86,6 +103,13 @@ def update_product(id):
 @product_routes.route('/<int:id>', methods=['DELETE'])
 @login_required
 def delete_product(id):
+    try:
+        id = int(id)
+        if id <= 0:
+            return {"error": "Invalid product ID"}, 400
+    except (ValueError, TypeError):
+        return {"error": "Invalid product ID"}, 400
+
     product = Product.query.get(id)
     if not product or product.owner_id != current_user.id:
         return {"error": "Unauthorized or not found"}, 403

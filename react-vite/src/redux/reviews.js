@@ -13,6 +13,11 @@ const deleteReview = (reviewId) => ({ type: DELETE_REVIEW, reviewId });
 //THUNKS
 
 export const fetchReviews = (productId) => async (dispatch) => {
+  if (typeof productId !== "number" || productId <= 0) {
+    console.warn("Invalid productId in fetchReviews:", productId);
+    return { error: "Invalid product ID." };
+  }
+
   const res = await fetch(`/api/products/${productId}/reviews`);
   if (res.ok) {
     const data = await res.json();
@@ -20,6 +25,11 @@ export const fetchReviews = (productId) => async (dispatch) => {
   }
 };
 export const createReview = (productId, payload) => async (dispatch) => {
+  if (typeof productId !== "number" || productId <= 0) {
+    console.warn("Invalid productId in createReview:", productId);
+    return { error: "Invalid product ID." };
+  }
+
   const res = await fetchWithAuth(
     `/api/products/${productId}/reviews`,
     "POST",
