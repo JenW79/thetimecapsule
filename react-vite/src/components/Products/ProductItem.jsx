@@ -11,7 +11,7 @@ import { fetchProduct } from "../../redux/products";
 import "./Products.css";
 import "../Favorites/Favorites.css";
 
-const ProductItem = ({ product}) => {
+const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
   //preventing non-owners from editing/deleting products
   const sessionUser = useSelector((state) => state.session.user);
@@ -114,8 +114,11 @@ const ProductItem = ({ product}) => {
                 {/* added average rating */}
                 {typeof product.average_rating === "number" ? (
                   <p className="product-rating">
-                  ⭐ <span className="rating-text">{product.average_rating.toFixed(1)} / 5</span>
-                </p>
+                    ⭐{" "}
+                    <span className="rating-text">
+                      {product.average_rating.toFixed(1)} / 5
+                    </span>
+                  </p>
                 ) : (
                   <p className="product-rating no-reviews">No reviews yet</p>
                 )}
@@ -169,30 +172,30 @@ const ProductItem = ({ product}) => {
                   }}
                 />
               )}
-              <div className="product-gallery">
-                {productImages.length > 0 ? (
-                  productImages.map((imageUrl, index) => (
-                    <div key={index} className="gallery-image">
-                      <img
-                        src={imageUrl}
-                        alt={`${product.name} view ${index + 1}`}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <div className="gallery-image">
-                    <img
-                      src="/assets/placeholder.png"
-                      alt={`${product.name}`}
-                    />
-                  </div>
-                )}
-                <div className="pattern-image">
+              <div className="product-images-grid">
+                <div className="product-main-image">
                   <img
-                    src="/assets/sprinkle-green.png"
-                    alt="Decorative pattern"
+                    src={productImages[0] || "/assets/placeholder.png"}
+                    alt={product.name}
                   />
                 </div>
+                <div className="product-thumbnails">
+                  {productImages.slice(1, 4).map((url, idx) => (
+                    <div key={idx} className="thumbnail">
+                      <img
+                        src={url}
+                        alt={`${product.name} alt view ${idx + 2}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pattern-image">
+                <img
+                  src="/assets/sprinkle-green.png"
+                  alt="Decorative pattern"
+                />
               </div>
             </div>
           ) : (
@@ -206,7 +209,10 @@ const ProductItem = ({ product}) => {
 
                 {typeof product.average_rating === "number" ? (
                   <p className="product-rating">
-                    ⭐ <span className="rating-text">{product.average_rating.toFixed(1)} / 5</span>
+                    ⭐{" "}
+                    <span className="rating-text">
+                      {product.average_rating.toFixed(1)} / 5
+                    </span>
                   </p>
                 ) : (
                   <p className="product-rating no-reviews">No reviews yet</p>
@@ -252,26 +258,11 @@ const ProductItem = ({ product}) => {
               </div>
               {/* making product actions conditional for owner/not owner */}
 
-              <div
-                className={`product-images-grid grid-${productImages.length}`}
-              >
-                {productImages.length > 0 ? (
-                  productImages.map((imageUrl, index) => (
-                    <div key={index} className="product-image-wrapper">
-                      <img
-                        src={imageUrl}
-                        alt={`${product.name} view ${index + 1}`}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <div className="product-image-wrapper">
-                    <img
-                      src="/assets/placeholder.png"
-                      alt={`${product.name}`}
-                    />
-                  </div>
-                )}
+              <div className="single-product-image">
+                <img
+                  src={productImages[0] || "/assets/placeholder.png"}
+                  alt={product.name}
+                />
               </div>
             </>
           )}

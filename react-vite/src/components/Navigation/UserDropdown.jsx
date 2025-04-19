@@ -58,11 +58,11 @@ export default function UserDropDown({ user, closeMenu }) {
         <div className="user-dropdown-item">
           {" "}
           <FiMail className="dropdown-icon" />
-          Messages(coming soon)
+          Messages (coming soon)
         </div>
         <div className="user-dropdown-item">
           <FiCreditCard className="dropdown-icon" />
-          Credit balance: $0.00(coming soon)
+          Credit balance: $0.00 (coming soon)
         </div>
         <Link
           to="/my-products"
@@ -74,14 +74,14 @@ export default function UserDropDown({ user, closeMenu }) {
         </Link>
         <div className="user-dropdown-item">
           <FiGift className="dropdown-icon" />
-          Registry(coming soon)
+          Registry (coming soon)
         </div>
       </div>
 
       <div className="user-dropdown-section">
         <div className="user-dropdown-item">
           <FiSettings className="dropdown-icon" />
-          Account settings(coming soon)
+          Account settings (coming soon)
         </div>
         <div className="user-dropdown-item" onClick={logout}>
           <FiLogOut className="dropdown-icon" />

@@ -14,7 +14,7 @@ function Navigation() {
     <div className="navbar">
       <div className="logo-container">
         <img
-          src="/the-time-capsule-logo.png"
+          src="/logo.png"
           alt="The Time Capsule Logo"
           className="logo"
         />
@@ -46,7 +46,10 @@ function Navigation() {
             <button>00s</button>
           </NavLink>
         </div>
-        <div className="nav-link cart-container">
+        
+      </div>
+      <div className="nav-modal-container">
+      <div className="nav-link cart-container">
           <NavLink to="/cart" className="cart-link">
             <div className="cart-wrapper">
               <FaShoppingBag size={24} />
@@ -54,10 +57,9 @@ function Navigation() {
             </div>
           </NavLink>
         </div>
-      </div>
-
       <div className="profile-button">
         <ProfileButton />
+      </div>
       </div>
     </div>
   );
