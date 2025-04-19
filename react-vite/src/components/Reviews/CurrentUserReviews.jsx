@@ -32,7 +32,7 @@ export default function CurrentUserReviews() {
   console.log("All reviews:", reviews);
   return (
     <div className="reviews-section">
-      <h2 className="reviews-title">MY REVIEWS</h2>
+      <h1 className="reviews-title">MY REVIEWS</h1>
       {reviews.length === 0 ? (
         <p className="no-reviews">You haven’t written any reviews yet.</p>
       ) : (
