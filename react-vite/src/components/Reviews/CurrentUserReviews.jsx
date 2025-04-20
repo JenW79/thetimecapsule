@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { fetchCurrentUserReviews, removeReview } from "../../redux/reviews";
 import EditReviewModal from "../Reviews/EditReviewModal";
 import "./Reviews.css";
+import "../Favorites/Favorites.css"; //quick fix for a class
 
 export default function CurrentUserReviews() {
   const dispatch = useDispatch();
@@ -55,58 +57,67 @@ export default function CurrentUserReviews() {
   }
 
   return (
-    <div className="reviews-section">
-      <h1 className="reviews-title">MY REVIEWS</h1>
-      {reviews.length === 0 ? (
-        <p className="no-reviews">You haven&apos;t written any reviews yet.</p>
-      ) : (
-        <div className="review-list">
-          {reviews.map((review) => {
-            if (!review || typeof review !== 'object' || !review.id) {
-              return null;
-            }
-            
-            return (
-              <div className="review-item" key={review.id}>
-                {review.product_image && (
-                  <img
-                    src={review.product_image}
-                    alt={review.product_name || "Product"}
-                    className="review-product-image"
-                  />
-                )}
-                <div className="star-rating">{renderStars(review.rating)}</div>
-                <div className="user-name">{review.product_name || "Unknown Product"}</div>
-                <div className="review-date">
-                  Posted on: {formatDate(review.created_at)}
+    <>
+      <div className="reviews-section">
+        <h1 className="reviews-title">MY REVIEWS</h1>
+        {reviews.length === 0 ? (
+          <div className="no-favorites-message">
+            <p>Head over to the products page and show some love!</p>
+            <Link to="/products">
+              <button className="ctaButtonSmall">Browse Products</button>
+            </Link>
+          </div>
+        ) : (
+          <div className="review-list">
+            {reviews.map((review) => {
+              if (!review || typeof review !== 'object' || !review.id) {
+                return null;
+              }
+  
+              return (
+                <div className="review-item" key={review.id}>
+                  {review.product_image && (
+                    <img
+                      src={review.product_image}
+                      alt={review.product_name || "Product"}
+                      className="review-product-image"
+                    />
+                  )}
+                  <div className="star-rating">{renderStars(review.rating)}</div>
+                  <div className="user-name">{review.product_name || "Unknown Product"}</div>
+                  <div className="review-date">
+                    Posted on: {formatDate(review.created_at)}
+                  </div>
+                  <p className="review-description">
+                    {review.comment || "No comment provided"}
+                  </p>
+                  <div className="review-actions">
+                    <button
+                      className="edit-review-button"
+                      onClick={() => setEditReview(review)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-review-button"
+                      onClick={() => handleDelete(review.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <p className="review-description">{review.comment || "No comment provided"}</p>
-                <div className="review-actions">
-                  <button
-                    className="edit-review-button"
-                    onClick={() => setEditReview(review)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-review-button"
-                    onClick={() => handleDelete(review.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
+              );
+            })}
+          </div>
+        )}
+      </div>
+  
       {editReview && (
         <EditReviewModal
           review={editReview}
           onClose={() => setEditReview(null)}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect } from "react"; 
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { fetchFavorites } from "../../redux/favorites";
 import ProductItem from "../Products/ProductItem";
 import "./Favorites.css";
