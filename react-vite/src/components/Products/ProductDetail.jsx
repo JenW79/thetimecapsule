@@ -36,10 +36,13 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchProduct(parsedId));
-  }, [dispatch, parsedId]);
-
-  if (isNaN(parsedId)) return <div className="error-message">Invalid product ID.</div>;
+    if (!isNaN(parsedId) && parsedId > 0) {
+      dispatch(fetchProduct(parsedId));
+    }
+  }, [dispatch, parsedId]);  
+  
+  if (isNaN(parsedId) || parsedId <= 0)
+    return <div className="error-message">Invalid product ID.</div>;  
   if (!product) return <div className="product-not-found">Loading product...</div>;
 
   const productImages = product?.images?.length > 0

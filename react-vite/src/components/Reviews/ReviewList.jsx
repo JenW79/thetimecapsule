@@ -7,7 +7,7 @@ import EditReviewModal from "./EditReviewModal";
 import DeleteReviewButton from "./DeleteReviewButton";
 import ReviewCard from "./ReviewCard";
 import "./Reviews.css";
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 // Adding for star rating
 const StarRating = ({ rating }) => {
@@ -15,35 +15,42 @@ const StarRating = ({ rating }) => {
 };
 
 const selectReviews = (state) => state.reviews;
-
 const getMemoizedReviews = createSelector(
   [selectReviews, (_, productId) => productId],
   (reviews, productId) => {
-    return Object.values(reviews || {}).filter((review) => review.product_id === Number(productId));
+    return Object.values(reviews || {}).filter(
+      (review) => review.product_id === Number(productId)
+    );
   }
 );
 
 const ReviewList = () => {
-  const dispatch = useDispatch();
   const { productId } = useParams();
+  const parsedProductId = parseInt(productId, 10);
+  const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
 
-  const reviews = useSelector((state) => getMemoizedReviews(state, productId));
+  const reviews = useSelector((state) =>
+    getMemoizedReviews(state, parsedProductId)
+  );
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editReview, setEditReview] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchReviews(Number(productId)));
-  }, [dispatch, productId]);
+    if (!isNaN(parsedProductId) && parsedProductId > 0) {
+      dispatch(fetchReviews(parsedProductId));
+    }
+  }, [dispatch, parsedProductId]);
 
   const userReview = useMemo(() => {
     if (!sessionUser) return null;
     return reviews.find((r) => r.user_id === sessionUser.id);
   }, [reviews, sessionUser]);
 
-  const renderedReviews = useMemo(() => {
-  
+  if (isNaN(parsedProductId) || parsedProductId <= 0)
+    return <div className="error-message">Invalid product ID.</div>;
+
   // Changing for css/wireframe. Commented out incase we need it later
 
   // return (
@@ -85,47 +92,44 @@ const ReviewList = () => {
   //     </div>
   //   );
   // };
-    return reviews.map((review) => (
-      <div key={review.id} className="review-item">
-        <StarRating rating={review.rating} />
-        <div className="user-name">{review.username}</div>
-        <div className="review-date">
-          {new Date(review.created_at).toLocaleDateString()}
-        </div>
-        <p className="review-description">{review.review_text}</p>
-
-        {sessionUser?.id === review.user_id && (
-          <div className="review-actions">
-            <button
-              className="edit-review-button"
-              onClick={() => setEditReview(review)}
-            >
-              Edit
-            </button>
-            <DeleteReviewButton reviewId={review.id} />
-          </div>
-        )}
-      </div>
-    ));
-  }, [reviews, sessionUser]);
-
   return (
     <div className="reviews-section">
       <h1 className="reviews-title">Reviews</h1>
 
-      {reviews.length === 0 && <p className="no-reviews">No reviews yet.</p>}
-
-      {reviews.map((review) => (
-        <ReviewCard
-          key={review.id}
-          review={review}
-          sessionUser={sessionUser}
-          onEdit={setEditReview}
-        />
-      ))}
-
-      {renderedReviews}
-
+      {reviews.length > 0 ? (
+        <div className="review-list">
+          {reviews.map((review) => (
+            <ReviewCard
+              key={review.id}
+              review={review}
+              sessionUser={sessionUser}
+              onEdit={setEditReview}
+            >
+              <StarRating rating={review.rating} />
+              <div className="user-name">{review.username || "user"}</div>
+              <div className="review-date">
+                {new Date(review.created_at).toLocaleDateString()}
+              </div>
+              <p className="review-description">
+                {review.review_text || "No comment"}
+              </p>
+              {sessionUser?.id === review.user_id && (
+                <div className="review-actions">
+                  <button
+                    className="edit-review-button"
+                    onClick={() => setEditReview(review)}
+                  >
+                    Edit
+                  </button>
+                  <DeleteReviewButton reviewId={review.id} />
+                </div>
+              )}
+            </ReviewCard>
+          ))}
+        </div>
+      ) : (
+        <p className="no-reviews">No reviews yet.</p>
+      )}
       <div className="review-button-container">
         {!userReview && sessionUser && (
           <button
@@ -138,7 +142,13 @@ const ReviewList = () => {
       </div>
 
       {showCreateModal && (
-        <CreateReviewModal onClose={() => setShowCreateModal(false)} />
+        <CreateReviewModal
+          productId={parsedProductId}
+          onClose={() => {
+            setShowCreateModal(false);
+            dispatch(fetchReviews(parsedProductId));
+          }}
+        />
       )}
 
       {editReview && (

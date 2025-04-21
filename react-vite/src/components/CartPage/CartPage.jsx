@@ -20,11 +20,9 @@ const CartPage = () => {
   );
   const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.session.user);
-
   const [error] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-
   const signupModalRef = useRef(null);
   const loginModalRef = useRef(null);
 
@@ -32,17 +30,17 @@ const CartPage = () => {
     (productId) => dispatch(incrementItem(Number(productId))),
     [dispatch]
   );
-
+  
   const handleDecrement = useCallback(
     (productId) => dispatch(decrementItem(Number(productId))),
     [dispatch]
   );
-
+  
   const handleRemoveFromCart = useCallback(
     (productId) => dispatch(removeFromCart(Number(productId))),
     [dispatch]
   );
-
+  
   const handleClearCart = () => dispatch(clearCart());
 
   useEffect(() => {
@@ -77,48 +75,43 @@ const CartPage = () => {
   }, [showSignupModal, showLoginModal]);
 
   const total = useMemo(() => {
-    return cartItems
-      .reduce((total, item) => {
-        const price = parseFloat(item.product?.price) || 0;
-        const quantity = parseInt(item.quantity) || 0;
-        return total + price * quantity;
-      }, 0)
-      .toFixed(2);
+    return cartItems.reduce((total, item) => {
+      const price = parseFloat(item.product?.price) || 0;
+      const quantity = parseInt(item.quantity) || 0;
+      return total + price * quantity;
+    }, 0).toFixed(2);
   }, [cartItems]);
 
   const memoizedCartItems = useMemo(() => {
     return cartItems.map((item) => {
-      let imageUrls = [];
-
-      if (Array.isArray(item.product?.image_url)) {
-        imageUrls = item.product.image_url;
+      let imageUrl = "";
+      if (Array.isArray(item.product?.image_url) && item.product.image_url.length > 0) {
+        imageUrl = item.product.image_url[0];
       } else if (typeof item.product?.image_url === "string") {
         try {
           const parsed = JSON.parse(item.product.image_url);
-          imageUrls = Array.isArray(parsed) ? parsed : [parsed];
+          imageUrl = Array.isArray(parsed) && parsed.length > 0 ? parsed[0] : item.product.image_url;
         } catch {
-          imageUrls = [item.product.image_url];
+          imageUrl = item.product.image_url;
         }
       }
 
       return (
         <div key={item.id} className="cart-item-container">
           <div className="cart-item-image">
-            {imageUrls.length ? (
-              imageUrls.map((url, idx) => (
-                <div className="cart-image-wrapper" key={idx}>
-                  <img
-                    src={greenSprinkles}
-                    alt="Green Sprinkles"
-                    className="sprinkle-bg sprinkle-green"
-                  />
-                  <img
-                    src={url || "/placeholder-image.jpg"}
-                    alt={item.product?.name || "Product"}
-                    className="product-image"
-                  />
-                </div>
-              ))
+            {imageUrl ? (
+              <div className="cart-image-wrapper">
+                <img
+                  src={greenSprinkles}
+                  alt="Green Sprinkles"
+                  className="sprinkle-bg sprinkle-green"
+                />
+                <img
+                  src={imageUrl || "/placeholder-image.jpg"}
+                  alt={item.product?.name || "Product"}
+                  className="product-image"
+                />
+              </div>
             ) : (
               <div>No Image</div>
             )}
@@ -126,32 +119,24 @@ const CartPage = () => {
           <div className="cart-item-details">
             <p>{item.product?.name}</p>
             <p>
-              price: $
-              {item.product?.price
+              price: ${item.product?.price
                 ? parseFloat(item.product.price).toFixed(2)
                 : "N/A"}
             </p>
             <div>
               <p>qty: {item.quantity}</p>
               <br />
-              <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">
-                -
-              </button>
-              <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">
-                +
-              </button>
+              <button onClick={() => handleDecrement(item.id)} aria-label="Decrease quantity">-</button>
+              <button onClick={() => handleIncrement(item.id)} aria-label="Increase quantity">+</button>
             </div>
             <div className="item-subtotal">
               <p>
-                subtotal: $
-                {item.product?.price && item.quantity
+                subtotal: ${item.product?.price && item.quantity
                   ? (item.product.price * item.quantity).toFixed(2)
                   : "N/A"}
               </p>
             </div>
-            <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">
-              remove
-            </button>
+            <button onClick={() => handleRemoveFromCart(item.id)} aria-label="Remove item">remove</button>
           </div>
         </div>
       );
@@ -187,7 +172,6 @@ const CartPage = () => {
           </div>
         </div>
       )}
-
       {showLoginModal && (
         <div ref={loginModalRef}>
           <LoginFormModal onClose={() => setShowLoginModal(false)} />
