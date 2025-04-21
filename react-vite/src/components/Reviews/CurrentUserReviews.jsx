@@ -45,8 +45,6 @@ export default function CurrentUserReviews() {
     return isNaN(date.getTime()) ? "Invalid date" : date.toLocaleString();
   };
   
-  console.log("All reviews:", reviews);
-  
   if (!Array.isArray(reviews)) {
     return (
       <div className="reviews-section">

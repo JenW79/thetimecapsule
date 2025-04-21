@@ -14,9 +14,9 @@ const FavoritesList = () => {
     dispatch(fetchFavorites());
   }, [dispatch]);
 
-  if (!favorites || !favorites.length) {
-    return <div className="loading">Loading favorites...</div>;
-  }
+  // if (!favorites || !favorites.length) {
+  //   return <div className="loading">Loading favorites...</div>;
+  // }
 
   if (favorites.length === 0) {
     return (
