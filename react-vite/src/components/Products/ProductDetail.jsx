@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../../redux/products";
@@ -13,90 +13,52 @@ const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-
+  const parsedId = parseInt(id, 10);
 
   // Check both ways of accessing the product from the store
-  const productFromIndex = useSelector((state) => state.products[parseInt(id)]);
-  const productsArray = useSelector((state) => Object.values(state.products));
-  const productFromArray = productsArray.find((p) => p.id === parseInt(id));
+  const productFromIndex = useSelector((state) => state.products[parsedId]);
+  const productsObject = useSelector((state) => state.products);
+
+  const productFromArray = useMemo(() => {
+    return Object.values(productsObject).find((p) => p.id === parsedId);
+  }, [productsObject, parsedId]);
 
   // Use whichever is available
   const product = productFromIndex || productFromArray;
+
   const isOwner = sessionUser?.id === product?.owner?.id;
   const [showReviewModal, setShowReviewModal] = useState(false);
 
- 
-
   const handleAddToCart = () => {
-    dispatch(addToCart(product));
+    if (product) {
+      dispatch(addToCart(product));
+    }
   };
 
   useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        await dispatch(fetchProduct(id));
-      } catch (error) {
-        console.error("Error fetching product:", error);
-      }
-    };
-
-    loadProduct();
-  }, [dispatch, id]);
-
-  if (!product) {
-    return <div className="product-not-found">Loading product...</div>;
-  }
+    if (!isNaN(parsedId) && parsedId > 0) {
+      dispatch(fetchProduct(parsedId));
+    }
+  }, [dispatch, parsedId]);  
   
-  // Parse and determine product images
-  const productImages = (() => {
-    if (
-      product.images &&
-      Array.isArray(product.images) &&
-      product.images.length > 0
-    ) {
-      return product.images;
-    }
+  if (isNaN(parsedId) || parsedId <= 0)
+    return <div className="error-message">Invalid product ID.</div>;  
+  if (!product) return <div className="product-not-found">Loading product...</div>;
 
-    if (typeof product.image_url === "string") {
-      try {
-        let cleanedString = product.image_url.replace(/^"|"$/g, "");
-
-        if (cleanedString.trim().startsWith("[")) {
-          const parsedImages = JSON.parse(cleanedString);
-          return Array.isArray(parsedImages)
-            ? parsedImages
-            : [product.image_url];
-        }
-      } catch (e) {
-        console.error("Failed to parse image_url as JSON:", e);
-      }
-
-      if (product.image_url.includes(",")) {
-        return product.image_url.split(",").map((url) => url.trim());
-      }
-
-      return [product.image_url];
-    }
-
-    return ["/assets/placeholder.png"];
-  })();
-
-
+  const productImages = product?.images?.length > 0
+    ? product.images
+    : product?.image_url
+    ? [product.image_url]
+    : ['/assets/placeholder.png'];
 
   return (
     <div className="product-detail-page">
       <div className="product-item product-detail">
         <div className="product-info-wrapper">
           <h1 className="product-title">{product?.name || "Product Title"}</h1>
-          <p className="product-description">
-            {product?.description || "Description"}
-          </p>
-          <p className="product-price">
-            ${product?.price?.toFixed(2) || "0.00"}
-          </p>
+          <p className="product-description">{product?.description || "Description"}</p>
+          <p className="product-price">${product?.price?.toFixed(2) || "0.00"}</p>
 
-          {/* added average rating */}
-          
           {product.average_rating && (
             <p className="product-rating">
               ⭐ <span className="rating-text">{product.average_rating.toFixed(1)} / 5</span>
@@ -112,10 +74,7 @@ const ProductDetail = () => {
             ) : (
               <>
                 <FavoriteButton productId={product.id} />
-                <button
-                  className="add-to-cart-button"
-                  onClick={handleAddToCart}
-                >
+                <button className="add-to-cart-button" onClick={handleAddToCart}>
                   Add to Cart
                 </button>
               </>
@@ -124,52 +83,36 @@ const ProductDetail = () => {
         </div>
 
         <div className="product-images-grid grid-4">
-          {productImages.length > 0 ? (
-            productImages.slice(0, 4).map((imageUrl, index) => (
-              <div key={index} className="product-image-wrapper">
-                <img src={imageUrl} alt={`${product.name} view ${index + 1}`} />
-              </div>
-            ))
-          ) : (
-            <div className="product-image-wrapper">
-              <img src="/assets/placeholder.png" alt={product.name} />
+          {productImages.map((imageUrl, index) => (
+            <div key={index} className="product-image-wrapper">
+              <img src={imageUrl} alt={`${product.name} view ${index + 1}`} />
             </div>
-          )}
+          ))}
         </div>
       </div>
 
       <div className="reviews-section">
         <h1 className="reviews-title">Reviews</h1>
-        {product.reviews && product.reviews.length > 0 ? (
+        {product.reviews?.length > 0 ? (
           <div className="review-list">
             {product.reviews.map((review) => (
               <div key={review.id} className="review-item">
                 <div className="review-stars">
-                  {Array(review.rating)
-                    .fill()
-                    .map((_, i) => (
-                      <span key={i} className="star">
-                        ★
-                      </span>
-                    ))}
+                  {Array(review.rating).fill().map((_, i) => (
+                    <span key={i} className="star">★</span>
+                  ))}
                 </div>
-                <div className="review-user">
-                  {review.user?.username || "user"}
-                </div>
+                <div className="review-user">{review.user?.username || "user"}</div>
                 <div className="review-date">{review.created_at || "date"}</div>
-                <div className="review-description">
-                  {review.comment || "description"}
-                </div>
+                <div className="review-description">{review.comment || "description"}</div>
               </div>
             ))}
           </div>
         ) : (
           <p>No reviews yet. Be the first to review this product!</p>
         )}
-        <button
-          className="leave-review-button"
-          onClick={() => setShowReviewModal(true)}
-        >
+
+        <button className="leave-review-button" onClick={() => setShowReviewModal(true)}>
           leave a review
         </button>
 

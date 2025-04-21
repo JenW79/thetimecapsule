@@ -13,17 +13,32 @@ const deleteReview = (reviewId) => ({ type: DELETE_REVIEW, reviewId });
 //THUNKS
 
 export const fetchReviews = (productId) => async (dispatch) => {
-  if (typeof productId !== "number" || productId <= 0) {
+  if (!productId || typeof productId !== "number" || productId <= 0) {
     console.warn("Invalid productId in fetchReviews:", productId);
     return { error: "Invalid product ID." };
   }
 
-  const res = await fetch(`/api/products/${productId}/reviews`);
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(loadReviews(data.reviews));
+  try {
+    const res = await fetch(`/api/products/${productId}/reviews`);
+    if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        dispatch(loadReviews(data.reviews));
+      } else {
+        console.error("Received non-JSON response when fetching reviews");
+        return { error: "Unexpected response format" };
+      }
+    } else {
+      console.error(`Error fetching reviews: ${res.status} ${res.statusText}`);
+      return { error: `Failed to fetch reviews: ${res.status}` };
+    }
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return { error: "Failed to fetch reviews" };
   }
 };
+
 export const createReview = (productId, payload) => async (dispatch) => {
   if (typeof productId !== "number" || productId <= 0) {
     console.warn("Invalid productId in createReview:", productId);
@@ -44,6 +59,7 @@ export const createReview = (productId, payload) => async (dispatch) => {
     return error;
   }
 };
+
 export const editReview = (reviewId, payload) => async (dispatch) => {
   const res = await fetchWithAuth(`/api/reviews/${reviewId}`, "PUT", payload);
   if (res.ok) {
@@ -55,6 +71,7 @@ export const editReview = (reviewId, payload) => async (dispatch) => {
     return error;
   }
 };
+
 export const removeReview = (reviewId) => async (dispatch) => {
   const res = await fetchWithAuth(`/api/reviews/${reviewId}`, "DELETE");
   if (res.ok) {
@@ -76,26 +93,34 @@ export const fetchCurrentUserReviews = () => async (dispatch) => {
   }
 };
 
-const initialState = {};
+const initialState = {
+  reviews: {},
+};
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
-    case LOAD_REVIEWS: {
-      const newState = {};
-      action.reviews.forEach((review) => {
-        newState[review.id] = review;
-      });
-      return newState;
-    }
+    case LOAD_REVIEWS:
+      return {
+        ...state,
+        reviews: action.reviews.reduce((acc, review) => {
+          acc[review.id] = review;
+          return acc;
+        }, {}),
+      };
+
     case ADD_REVIEW:
-      return { ...state, [action.review.id]: action.review };
+      return { ...state, reviews: { ...state.reviews, [action.review.id]: action.review } };
+
     case UPDATE_REVIEW:
-      return { ...state, [action.review.id]: action.review };
-    case DELETE_REVIEW: {
-      const stateCopy = { ...state };
-      delete stateCopy[action.reviewId];
-      return stateCopy;
-    }
+      return { ...state, reviews: { ...state.reviews, [action.review.id]: action.review } };
+
+    case DELETE_REVIEW:
+      {
+      const newReviews = { ...state.reviews };
+      delete newReviews[action.reviewId];
+      return { ...state, reviews: newReviews };
+      }
+
     default:
       return state;
   }

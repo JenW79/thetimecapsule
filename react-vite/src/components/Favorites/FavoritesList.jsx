@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from "react"; 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchFavorites } from "../../redux/favorites";
@@ -7,16 +7,16 @@ import "./Favorites.css";
 
 const FavoritesList = () => {
   const dispatch = useDispatch();
-  const favoritesObj = useSelector((state) => state.favorites);
+  const favoritesObj = useSelector(state => state.favorites);
   const favorites = Object.values(favoritesObj);
-
+  
   useEffect(() => {
     dispatch(fetchFavorites());
   }, [dispatch]);
 
-  if (!favorites) {
-    return <div className="loading">Loading favorites...</div>;
-  }
+  // if (!favorites || !favorites.length) {
+  //   return <div className="loading">Loading favorites...</div>;
+  // }
 
   if (favorites.length === 0) {
     return (

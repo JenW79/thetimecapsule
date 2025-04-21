@@ -17,7 +17,7 @@ const FavoriteButton = ({ productId }) => {
     if (favorite) {
       await dispatch(deleteFavorite(favorite.id));
     } else {
-      await dispatch(createFavorite(productId));
+      await dispatch(createFavorite(Number(productId)));
     }
   
     // // Refresh state
